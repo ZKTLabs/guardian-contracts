@@ -7,7 +7,7 @@ import "@openzeppelin/contracts-upgradeable/utils/StringsUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/utils/Base64Upgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/access/AccessControlUpgradeable.sol";
 
-contract GuardianNodeLicense is ERC721EnumerableUpgradeable, AccessControlUpgradeable {
+contract GuardianVoterLicense is ERC721EnumerableUpgradeable, AccessControlUpgradeable {
     using StringsUpgradeable for uint256;
     using CountersUpgradeable for CountersUpgradeable.Counter;
     CountersUpgradeable.Counter private _tokenIds;
@@ -73,7 +73,7 @@ contract GuardianNodeLicense is ERC721EnumerableUpgradeable, AccessControlUpgrad
         uint256 _referralDiscountPercentage,
         uint256 _referralRewardPercentage
     ) public initializer {
-        __ERC721_init("Guardian Node License", "GNL");
+        __ERC721_init("Guardian Voter License", "GVL");
         __AccessControl_init();
         fundsReceiver = _fundsReceiver;
         referralDiscountPercentage = _referralDiscountPercentage;
@@ -184,36 +184,37 @@ contract GuardianNodeLicense is ERC721EnumerableUpgradeable, AccessControlUpgrad
      * @return The price in wei.
      */
     function price(uint256 _amount, string calldata _promoCode) public view returns (uint256) {
-        uint256 totalSupply = totalSupply();
-        uint256 totalCost = 0;
-        uint256 remaining = _amount;
-        uint256 tierSum = 0;
-
-        for (uint256 i = 0; i < pricingTiers.length; i++) {
-            tierSum += pricingTiers[i].quantity;
-            uint256 availableInThisTier = tierSum > totalSupply
-                ? tierSum - totalSupply
-                : 0;
-
-            if (remaining <= availableInThisTier) {
-                totalCost += remaining * pricingTiers[i].price;
-                remaining = 0;
-                break;
-            } else {
-                totalCost += availableInThisTier * pricingTiers[i].price;
-                remaining -= availableInThisTier;
-                totalSupply += availableInThisTier;
-            }
-        }
-
-        require(remaining == 0, "Not enough licenses available for sale");
-
-        // Apply discount if promo code is active
-        if (_promoCodes[_promoCode].active) {
-            totalCost = totalCost * (100 - referralDiscountPercentage) / 100;
-        }
-
-        return totalCost;
+        return 1;
+//        uint256 totalSupply = totalSupply();
+//        uint256 totalCost = 0;
+//        uint256 remaining = _amount;
+//        uint256 tierSum = 0;
+//
+//        for (uint256 i = 0; i < pricingTiers.length; i++) {
+//            tierSum += pricingTiers[i].quantity;
+//            uint256 availableInThisTier = tierSum > totalSupply
+//                ? tierSum - totalSupply
+//                : 0;
+//
+//            if (remaining <= availableInThisTier) {
+//                totalCost += remaining * pricingTiers[i].price;
+//                remaining = 0;
+//                break;
+//            } else {
+//                totalCost += availableInThisTier * pricingTiers[i].price;
+//                remaining -= availableInThisTier;
+//                totalSupply += availableInThisTier;
+//            }
+//        }
+//
+//        require(remaining == 0, "Not enough licenses available for sale");
+//
+//        // Apply discount if promo code is active
+//        if (_promoCodes[_promoCode].active) {
+//            totalCost = totalCost * (100 - referralDiscountPercentage) / 100;
+//        }
+//
+//        return totalCost;
     }
 
     /**

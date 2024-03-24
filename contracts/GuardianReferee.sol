@@ -7,7 +7,7 @@ import "@openzeppelin/contracts-upgradeable/utils/structs/EnumerableSetUpgradeab
 import "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
 import "@openzeppelin/contracts/utils/math/Math.sol";
 import "./nitro-contracts/rollup/IRollupCore.sol";
-import "./GuardianNodeLicense.sol";
+import "./GuardianVoterLicense.sol";
 import "./esZKT.sol";
 import "./ZKT.sol";
 
@@ -382,7 +382,7 @@ contract GuardianReferee is Initializable, AccessControlEnumerableUpgradeable {
             activeChallengerPublicKey: challengerPublicKey, // Store the active challengerPublicKey at the time of challenge submission
             rollupUsed: rollupAddress, // Store the rollup address used for this challenge
             createdTimestamp: block.timestamp,
-            totalSupplyOfNodesAtChallengeStart: GuardianNodeLicense(guardianNodeLicenseAddress).totalSupply(), // we need to store how many nodes were created for the 1% odds
+            totalSupplyOfNodesAtChallengeStart: GuardianVoterLicense(guardianNodeLicenseAddress).totalSupply(), // we need to store how many nodes were created for the 1% odds
             rewardAmountForClaimers: rewardAmountForClaimers,
             amountForGasSubsidy: amountForGasSubsidy,
             numberOfEligibleClaimers: 0,
@@ -417,7 +417,7 @@ contract GuardianReferee is Initializable, AccessControlEnumerableUpgradeable {
         bytes memory _confirmData
     ) public {
         require(
-            isApprovedForOperator(GuardianNodeLicense(guardianNodeLicenseAddress).ownerOf(_nodeLicenseId), msg.sender) || GuardianNodeLicense(guardianNodeLicenseAddress).ownerOf(_nodeLicenseId) == msg.sender,
+            isApprovedForOperator(GuardianVoterLicense(guardianNodeLicenseAddress).ownerOf(_nodeLicenseId), msg.sender) || GuardianVoterLicense(guardianNodeLicenseAddress).ownerOf(_nodeLicenseId) == msg.sender,
             "Caller must be the owner of the NodeLicense or an approved operator"
         );
 
@@ -481,7 +481,7 @@ contract GuardianReferee is Initializable, AccessControlEnumerableUpgradeable {
         require(challenges[_challengeId].totalSupplyOfNodesAtChallengeStart > 0, "No NodeLicenses have been minted when this challenge started");
 
         // Get the minting timestamp of the nodeLicenseId
-        uint256 mintTimestamp = GuardianNodeLicense(guardianNodeLicenseAddress).getMintTimestamp(_nodeLicenseId);
+        uint256 mintTimestamp = GuardianVoterLicense(guardianNodeLicenseAddress).getMintTimestamp(_nodeLicenseId);
 
         // Check if the nodeLicenseId is eligible for a payout
         require(mintTimestamp < challenges[_challengeId].createdTimestamp, "NodeLicense is not eligible for a payout on this challenge, it was minted after it started");
@@ -494,7 +494,7 @@ contract GuardianReferee is Initializable, AccessControlEnumerableUpgradeable {
         require(!challenges[_challengeId].expiredForRewarding, "Challenge rewards have expired");
 
         // Check if the owner of the NodeLicense is KYC'd
-        address owner = GuardianNodeLicense(guardianNodeLicenseAddress).ownerOf(_nodeLicenseId);
+        address owner = GuardianVoterLicense(guardianNodeLicenseAddress).ownerOf(_nodeLicenseId);
         require(isKycApproved(owner), "Owner of the NodeLicense is not KYC'd");
 
         // Check if the submission has already been claimed
