@@ -49,7 +49,10 @@ library MachineLib {
                     )
                 );
         } else if (mach.status == MachineStatus.FINISHED) {
-            return keccak256(abi.encodePacked("Machine finished:", mach.globalStateHash));
+            return
+                keccak256(
+                    abi.encodePacked("Machine finished:", mach.globalStateHash)
+                );
         } else if (mach.status == MachineStatus.ERRORED) {
             return keccak256(abi.encodePacked("Machine errored:"));
         } else if (mach.status == MachineStatus.TOO_FAR) {

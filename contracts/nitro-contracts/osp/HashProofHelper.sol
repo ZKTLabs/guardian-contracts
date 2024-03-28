@@ -25,15 +25,19 @@ contract HashProofHelper {
     mapping(bytes32 => mapping(uint64 => PreimagePart)) private preimageParts;
     mapping(address => KeccakState) public keccakStates;
 
-    event PreimagePartProven(bytes32 indexed fullHash, uint64 indexed offset, bytes part);
+    event PreimagePartProven(
+        bytes32 indexed fullHash,
+        uint64 indexed offset,
+        bytes part
+    );
 
     uint256 private constant MAX_PART_LENGTH = 32;
     uint256 private constant KECCAK_ROUND_INPUT = 136;
 
-    function proveWithFullPreimage(bytes calldata data, uint64 offset)
-        external
-        returns (bytes32 fullHash)
-    {
+    function proveWithFullPreimage(
+        bytes calldata data,
+        uint64 offset
+    ) external returns (bytes32 fullHash) {
         fullHash = keccak256(data);
         bytes memory part;
         if (data.length > offset) {
@@ -43,7 +47,10 @@ contract HashProofHelper {
             }
             part = data[offset:(offset + partLength)];
         }
-        preimageParts[fullHash][offset] = PreimagePart({proven: true, part: part});
+        preimageParts[fullHash][offset] = PreimagePart({
+            proven: true,
+            part: part
+        });
         emit PreimagePartProven(fullHash, offset, part);
     }
 
@@ -59,7 +66,10 @@ contract HashProofHelper {
         if ((flags & (1 << 1)) != 0) {
             delete keccakStates[msg.sender];
         }
-        require(isFinal || data.length % KECCAK_ROUND_INPUT == 0, "NOT_BLOCK_ALIGNED");
+        require(
+            isFinal || data.length % KECCAK_ROUND_INPUT == 0,
+            "NOT_BLOCK_ALIGNED"
+        );
         KeccakState storage state = keccakStates[msg.sender];
         uint256 startLength = state.length;
         if (startLength == 0) {
@@ -68,7 +78,10 @@ contract HashProofHelper {
             require(state.offset == offset, "DIFF_OFFSET");
         }
         keccakUpdate(state, data, isFinal);
-        if (uint256(offset) + MAX_PART_LENGTH > startLength && offset < state.length) {
+        if (
+            uint256(offset) + MAX_PART_LENGTH > startLength &&
+            offset < state.length
+        ) {
             uint256 startIdx = 0;
             if (offset > startLength) {
                 startIdx = offset - startLength;
@@ -91,7 +104,10 @@ contract HashProofHelper {
             uint8 b = uint8(state.state[stateIdx] >> ((i % 8) * 8));
             fullHash |= bytes32(uint256(b) << (248 - (i * 8)));
         }
-        preimageParts[fullHash][state.offset] = PreimagePart({proven: true, part: state.part});
+        preimageParts[fullHash][state.offset] = PreimagePart({
+            proven: true,
+            part: state.part
+        });
         emit PreimagePartProven(fullHash, state.offset, state.part);
         delete keccakStates[msg.sender];
     }
@@ -144,7 +160,10 @@ contract HashProofHelper {
     }
 
     /// Retrieves up to 32 bytes of the preimage of fullHash at the given offset, reverting if it hasn't been proven yet.
-    function getPreimagePart(bytes32 fullHash, uint64 offset) external view returns (bytes memory) {
+    function getPreimagePart(
+        bytes32 fullHash,
+        uint64 offset
+    ) external view returns (bytes memory) {
         PreimagePart storage part = preimageParts[fullHash][offset];
         if (!part.proven) {
             revert NotProven(fullHash, offset);

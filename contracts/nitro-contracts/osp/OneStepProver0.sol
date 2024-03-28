@@ -54,7 +54,9 @@ contract OneStepProver0 is IOneStepProver {
             revert("CONST_PUSH_INVALID_OPCODE");
         }
 
-        mach.valueStack.push(Value({valueType: ty, contents: uint64(inst.argumentData)}));
+        mach.valueStack.push(
+            Value({valueType: ty, contents: uint64(inst.argumentData)})
+        );
     }
 
     function executeDrop(
@@ -106,7 +108,9 @@ contract OneStepProver0 is IOneStepProver {
         mach.moduleIdx = mod;
     }
 
-    function createReturnValue(Machine memory mach) internal pure returns (Value memory) {
+    function createReturnValue(
+        Machine memory mach
+    ) internal pure returns (Value memory) {
         uint256 returnData = 0;
         returnData |= mach.functionPc;
         returnData |= uint256(mach.functionIdx) << 32;
@@ -209,13 +213,23 @@ contract OneStepProver0 is IOneStepProver {
                 (tableType, offset) = Deserialize.u8(proof, offset);
                 (tableSize, offset) = Deserialize.u64(proof, offset);
                 (elemsRoot, offset) = Deserialize.b32(proof, offset);
-                (tableMerkleProof, offset) = Deserialize.merkleProof(proof, offset);
+                (tableMerkleProof, offset) = Deserialize.merkleProof(
+                    proof,
+                    offset
+                );
 
                 // Validate the information by recomputing known hashes
                 bytes32 recomputed = keccak256(
-                    abi.encodePacked("Call indirect:", tableIdx, wantedFuncTypeHash)
+                    abi.encodePacked(
+                        "Call indirect:",
+                        tableIdx,
+                        wantedFuncTypeHash
+                    )
                 );
-                require(recomputed == bytes32(inst.argumentData), "BAD_CALL_INDIRECT_DATA");
+                require(
+                    recomputed == bytes32(inst.argumentData),
+                    "BAD_CALL_INDIRECT_DATA"
+                );
                 recomputed = tableMerkleProof.computeRootFromTable(
                     tableIdx,
                     tableType,
@@ -236,12 +250,16 @@ contract OneStepProver0 is IOneStepProver {
             MerkleProof memory elementMerkleProof;
             (elemFuncTypeHash, offset) = Deserialize.b32(proof, offset);
             (functionPointer, offset) = Deserialize.value(proof, offset);
-            (elementMerkleProof, offset) = Deserialize.merkleProof(proof, offset);
-            bytes32 recomputedElemRoot = elementMerkleProof.computeRootFromElement(
-                elementIdx,
-                elemFuncTypeHash,
-                functionPointer
+            (elementMerkleProof, offset) = Deserialize.merkleProof(
+                proof,
+                offset
             );
+            bytes32 recomputedElemRoot = elementMerkleProof
+                .computeRootFromElement(
+                    elementIdx,
+                    elemFuncTypeHash,
+                    functionPointer
+                );
             require(recomputedElemRoot == elemsRoot, "BAD_ELEMENTS_ROOT");
 
             if (elemFuncTypeHash != wantedFuncTypeHash) {
@@ -254,7 +272,10 @@ contract OneStepProver0 is IOneStepProver {
                 return;
             } else if (functionPointer.valueType == ValueType.FUNC_REF) {
                 funcIdx = uint32(functionPointer.contents);
-                require(funcIdx == functionPointer.contents, "BAD_FUNC_REF_CONTENTS");
+                require(
+                    funcIdx == functionPointer.contents,
+                    "BAD_FUNC_REF_CONTENTS"
+                );
             } else {
                 revert("BAD_ELEM_TYPE");
             }
@@ -310,7 +331,10 @@ contract OneStepProver0 is IOneStepProver {
         MerkleProof memory merkle;
         (proposedVal, offset) = Deserialize.value(proof, offset);
         (merkle, offset) = Deserialize.merkleProof(proof, offset);
-        bytes32 recomputedRoot = merkle.computeRootFromValue(index, proposedVal);
+        bytes32 recomputedRoot = merkle.computeRootFromValue(
+            index,
+            proposedVal
+        );
         require(recomputedRoot == merkleRoot, "WRONG_MERKLE_ROOT");
         return proposedVal;
     }
@@ -338,7 +362,11 @@ contract OneStepProver0 is IOneStepProver {
         bytes calldata proof
     ) internal pure {
         StackFrame memory frame = mach.frameStack.peek();
-        Value memory val = merkleProveGetValue(frame.localsMerkleRoot, inst.argumentData, proof);
+        Value memory val = merkleProveGetValue(
+            frame.localsMerkleRoot,
+            inst.argumentData,
+            proof
+        );
         mach.valueStack.push(val);
     }
 
@@ -364,7 +392,11 @@ contract OneStepProver0 is IOneStepProver {
         Instruction calldata inst,
         bytes calldata proof
     ) internal pure {
-        Value memory val = merkleProveGetValue(mod.globalsMerkleRoot, inst.argumentData, proof);
+        Value memory val = merkleProveGetValue(
+            mod.globalsMerkleRoot,
+            inst.argumentData,
+            proof
+        );
         mach.valueStack.push(val);
     }
 
@@ -441,9 +473,12 @@ contract OneStepProver0 is IOneStepProver {
 
         uint16 opcode = inst.opcode;
 
-        function(Machine memory, Module memory, Instruction calldata, bytes calldata)
-            internal
-            pure impl;
+        function(
+            Machine memory,
+            Module memory,
+            Instruction calldata,
+            bytes calldata
+        ) internal pure impl;
         if (opcode == Instructions.UNREACHABLE) {
             impl = executeUnreachable;
         } else if (opcode == Instructions.NOP) {
@@ -476,7 +511,9 @@ contract OneStepProver0 is IOneStepProver {
             impl = executeDrop;
         } else if (opcode == Instructions.SELECT) {
             impl = executeSelect;
-        } else if (opcode >= Instructions.I32_CONST && opcode <= Instructions.F64_CONST) {
+        } else if (
+            opcode >= Instructions.I32_CONST && opcode <= Instructions.F64_CONST
+        ) {
             impl = executeConstPush;
         } else if (
             opcode == Instructions.MOVE_FROM_STACK_TO_INTERNAL ||

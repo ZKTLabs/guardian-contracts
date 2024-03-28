@@ -4,15 +4,7 @@
 
 pragma solidity ^0.8.4;
 
-import {
-    AlreadyInit,
-    NotRollup,
-    ProofTooLong,
-    PathNotMinimal,
-    UnknownRoot,
-    AlreadySpent,
-    BridgeCallFailed
-} from "../libraries/Error.sol";
+import {AlreadyInit, NotRollup, ProofTooLong, PathNotMinimal, UnknownRoot, AlreadySpent, BridgeCallFailed} from "../libraries/Error.sol";
 import "../bridge/IBridge.sol";
 import "../bridge/IOutbox.sol";
 import "../libraries/MerkleLib.sol";
@@ -48,7 +40,10 @@ contract OutboxWithoutOptTester is DelegateCallAware, IOutbox {
         rollup = address(_bridge.rollup());
     }
 
-    function updateSendRoot(bytes32 root, bytes32 l2BlockHash) external override {
+    function updateSendRoot(
+        bytes32 root,
+        bytes32 l2BlockHash
+    ) external override {
         //if (msg.sender != rollup) revert NotRollup(msg.sender, rollup);  //test only!!!
         roots[root] = l2BlockHash;
         emit SendRootUpdated(root, l2BlockHash);
@@ -160,7 +155,8 @@ contract OutboxWithoutOptTester is DelegateCallAware, IOutbox {
         bytes32 item
     ) internal returns (bytes32) {
         if (proof.length >= 256) revert ProofTooLong(proof.length);
-        if (index >= 2**proof.length) revert PathNotMinimal(index, 2**proof.length);
+        if (index >= 2 ** proof.length)
+            revert PathNotMinimal(index, 2 ** proof.length);
 
         // Hash the leaf an extra time to prove it's a leaf
         bytes32 calcRoot = calculateMerkleRoot(proof, index, item);
@@ -177,7 +173,11 @@ contract OutboxWithoutOptTester is DelegateCallAware, IOutbox {
         uint256 value,
         bytes memory data
     ) internal {
-        (bool success, bytes memory returndata) = bridge.executeCall(to, value, data);
+        (bool success, bytes memory returndata) = bridge.executeCall(
+            to,
+            value,
+            data
+        );
         if (!success) {
             if (returndata.length > 0) {
                 // solhint-disable-next-line no-inline-assembly
@@ -201,7 +201,17 @@ contract OutboxWithoutOptTester is DelegateCallAware, IOutbox {
         bytes calldata data
     ) public pure override returns (bytes32) {
         return
-            keccak256(abi.encodePacked(l2Sender, to, l2Block, l1Block, l2Timestamp, value, data));
+            keccak256(
+                abi.encodePacked(
+                    l2Sender,
+                    to,
+                    l2Block,
+                    l1Block,
+                    l2Timestamp,
+                    value,
+                    data
+                )
+            );
     }
 
     function calculateMerkleRoot(
@@ -209,6 +219,11 @@ contract OutboxWithoutOptTester is DelegateCallAware, IOutbox {
         uint256 path,
         bytes32 item
     ) public pure override returns (bytes32) {
-        return MerkleLib.calculateRoot(proof, path, keccak256(abi.encodePacked(item)));
+        return
+            MerkleLib.calculateRoot(
+                proof,
+                path,
+                keccak256(abi.encodePacked(item))
+            );
     }
 }

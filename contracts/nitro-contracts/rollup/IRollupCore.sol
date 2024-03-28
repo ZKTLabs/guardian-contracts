@@ -34,7 +34,11 @@ interface IRollupCore {
         uint256 inboxMaxCount
     );
 
-    event NodeConfirmed(uint64 indexed nodeNum, bytes32 blockHash, bytes32 sendRoot);
+    event NodeConfirmed(
+        uint64 indexed nodeNum,
+        bytes32 blockHash,
+        bytes32 sendRoot
+    );
 
     event NodeRejected(uint64 indexed nodeNum);
 
@@ -45,7 +49,11 @@ interface IRollupCore {
         uint64 challengedNode
     );
 
-    event UserStakeUpdated(address indexed user, uint256 initialBalance, uint256 finalBalance);
+    event UserStakeUpdated(
+        address indexed user,
+        uint256 initialBalance,
+        uint256 finalBalance
+    );
 
     event UserWithdrawableFundsUpdated(
         address indexed user,
@@ -95,13 +103,18 @@ interface IRollupCore {
      * This function will revert if the given node number does not exist.
      * @dev This function is meant for internal use only and has no stability guarantees.
      */
-    function getNodeCreationBlockForLogLookup(uint64 nodeNum) external view returns (uint256);
+    function getNodeCreationBlockForLogLookup(
+        uint64 nodeNum
+    ) external view returns (uint256);
 
     /**
      * @notice Check if the specified node has been staked on by the provided staker.
      * Only accurate at the latest confirmed node and afterwards.
      */
-    function nodeHasStaker(uint64 nodeNum, address staker) external view returns (bool);
+    function nodeHasStaker(
+        uint64 nodeNum,
+        address staker
+    ) external view returns (bool);
 
     /**
      * @notice Get the address of the staker at the given index
@@ -157,7 +170,9 @@ interface IRollupCore {
      * @param zombieNum Index of the zombie to lookup
      * @return Latest node that the given zombie is staked on
      */
-    function zombieLatestStakedNode(uint256 zombieNum) external view returns (uint64);
+    function zombieLatestStakedNode(
+        uint256 zombieNum
+    ) external view returns (uint64);
 
     /// @return Current number of un-removed zombies
     function zombieCount() external view returns (uint256);

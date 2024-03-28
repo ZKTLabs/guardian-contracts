@@ -35,10 +35,16 @@ interface IChallengeManager {
         bytes32[] chainHashes
     );
 
-    event ExecutionChallengeBegun(uint64 indexed challengeIndex, uint256 blockSteps);
+    event ExecutionChallengeBegun(
+        uint64 indexed challengeIndex,
+        uint256 blockSteps
+    );
     event OneStepProofCompleted(uint64 indexed challengeIndex);
 
-    event ChallengeEnded(uint64 indexed challengeIndex, ChallengeTerminationType kind);
+    event ChallengeEnded(
+        uint64 indexed challengeIndex,
+        ChallengeTerminationType kind
+    );
 
     function initialize(
         IChallengeResultReceiver resultReceiver_,
@@ -58,12 +64,13 @@ interface IChallengeManager {
         uint256 challengerTimeLeft_
     ) external returns (uint64);
 
-    function challengeInfo(uint64 challengeIndex_)
-        external
-        view
-        returns (ChallengeLib.Challenge memory);
+    function challengeInfo(
+        uint64 challengeIndex_
+    ) external view returns (ChallengeLib.Challenge memory);
 
-    function currentResponder(uint64 challengeIndex) external view returns (address);
+    function currentResponder(
+        uint64 challengeIndex
+    ) external view returns (address);
 
     function isTimedOut(uint64 challengeIndex) external view returns (bool);
 

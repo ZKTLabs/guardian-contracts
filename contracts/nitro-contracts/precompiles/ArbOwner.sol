@@ -61,7 +61,9 @@ interface ArbOwner {
     function scheduleArbOSUpgrade(uint64 newVersion, uint64 timestamp) external;
 
     /// @notice Sets equilibration units parameter for L1 price adjustment algorithm
-    function setL1PricingEquilibrationUnits(uint256 equilibrationUnits) external;
+    function setL1PricingEquilibrationUnits(
+        uint256 equilibrationUnits
+    ) external;
 
     /// @notice Sets inertia parameter for L1 price adjustment algorithm
     function setL1PricingInertia(uint64 inertia) external;
@@ -82,7 +84,9 @@ interface ArbOwner {
     function setAmortizedCostCapBips(uint64 cap) external;
 
     /// @notice Releases surplus funds from L1PricerFundsPoolAddress for use
-    function releaseL1PricerSurplusFunds(uint256 maxWeiToRelease) external returns (uint256);
+    function releaseL1PricerSurplusFunds(
+        uint256 maxWeiToRelease
+    ) external returns (uint256);
 
     /// @notice Sets serialized chain config in ArbOS state
     function setChainConfig(string calldata chainConfig) external;

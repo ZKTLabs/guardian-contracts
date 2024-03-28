@@ -41,14 +41,13 @@ interface NodeInterface {
      * @return root the root of the outbox accumulator
      * @return proof level-by-level branch hashes constituting a proof of the send's membership at the given size
      */
-    function constructOutboxProof(uint64 size, uint64 leaf)
+    function constructOutboxProof(
+        uint64 size,
+        uint64 leaf
+    )
         external
         view
-        returns (
-            bytes32 send,
-            bytes32 root,
-            bytes32[] memory proof
-        );
+        returns (bytes32 send, bytes32 root, bytes32[] memory proof);
 
     /**
      * @notice Finds the L1 batch containing a requested L2 block, reverting if none does.
@@ -57,7 +56,9 @@ interface NodeInterface {
      * @param blockNum The L2 block being queried
      * @return batch The sequencer batch number containing the requested L2 block
      */
-    function findBatchContainingBlock(uint64 blockNum) external view returns (uint64 batch);
+    function findBatchContainingBlock(
+        uint64 blockNum
+    ) external view returns (uint64 batch);
 
     /**
      * @notice Gets the number of L1 confirmations of the sequencer batch producing the requested L2 block
@@ -68,7 +69,9 @@ interface NodeInterface {
      * @param blockHash The hash of the L2 block being queried
      * @return confirmations The number of L1 confirmations the sequencer batch has. Returns 0 if block not yet included in an L1 batch.
      */
-    function getL1Confirmations(bytes32 blockHash) external view returns (uint64 confirmations);
+    function getL1Confirmations(
+        bytes32 blockHash
+    ) external view returns (uint64 confirmations);
 
     /**
      * @notice Same as native gas estimation, but with additional info on the l1 costs.
@@ -136,7 +139,10 @@ interface NodeInterface {
      * @return amount value in L1 message in wei
      * @return calldataForL1 abi-encoded L1 message data
      */
-    function legacyLookupMessageBatchProof(uint256 batchNum, uint64 index)
+    function legacyLookupMessageBatchProof(
+        uint256 batchNum,
+        uint64 index
+    )
         external
         view
         returns (

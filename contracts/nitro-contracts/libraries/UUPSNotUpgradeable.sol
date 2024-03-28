@@ -10,7 +10,10 @@ import {DoubleLogicERC1967Upgrade} from "./AdminFallbackProxy.sol";
  * @dev UUPSUpgradeable by OpenZeppelin but not upgradeable. This is expected to be used on the secondary
  * logic slot behind a DoubleLogicERC1967Upgrade proxy
  */
-abstract contract UUPSNotUpgradeable is IERC1822Proxiable, DoubleLogicERC1967Upgrade {
+abstract contract UUPSNotUpgradeable is
+    IERC1822Proxiable,
+    DoubleLogicERC1967Upgrade
+{
     /// @custom:oz-upgrades-unsafe-allow state-variable-immutable state-variable-assignment
     address private immutable __self = address(this);
 
@@ -22,7 +25,10 @@ abstract contract UUPSNotUpgradeable is IERC1822Proxiable, DoubleLogicERC1967Upg
      * fail.
      */
     modifier onlyProxy() {
-        require(address(this) != __self, "Function must be called through delegatecall");
+        require(
+            address(this) != __self,
+            "Function must be called through delegatecall"
+        );
         require(
             _getSecondaryImplementation() == __self,
             "Function must be called through active proxy"
@@ -50,7 +56,14 @@ abstract contract UUPSNotUpgradeable is IERC1822Proxiable, DoubleLogicERC1967Upg
      * bricking a proxy that upgrades to it, by delegating to itself until out of gas. Thus it is critical that this
      * function revert if invoked through a proxy. This is guaranteed by the `notDelegated` modifier.
      */
-    function proxiableUUID() external view virtual override notDelegated returns (bytes32) {
+    function proxiableUUID()
+        external
+        view
+        virtual
+        override
+        notDelegated
+        returns (bytes32)
+    {
         return _IMPLEMENTATION_SECONDARY_SLOT;
     }
 }

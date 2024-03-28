@@ -4,24 +4,7 @@
 
 pragma solidity ^0.8.0;
 
-import {
-    AlreadyInit,
-    HadZeroInit,
-    NotOrigin,
-    DataTooLarge,
-    NotRollup,
-    DelayedBackwards,
-    DelayedTooFar,
-    ForceIncludeBlockTooSoon,
-    ForceIncludeTimeTooSoon,
-    IncorrectMessagePreimage,
-    NotBatchPoster,
-    BadSequencerNumber,
-    DataNotAuthenticated,
-    AlreadyValidDASKeyset,
-    NoSuchKeyset,
-    NotForked
-} from "../libraries/Error.sol";
+import {AlreadyInit, HadZeroInit, NotOrigin, DataTooLarge, NotRollup, DelayedBackwards, DelayedTooFar, ForceIncludeBlockTooSoon, ForceIncludeTimeTooSoon, IncorrectMessagePreimage, NotBatchPoster, BadSequencerNumber, DataNotAuthenticated, AlreadyValidDASKeyset, NoSuchKeyset, NotForked} from "../libraries/Error.sol";
 import "./IBridge.sol";
 import "./IInbox.sol";
 import "./ISequencerInbox.sol";
@@ -40,7 +23,11 @@ import {MAX_DATA_SIZE} from "../libraries/Constants.sol";
  * in the delayed inbox (Bridge.sol). If items in the delayed inbox are not included by a
  * sequencer within a time limit they can be force included into the rollup inbox by anyone.
  */
-contract SequencerInbox is DelegateCallAware, GasRefundEnabled, ISequencerInbox {
+contract SequencerInbox is
+    DelegateCallAware,
+    GasRefundEnabled,
+    ISequencerInbox
+{
     uint256 public totalDelayedMessagesRead;
 
     IBridge public bridge;
@@ -58,7 +45,8 @@ contract SequencerInbox is DelegateCallAware, GasRefundEnabled, ISequencerInbox 
     mapping(bytes32 => DasKeySetInfo) public dasKeySetInfo;
 
     modifier onlyRollupOwner() {
-        if (msg.sender != rollup.owner()) revert NotOwner(msg.sender, address(rollup));
+        if (msg.sender != rollup.owner())
+            revert NotOwner(msg.sender, address(rollup));
         _;
     }
 
@@ -84,13 +72,21 @@ contract SequencerInbox is DelegateCallAware, GasRefundEnabled, ISequencerInbox 
     function getTimeBounds() internal view virtual returns (TimeBounds memory) {
         TimeBounds memory bounds;
         if (block.timestamp > maxTimeVariation.delaySeconds) {
-            bounds.minTimestamp = uint64(block.timestamp - maxTimeVariation.delaySeconds);
+            bounds.minTimestamp = uint64(
+                block.timestamp - maxTimeVariation.delaySeconds
+            );
         }
-        bounds.maxTimestamp = uint64(block.timestamp + maxTimeVariation.futureSeconds);
+        bounds.maxTimestamp = uint64(
+            block.timestamp + maxTimeVariation.futureSeconds
+        );
         if (block.number > maxTimeVariation.delayBlocks) {
-            bounds.minBlockNumber = uint64(block.number - maxTimeVariation.delayBlocks);
+            bounds.minBlockNumber = uint64(
+                block.number - maxTimeVariation.delayBlocks
+            );
         }
-        bounds.maxBlockNumber = uint64(block.number + maxTimeVariation.futureBlocks);
+        bounds.maxBlockNumber = uint64(
+            block.number + maxTimeVariation.futureBlocks
+        );
         return bounds;
     }
 
@@ -114,7 +110,8 @@ contract SequencerInbox is DelegateCallAware, GasRefundEnabled, ISequencerInbox 
         address sender,
         bytes32 messageDataHash
     ) external {
-        if (_totalDelayedMessagesRead <= totalDelayedMessagesRead) revert DelayedBackwards();
+        if (_totalDelayedMessagesRead <= totalDelayedMessagesRead)
+            revert DelayedBackwards();
         bytes32 messageHash = Messages.messageHash(
             kind,
             sender,
@@ -127,13 +124,16 @@ contract SequencerInbox is DelegateCallAware, GasRefundEnabled, ISequencerInbox 
         // Can only force-include after the Sequencer-only window has expired.
         if (l1BlockAndTime[0] + maxTimeVariation.delayBlocks >= block.number)
             revert ForceIncludeBlockTooSoon();
-        if (l1BlockAndTime[1] + maxTimeVariation.delaySeconds >= block.timestamp)
-            revert ForceIncludeTimeTooSoon();
+        if (
+            l1BlockAndTime[1] + maxTimeVariation.delaySeconds >= block.timestamp
+        ) revert ForceIncludeTimeTooSoon();
 
         // Verify that message hash represents the last message sequence of delayed message to be included
         bytes32 prevDelayedAcc = 0;
         if (_totalDelayedMessagesRead > 1) {
-            prevDelayedAcc = bridge.delayedInboxAccs(_totalDelayedMessagesRead - 2);
+            prevDelayedAcc = bridge.delayedInboxAccs(
+                _totalDelayedMessagesRead - 2
+            );
         }
         if (
             bridge.delayedInboxAccs(_totalDelayedMessagesRead - 1) !=
@@ -191,7 +191,13 @@ contract SequencerInbox is DelegateCallAware, GasRefundEnabled, ISequencerInbox 
             bytes32 beforeAcc,
             bytes32 delayedAcc,
             bytes32 afterAcc
-        ) = addSequencerL2BatchImpl(dataHash, afterDelayedMessagesRead, data.length, 0, 0);
+        ) = addSequencerL2BatchImpl(
+                dataHash,
+                afterDelayedMessagesRead,
+                data.length,
+                0,
+                0
+            );
         if (seqMessageIndex != sequenceNumber)
             revert BadSequencerNumber(seqMessageIndex, sequenceNumber);
         emit SequencerBatchDelivered(
@@ -240,8 +246,9 @@ contract SequencerInbox is DelegateCallAware, GasRefundEnabled, ISequencerInbox 
                 prevMessageCount_,
                 newMessageCount_
             );
-        if (seqMessageIndex != sequenceNumber_ && sequenceNumber_ != ~uint256(0))
-            revert BadSequencerNumber(seqMessageIndex, sequenceNumber_);
+        if (
+            seqMessageIndex != sequenceNumber_ && sequenceNumber_ != ~uint256(0)
+        ) revert BadSequencerNumber(seqMessageIndex, sequenceNumber_);
         emit SequencerBatchDelivered(
             seqMessageIndex,
             beforeAcc,
@@ -261,7 +268,8 @@ contract SequencerInbox is DelegateCallAware, GasRefundEnabled, ISequencerInbox 
         uint256 prevMessageCount,
         uint256 newMessageCount
     ) external override refundsGas(gasRefunder) {
-        if (!isBatchPoster[msg.sender] && msg.sender != address(rollup)) revert NotBatchPoster();
+        if (!isBatchPoster[msg.sender] && msg.sender != address(rollup))
+            revert NotBatchPoster();
         (bytes32 dataHash, TimeBounds memory timeBounds) = formDataHash(
             data,
             afterDelayedMessagesRead
@@ -280,15 +288,22 @@ contract SequencerInbox is DelegateCallAware, GasRefundEnabled, ISequencerInbox 
             bytes32 beforeAcc;
             bytes32 delayedAcc;
             bytes32 afterAcc;
-            (seqMessageIndex, beforeAcc, delayedAcc, afterAcc) = addSequencerL2BatchImpl(
+            (
+                seqMessageIndex,
+                beforeAcc,
+                delayedAcc,
+                afterAcc
+            ) = addSequencerL2BatchImpl(
                 dataHash_,
                 afterDelayedMessagesRead_,
                 0,
                 prevMessageCount_,
                 newMessageCount_
             );
-            if (seqMessageIndex != sequenceNumber_ && sequenceNumber_ != ~uint256(0))
-                revert BadSequencerNumber(seqMessageIndex, sequenceNumber_);
+            if (
+                seqMessageIndex != sequenceNumber_ &&
+                sequenceNumber_ != ~uint256(0)
+            ) revert BadSequencerNumber(seqMessageIndex, sequenceNumber_);
             emit SequencerBatchDelivered(
                 seqMessageIndex,
                 beforeAcc,
@@ -304,8 +319,12 @@ contract SequencerInbox is DelegateCallAware, GasRefundEnabled, ISequencerInbox 
 
     modifier validateBatchData(bytes calldata data) {
         uint256 fullDataLen = HEADER_LENGTH + data.length;
-        if (fullDataLen > MAX_DATA_SIZE) revert DataTooLarge(fullDataLen, MAX_DATA_SIZE);
-        if (data.length > 0 && (data[0] & DATA_AUTHENTICATED_FLAG) == DATA_AUTHENTICATED_FLAG) {
+        if (fullDataLen > MAX_DATA_SIZE)
+            revert DataTooLarge(fullDataLen, MAX_DATA_SIZE);
+        if (
+            data.length > 0 &&
+            (data[0] & DATA_AUTHENTICATED_FLAG) == DATA_AUTHENTICATED_FLAG
+        ) {
             revert DataNotAuthenticated();
         }
         // the first byte is used to identify the type of batch data
@@ -313,16 +332,15 @@ contract SequencerInbox is DelegateCallAware, GasRefundEnabled, ISequencerInbox 
         if (data.length >= 33 && data[0] & 0x80 != 0) {
             // we skip the first byte, then read the next 32 bytes for the keyset
             bytes32 dasKeysetHash = bytes32(data[1:33]);
-            if (!dasKeySetInfo[dasKeysetHash].isValidKeyset) revert NoSuchKeyset(dasKeysetHash);
+            if (!dasKeySetInfo[dasKeysetHash].isValidKeyset)
+                revert NoSuchKeyset(dasKeysetHash);
         }
         _;
     }
 
-    function packHeader(uint256 afterDelayedMessagesRead)
-        internal
-        view
-        returns (bytes memory, TimeBounds memory)
-    {
+    function packHeader(
+        uint256 afterDelayedMessagesRead
+    ) internal view returns (bytes memory, TimeBounds memory) {
         TimeBounds memory timeBounds = getTimeBounds();
         bytes memory header = abi.encodePacked(
             timeBounds.minTimestamp,
@@ -336,23 +354,28 @@ contract SequencerInbox is DelegateCallAware, GasRefundEnabled, ISequencerInbox 
         return (header, timeBounds);
     }
 
-    function formDataHash(bytes calldata data, uint256 afterDelayedMessagesRead)
+    function formDataHash(
+        bytes calldata data,
+        uint256 afterDelayedMessagesRead
+    )
         internal
         view
         validateBatchData(data)
         returns (bytes32, TimeBounds memory)
     {
-        (bytes memory header, TimeBounds memory timeBounds) = packHeader(afterDelayedMessagesRead);
+        (bytes memory header, TimeBounds memory timeBounds) = packHeader(
+            afterDelayedMessagesRead
+        );
         bytes32 dataHash = keccak256(bytes.concat(header, data));
         return (dataHash, timeBounds);
     }
 
-    function formEmptyDataHash(uint256 afterDelayedMessagesRead)
-        internal
-        view
-        returns (bytes32, TimeBounds memory)
-    {
-        (bytes memory header, TimeBounds memory timeBounds) = packHeader(afterDelayedMessagesRead);
+    function formEmptyDataHash(
+        uint256 afterDelayedMessagesRead
+    ) internal view returns (bytes32, TimeBounds memory) {
+        (bytes memory header, TimeBounds memory timeBounds) = packHeader(
+            afterDelayedMessagesRead
+        );
         return (keccak256(header), timeBounds);
     }
 
@@ -371,15 +394,18 @@ contract SequencerInbox is DelegateCallAware, GasRefundEnabled, ISequencerInbox 
             bytes32 acc
         )
     {
-        if (afterDelayedMessagesRead < totalDelayedMessagesRead) revert DelayedBackwards();
-        if (afterDelayedMessagesRead > bridge.delayedMessageCount()) revert DelayedTooFar();
+        if (afterDelayedMessagesRead < totalDelayedMessagesRead)
+            revert DelayedBackwards();
+        if (afterDelayedMessagesRead > bridge.delayedMessageCount())
+            revert DelayedTooFar();
 
-        (seqMessageIndex, beforeAcc, delayedAcc, acc) = bridge.enqueueSequencerMessage(
-            dataHash,
-            afterDelayedMessagesRead,
-            prevMessageCount,
-            newMessageCount
-        );
+        (seqMessageIndex, beforeAcc, delayedAcc, acc) = bridge
+            .enqueueSequencerMessage(
+                dataHash,
+                afterDelayedMessagesRead,
+                prevMessageCount,
+                newMessageCount
+            );
 
         totalDelayedMessagesRead = afterDelayedMessagesRead;
 
@@ -412,27 +438,34 @@ contract SequencerInbox is DelegateCallAware, GasRefundEnabled, ISequencerInbox 
     }
 
     /// @inheritdoc ISequencerInbox
-    function setMaxTimeVariation(ISequencerInbox.MaxTimeVariation memory maxTimeVariation_)
-        external
-        onlyRollupOwner
-    {
+    function setMaxTimeVariation(
+        ISequencerInbox.MaxTimeVariation memory maxTimeVariation_
+    ) external onlyRollupOwner {
         maxTimeVariation = maxTimeVariation_;
         emit OwnerFunctionCalled(0);
     }
 
     /// @inheritdoc ISequencerInbox
-    function setIsBatchPoster(address addr, bool isBatchPoster_) external onlyRollupOwner {
+    function setIsBatchPoster(
+        address addr,
+        bool isBatchPoster_
+    ) external onlyRollupOwner {
         isBatchPoster[addr] = isBatchPoster_;
         emit OwnerFunctionCalled(1);
     }
 
     /// @inheritdoc ISequencerInbox
-    function setValidKeyset(bytes calldata keysetBytes) external onlyRollupOwner {
-        uint256 ksWord = uint256(keccak256(bytes.concat(hex"fe", keccak256(keysetBytes))));
+    function setValidKeyset(
+        bytes calldata keysetBytes
+    ) external onlyRollupOwner {
+        uint256 ksWord = uint256(
+            keccak256(bytes.concat(hex"fe", keccak256(keysetBytes)))
+        );
         bytes32 ksHash = bytes32(ksWord ^ (1 << 255));
         require(keysetBytes.length < 64 * 1024, "keyset is too large");
 
-        if (dasKeySetInfo[ksHash].isValidKeyset) revert AlreadyValidDASKeyset(ksHash);
+        if (dasKeySetInfo[ksHash].isValidKeyset)
+            revert AlreadyValidDASKeyset(ksHash);
         dasKeySetInfo[ksHash] = DasKeySetInfo({
             isValidKeyset: true,
             creationBlock: uint64(block.number)
@@ -453,7 +486,10 @@ contract SequencerInbox is DelegateCallAware, GasRefundEnabled, ISequencerInbox 
     }
 
     /// @inheritdoc ISequencerInbox
-    function setIsSequencer(address addr, bool isSequencer_) external onlyRollupOwner {
+    function setIsSequencer(
+        address addr,
+        bool isSequencer_
+    ) external onlyRollupOwner {
         isSequencer[addr] = isSequencer_;
         emit OwnerFunctionCalled(4);
     }
@@ -463,7 +499,9 @@ contract SequencerInbox is DelegateCallAware, GasRefundEnabled, ISequencerInbox 
     }
 
     /// @inheritdoc ISequencerInbox
-    function getKeysetCreationBlock(bytes32 ksHash) external view returns (uint256) {
+    function getKeysetCreationBlock(
+        bytes32 ksHash
+    ) external view returns (uint256) {
         DasKeySetInfo memory ksInfo = dasKeySetInfo[ksHash];
         if (ksInfo.creationBlock == 0) revert NoSuchKeyset(ksHash);
         return uint256(ksInfo.creationBlock);

@@ -7,10 +7,14 @@ pragma solidity ^0.8.4;
 import {MerkleProofTooLong} from "./Error.sol";
 
 library MerkleLib {
-    function generateRoot(bytes32[] memory _hashes) internal pure returns (bytes32) {
+    function generateRoot(
+        bytes32[] memory _hashes
+    ) internal pure returns (bytes32) {
         bytes32[] memory prevLayer = _hashes;
         while (prevLayer.length > 1) {
-            bytes32[] memory nextLayer = new bytes32[]((prevLayer.length + 1) / 2);
+            bytes32[] memory nextLayer = new bytes32[](
+                (prevLayer.length + 1) / 2
+            );
             for (uint256 i = 0; i < nextLayer.length; i++) {
                 if (2 * i + 1 < prevLayer.length) {
                     nextLayer[i] = keccak256(

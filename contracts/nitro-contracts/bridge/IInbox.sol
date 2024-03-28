@@ -20,7 +20,9 @@ interface IInbox is IDelayedMessageProvider {
      *      This method will be disabled upon L1 fork to prevent replay attacks on L2
      * @param messageData Data of the message being sent
      */
-    function sendL2MessageFromOrigin(bytes calldata messageData) external returns (uint256);
+    function sendL2MessageFromOrigin(
+        bytes calldata messageData
+    ) external returns (uint256);
 
     /**
      * @notice Send a generic L2 message to the chain
@@ -28,7 +30,9 @@ interface IInbox is IDelayedMessageProvider {
      *      This method will be disabled upon L1 fork to prevent replay attacks on L2
      * @param messageData Data of the message being sent
      */
-    function sendL2Message(bytes calldata messageData) external returns (uint256);
+    function sendL2Message(
+        bytes calldata messageData
+    ) external returns (uint256);
 
     function sendL1FundedUnsignedTransaction(
         uint256 gasLimit,
@@ -107,10 +111,10 @@ interface IInbox is IDelayedMessageProvider {
      * @param dataLength The length of the retryable's calldata, in bytes
      * @param baseFee The block basefee when the retryable is included in the chain, if 0 current block.basefee will be used
      */
-    function calculateRetryableSubmissionFee(uint256 dataLength, uint256 baseFee)
-        external
-        view
-        returns (uint256);
+    function calculateRetryableSubmissionFee(
+        uint256 dataLength,
+        uint256 baseFee
+    ) external view returns (uint256);
 
     /**
      * @notice Deposit eth from L1 to L2 to address of the sender if sender is an EOA, and to its aliased address if the sender is a contract
@@ -189,5 +193,8 @@ interface IInbox is IDelayedMessageProvider {
      */
     function postUpgradeInit(IBridge _bridge) external;
 
-    function initialize(IBridge _bridge, ISequencerInbox _sequencerInbox) external;
+    function initialize(
+        IBridge _bridge,
+        ISequencerInbox _sequencerInbox
+    ) external;
 }

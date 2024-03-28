@@ -10,9 +10,18 @@ import "@openzeppelin/contracts/proxy/utils/UUPSUpgradeable.sol";
 /// @notice An extension to OZ's UUPSUpgradeable contract to be used for handling UUPS upgrades with a DoubleLogicERC1967Upgrade proxy
 ///         The should be used in the primary implementation slot of the DoubleLogicUUPS proxy
 /// @dev upgrades should be handles by the primary logic contract in order to pass the `onlyProxy` check
-abstract contract DoubleLogicUUPSUpgradeable is UUPSUpgradeable, DoubleLogicERC1967Upgrade {
+abstract contract DoubleLogicUUPSUpgradeable is
+    UUPSUpgradeable,
+    DoubleLogicERC1967Upgrade
+{
     /// @inheritdoc UUPSUpgradeable
-    function proxiableUUID() external view override notDelegated returns (bytes32) {
+    function proxiableUUID()
+        external
+        view
+        override
+        notDelegated
+        returns (bytes32)
+    {
         return _IMPLEMENTATION_SLOT;
     }
 
@@ -26,7 +35,9 @@ abstract contract DoubleLogicUUPSUpgradeable is UUPSUpgradeable, DoubleLogicERC1
      * function _authorizeSecondaryUpgrade(address) internal override onlyOwner {}
      * ```
      */
-    function _authorizeSecondaryUpgrade(address newImplementation) internal virtual;
+    function _authorizeSecondaryUpgrade(
+        address newImplementation
+    ) internal virtual;
 
     /**
      * @dev Upgrade the secondary implementation of the proxy to `newImplementation`.
@@ -48,11 +59,10 @@ abstract contract DoubleLogicUUPSUpgradeable is UUPSUpgradeable, DoubleLogicERC1
      *
      * Emits an {UpgradedSecondary} event.
      */
-    function upgradeSecondaryToAndCall(address newImplementation, bytes memory data)
-        external
-        payable
-        onlyProxy
-    {
+    function upgradeSecondaryToAndCall(
+        address newImplementation,
+        bytes memory data
+    ) external payable onlyProxy {
         _authorizeSecondaryUpgrade(newImplementation);
         _upgradeSecondaryToAndCallUUPS(newImplementation, data, true);
     }

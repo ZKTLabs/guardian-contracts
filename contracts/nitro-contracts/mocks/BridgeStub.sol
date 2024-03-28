@@ -36,7 +36,9 @@ contract BridgeStub is IBridge {
         emit SequencerInboxUpdated(_sequencerInbox);
     }
 
-    function allowedDelayedInboxes(address inbox) external view override returns (bool) {
+    function allowedDelayedInboxes(
+        address inbox
+    ) external view override returns (bool) {
         return allowedDelayedInboxesMap[inbox].allowed;
     }
 
@@ -80,7 +82,10 @@ contract BridgeStub is IBridge {
             prevMessageCount != 0 &&
             sequencerReportedSubMessageCount != 0
         ) {
-            revert BadSequencerMessageNumber(sequencerReportedSubMessageCount, prevMessageCount);
+            revert BadSequencerMessageNumber(
+                sequencerReportedSubMessageCount,
+                prevMessageCount
+            );
         }
         sequencerReportedSubMessageCount = newMessageCount;
         seqMessageIndex = sequencerInboxAccs.length;
@@ -94,10 +99,10 @@ contract BridgeStub is IBridge {
         sequencerInboxAccs.push(acc);
     }
 
-    function submitBatchSpendingReport(address batchPoster, bytes32 dataHash)
-        external
-        returns (uint256)
-    {
+    function submitBatchSpendingReport(
+        address batchPoster,
+        bytes32 dataHash
+    ) external returns (uint256) {
         // TODO: implement stub
     }
 
@@ -123,7 +128,9 @@ contract BridgeStub is IBridge {
         if (count > 0) {
             prevAcc = delayedInboxAccs[count - 1];
         }
-        delayedInboxAccs.push(Messages.accumulateInboxMessage(prevAcc, messageHash));
+        delayedInboxAccs.push(
+            Messages.accumulateInboxMessage(prevAcc, messageHash)
+        );
         return count;
     }
 
@@ -143,20 +150,24 @@ contract BridgeStub is IBridge {
             return;
         }
         if (enabled) {
-            allowedDelayedInboxesMap[inbox] = InOutInfo(allowedDelayedInboxList.length, true);
+            allowedDelayedInboxesMap[inbox] = InOutInfo(
+                allowedDelayedInboxList.length,
+                true
+            );
             allowedDelayedInboxList.push(inbox);
         } else {
             allowedDelayedInboxList[info.index] = allowedDelayedInboxList[
                 allowedDelayedInboxList.length - 1
             ];
-            allowedDelayedInboxesMap[allowedDelayedInboxList[info.index]].index = info.index;
+            allowedDelayedInboxesMap[allowedDelayedInboxList[info.index]]
+                .index = info.index;
             allowedDelayedInboxList.pop();
             delete allowedDelayedInboxesMap[inbox];
         }
     }
 
     function setOutbox(
-        address, /* outbox */
+        address /* outbox */,
         bool /* enabled*/
     ) external pure override {
         revert("NOT_IMPLEMENTED");

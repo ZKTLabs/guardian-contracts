@@ -26,9 +26,16 @@ contract SingleExecutionChallenge is ChallengeManager {
         bytes32[] memory segments = new bytes32[](2);
         segments[0] = startAndEndHashes[0];
         segments[1] = startAndEndHashes[1];
-        bytes32 challengeStateHash = ChallengeLib.hashChallengeState(0, numSteps_, segments);
+        bytes32 challengeStateHash = ChallengeLib.hashChallengeState(
+            0,
+            numSteps_,
+            segments
+        );
         challenge.challengeStateHash = challengeStateHash;
-        challenge.next = ChallengeLib.Participant({addr: asserter_, timeLeft: asserterTimeLeft_});
+        challenge.next = ChallengeLib.Participant({
+            addr: asserter_,
+            timeLeft: asserterTimeLeft_
+        });
         challenge.current = ChallengeLib.Participant({
             addr: challenger_,
             timeLeft: challengerTimeLeft_
@@ -36,6 +43,12 @@ contract SingleExecutionChallenge is ChallengeManager {
         challenge.lastMoveTimestamp = block.timestamp;
         challenge.mode = ChallengeLib.ChallengeMode.EXECUTION;
 
-        emit Bisected(challengeIndex, challengeStateHash, 0, numSteps_, segments);
+        emit Bisected(
+            challengeIndex,
+            challengeStateHash,
+            0,
+            numSteps_,
+            segments
+        );
     }
 }

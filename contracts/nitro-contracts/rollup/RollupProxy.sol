@@ -9,9 +9,10 @@ import "./IRollupAdmin.sol";
 import "./Config.sol";
 
 contract RollupProxy is AdminFallbackProxy {
-    function initializeProxy(Config memory config, ContractDependencies memory connectedContracts)
-        external
-    {
+    function initializeProxy(
+        Config memory config,
+        ContractDependencies memory connectedContracts
+    ) external {
         if (
             _getAdmin() == address(0) &&
             _getImplementation() == address(0) &&
@@ -25,7 +26,10 @@ contract RollupProxy is AdminFallbackProxy {
                     connectedContracts
                 ),
                 address(connectedContracts.rollupUserLogic),
-                abi.encodeWithSelector(IRollupUserAbs.initialize.selector, config.stakeToken),
+                abi.encodeWithSelector(
+                    IRollupUserAbs.initialize.selector,
+                    config.stakeToken
+                ),
                 config.owner
             );
         } else {

@@ -4,16 +4,7 @@
 
 pragma solidity ^0.8.4;
 
-import {
-    AlreadyInit,
-    NotRollup,
-    ProofTooLong,
-    PathNotMinimal,
-    UnknownRoot,
-    AlreadySpent,
-    BridgeCallFailed,
-    HadZeroInit
-} from "../libraries/Error.sol";
+import {AlreadyInit, NotRollup, ProofTooLong, PathNotMinimal, UnknownRoot, AlreadySpent, BridgeCallFailed, HadZeroInit} from "../libraries/Error.sol";
 import "./IBridge.sol";
 import "./IOutbox.sol";
 import "../libraries/MerkleLib.sol";
@@ -46,8 +37,10 @@ contract Outbox is DelegateCallAware, IOutbox {
     uint128 private constant L2BLOCK_DEFAULT_CONTEXT = type(uint128).max;
     uint128 private constant L1BLOCK_DEFAULT_CONTEXT = type(uint128).max;
     uint128 private constant TIMESTAMP_DEFAULT_CONTEXT = type(uint128).max;
-    bytes32 private constant OUTPUTID_DEFAULT_CONTEXT = bytes32(type(uint256).max);
-    address private constant SENDER_DEFAULT_CONTEXT = address(type(uint160).max);
+    bytes32 private constant OUTPUTID_DEFAULT_CONTEXT =
+        bytes32(type(uint256).max);
+    address private constant SENDER_DEFAULT_CONTEXT =
+        address(type(uint160).max);
 
     uint128 public constant OUTBOX_VERSION = 2;
 
@@ -143,7 +136,16 @@ contract Outbox is DelegateCallAware, IOutbox {
 
         recordOutputAsSpent(proof, index, userTx);
 
-        executeTransactionImpl(index, l2Sender, to, l2Block, l1Block, l2Timestamp, value, data);
+        executeTransactionImpl(
+            index,
+            l2Sender,
+            to,
+            l2Block,
+            l1Block,
+            l2Timestamp,
+            value,
+            data
+        );
     }
 
     /// @inheritdoc IOutbox
@@ -158,7 +160,16 @@ contract Outbox is DelegateCallAware, IOutbox {
         bytes calldata data
     ) external {
         if (msg.sender != address(0)) revert SimulationOnlyEntrypoint();
-        executeTransactionImpl(index, l2Sender, to, l2Block, l1Block, l2Timestamp, value, data);
+        executeTransactionImpl(
+            index,
+            l2Sender,
+            to,
+            l2Block,
+            l1Block,
+            l2Timestamp,
+            value,
+            data
+        );
     }
 
     function executeTransactionImpl(
@@ -191,22 +202,19 @@ contract Outbox is DelegateCallAware, IOutbox {
         context = prevContext;
     }
 
-    function _calcSpentIndexOffset(uint256 index)
-        internal
-        view
-        returns (
-            uint256,
-            uint256,
-            bytes32
-        )
-    {
+    function _calcSpentIndexOffset(
+        uint256 index
+    ) internal view returns (uint256, uint256, bytes32) {
         uint256 spentIndex = index / 255; // Note: Reserves the MSB.
         uint256 bitOffset = index % 255;
         bytes32 replay = spent[spentIndex];
         return (spentIndex, bitOffset, replay);
     }
 
-    function _isSpent(uint256 bitOffset, bytes32 replay) internal pure returns (bool) {
+    function _isSpent(
+        uint256 bitOffset,
+        bytes32 replay
+    ) internal pure returns (bool) {
         return ((replay >> bitOffset) & bytes32(uint256(1))) != bytes32(0);
     }
 
@@ -222,13 +230,18 @@ contract Outbox is DelegateCallAware, IOutbox {
         bytes32 item
     ) internal {
         if (proof.length >= 256) revert ProofTooLong(proof.length);
-        if (index >= 2**proof.length) revert PathNotMinimal(index, 2**proof.length);
+        if (index >= 2 ** proof.length)
+            revert PathNotMinimal(index, 2 ** proof.length);
 
         // Hash the leaf an extra time to prove it's a leaf
         bytes32 calcRoot = calculateMerkleRoot(proof, index, item);
         if (roots[calcRoot] == bytes32(0)) revert UnknownRoot(calcRoot);
 
-        (uint256 spentIndex, uint256 bitOffset, bytes32 replay) = _calcSpentIndexOffset(index);
+        (
+            uint256 spentIndex,
+            uint256 bitOffset,
+            bytes32 replay
+        ) = _calcSpentIndexOffset(index);
 
         if (_isSpent(bitOffset, replay)) revert AlreadySpent(index);
         spent[spentIndex] = (replay | bytes32(1 << bitOffset));
@@ -239,7 +252,11 @@ contract Outbox is DelegateCallAware, IOutbox {
         uint256 value,
         bytes memory data
     ) internal {
-        (bool success, bytes memory returndata) = bridge.executeCall(to, value, data);
+        (bool success, bytes memory returndata) = bridge.executeCall(
+            to,
+            value,
+            data
+        );
         if (!success) {
             if (returndata.length > 0) {
                 // solhint-disable-next-line no-inline-assembly
@@ -263,7 +280,17 @@ contract Outbox is DelegateCallAware, IOutbox {
         bytes calldata data
     ) public pure returns (bytes32) {
         return
-            keccak256(abi.encodePacked(l2Sender, to, l2Block, l1Block, l2Timestamp, value, data));
+            keccak256(
+                abi.encodePacked(
+                    l2Sender,
+                    to,
+                    l2Block,
+                    l1Block,
+                    l2Timestamp,
+                    value,
+                    data
+                )
+            );
     }
 
     function calculateMerkleRoot(
@@ -271,6 +298,11 @@ contract Outbox is DelegateCallAware, IOutbox {
         uint256 path,
         bytes32 item
     ) public pure returns (bytes32) {
-        return MerkleLib.calculateRoot(proof, path, keccak256(abi.encodePacked(item)));
+        return
+            MerkleLib.calculateRoot(
+                proof,
+                path,
+                keccak256(abi.encodePacked(item))
+            );
     }
 }

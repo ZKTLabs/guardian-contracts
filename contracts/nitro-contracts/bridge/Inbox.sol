@@ -4,22 +4,7 @@
 
 pragma solidity ^0.8.4;
 
-import {
-    AlreadyInit,
-    NotOrigin,
-    DataTooLarge,
-    AlreadyPaused,
-    AlreadyUnpaused,
-    Paused,
-    InsufficientValue,
-    InsufficientSubmissionCost,
-    NotAllowedOrigin,
-    RetryableData,
-    NotRollupOrOwner,
-    L1Forked,
-    NotForked,
-    GasLimitTooLarge
-} from "../libraries/Error.sol";
+import {AlreadyInit, NotOrigin, DataTooLarge, AlreadyPaused, AlreadyUnpaused, Paused, InsufficientValue, InsufficientSubmissionCost, NotAllowedOrigin, RetryableData, NotRollupOrOwner, L1Forked, NotForked, GasLimitTooLarge} from "../libraries/Error.sol";
 import "./IInbox.sol";
 import "./ISequencerInbox.sol";
 import "./IBridge.sol";
@@ -27,14 +12,7 @@ import "./IBridge.sol";
 import "./Messages.sol";
 import "../libraries/AddressAliasHelper.sol";
 import "../libraries/DelegateCallAware.sol";
-import {
-    L2_MSG,
-    L1MessageType_L2FundedByL1,
-    L1MessageType_submitRetryableTx,
-    L1MessageType_ethDeposit,
-    L2MessageType_unsignedEOATx,
-    L2MessageType_unsignedContractTx
-} from "../libraries/MessageTypes.sol";
+import {L2_MSG, L1MessageType_L2FundedByL1, L1MessageType_submitRetryableTx, L1MessageType_ethDeposit, L2MessageType_unsignedEOATx, L2MessageType_unsignedContractTx} from "../libraries/MessageTypes.sol";
 import {MAX_DATA_SIZE, UNISWAP_L1_TIMELOCK, UNISWAP_L2_FACTORY} from "../libraries/Constants.sol";
 import "../precompiles/ArbSys.sol";
 
@@ -58,7 +36,10 @@ contract Inbox is DelegateCallAware, PausableUpgradeable, IInbox {
     event AllowListAddressSet(address indexed user, bool val);
     event AllowListEnabledUpdated(bool isEnabled);
 
-    function setAllowList(address[] memory user, bool[] memory val) external onlyRollupOrOwner {
+    function setAllowList(
+        address[] memory user,
+        bool[] memory val
+    ) external onlyRollupOrOwner {
         require(user.length == val.length, "INVALID_INPUT");
 
         for (uint256 i = 0; i < user.length; i++) {
@@ -67,7 +48,9 @@ contract Inbox is DelegateCallAware, PausableUpgradeable, IInbox {
         }
     }
 
-    function setAllowListEnabled(bool _allowListEnabled) external onlyRollupOrOwner {
+    function setAllowListEnabled(
+        bool _allowListEnabled
+    ) external onlyRollupOrOwner {
         require(_allowListEnabled != allowListEnabled, "ALREADY_SET");
         allowListEnabled = _allowListEnabled;
         emit AllowListEnabledUpdated(_allowListEnabled);
@@ -79,7 +62,8 @@ contract Inbox is DelegateCallAware, PausableUpgradeable, IInbox {
     /// a smart contract phishing risk).
     modifier onlyAllowed() {
         // solhint-disable-next-line avoid-tx-origin
-        if (allowListEnabled && !isAllowed[tx.origin]) revert NotAllowedOrigin(tx.origin);
+        if (allowListEnabled && !isAllowed[tx.origin])
+            revert NotAllowedOrigin(tx.origin);
         _;
     }
 
@@ -90,7 +74,11 @@ contract Inbox is DelegateCallAware, PausableUpgradeable, IInbox {
         if (msg.sender != address(rollup)) {
             address rollupOwner = rollup.owner();
             if (msg.sender != rollupOwner) {
-                revert NotRollupOrOwner(msg.sender, address(rollup), rollupOwner);
+                revert NotRollupOrOwner(
+                    msg.sender,
+                    address(rollup),
+                    rollupOwner
+                );
             }
         }
         _;
@@ -112,11 +100,10 @@ contract Inbox is DelegateCallAware, PausableUpgradeable, IInbox {
         _unpause();
     }
 
-    function initialize(IBridge _bridge, ISequencerInbox _sequencerInbox)
-        external
-        initializer
-        onlyDelegated
-    {
+    function initialize(
+        IBridge _bridge,
+        ISequencerInbox _sequencerInbox
+    ) external initializer onlyDelegated {
         bridge = _bridge;
         sequencerInbox = _sequencerInbox;
         allowListEnabled = false;
@@ -127,29 +114,27 @@ contract Inbox is DelegateCallAware, PausableUpgradeable, IInbox {
     function postUpgradeInit(IBridge) external onlyDelegated onlyProxyOwner {}
 
     /// @inheritdoc IInbox
-    function sendL2MessageFromOrigin(bytes calldata messageData)
-        external
-        whenNotPaused
-        onlyAllowed
-        returns (uint256)
-    {
+    function sendL2MessageFromOrigin(
+        bytes calldata messageData
+    ) external whenNotPaused onlyAllowed returns (uint256) {
         if (_chainIdChanged()) revert L1Forked();
         // solhint-disable-next-line avoid-tx-origin
         if (msg.sender != tx.origin) revert NotOrigin();
         if (messageData.length > MAX_DATA_SIZE)
             revert DataTooLarge(messageData.length, MAX_DATA_SIZE);
-        uint256 msgNum = deliverToBridge(L2_MSG, msg.sender, keccak256(messageData));
+        uint256 msgNum = deliverToBridge(
+            L2_MSG,
+            msg.sender,
+            keccak256(messageData)
+        );
         emit InboxMessageDeliveredFromOrigin(msgNum);
         return msgNum;
     }
 
     /// @inheritdoc IInbox
-    function sendL2Message(bytes calldata messageData)
-        external
-        whenNotPaused
-        onlyAllowed
-        returns (uint256)
-    {
+    function sendL2Message(
+        bytes calldata messageData
+    ) external whenNotPaused onlyAllowed returns (uint256) {
         if (_chainIdChanged()) revert L1Forked();
         return _deliverMessage(L2_MSG, msg.sender, messageData);
     }
@@ -352,27 +337,38 @@ contract Inbox is DelegateCallAware, PausableUpgradeable, IInbox {
                     nonce,
                     uint256(uint160(address(100))), // ArbSys address
                     value,
-                    abi.encodeWithSelector(ArbSys.withdrawEth.selector, withdrawTo)
+                    abi.encodeWithSelector(
+                        ArbSys.withdrawEth.selector,
+                        withdrawTo
+                    )
                 )
             );
     }
 
     /// @inheritdoc IInbox
-    function calculateRetryableSubmissionFee(uint256 dataLength, uint256 baseFee)
-        public
-        view
-        returns (uint256)
-    {
+    function calculateRetryableSubmissionFee(
+        uint256 dataLength,
+        uint256 baseFee
+    ) public view returns (uint256) {
         // Use current block basefee if baseFee parameter is 0
-        return (1400 + 6 * dataLength) * (baseFee == 0 ? block.basefee : baseFee);
+        return
+            (1400 + 6 * dataLength) * (baseFee == 0 ? block.basefee : baseFee);
     }
 
     /// @inheritdoc IInbox
-    function depositEth() public payable whenNotPaused onlyAllowed returns (uint256) {
+    function depositEth()
+        public
+        payable
+        whenNotPaused
+        onlyAllowed
+        returns (uint256)
+    {
         address dest = msg.sender;
 
         // solhint-disable-next-line avoid-tx-origin
-        if (AddressUpgradeable.isContract(msg.sender) || tx.origin != msg.sender) {
+        if (
+            AddressUpgradeable.isContract(msg.sender) || tx.origin != msg.sender
+        ) {
             // isContract check fails if this function is called during a contract's constructor.
             dest = AddressAliasHelper.applyL1ToL2Alias(msg.sender);
         }
@@ -386,7 +382,9 @@ contract Inbox is DelegateCallAware, PausableUpgradeable, IInbox {
     }
 
     /// @notice deprecated in favour of depositEth with no parameters
-    function depositEth(uint256) external payable whenNotPaused onlyAllowed returns (uint256) {
+    function depositEth(
+        uint256
+    ) external payable whenNotPaused onlyAllowed returns (uint256) {
         return depositEth();
     }
 
@@ -440,7 +438,10 @@ contract Inbox is DelegateCallAware, PausableUpgradeable, IInbox {
         bytes calldata data
     ) external payable whenNotPaused onlyAllowed returns (uint256) {
         // ensure the user's deposit alone will make submission succeed
-        if (msg.value < (maxSubmissionCost + l2CallValue + gasLimit * maxFeePerGas)) {
+        if (
+            msg.value <
+            (maxSubmissionCost + l2CallValue + gasLimit * maxFeePerGas)
+        ) {
             revert InsufficientValue(
                 maxSubmissionCost + l2CallValue + gasLimit * maxFeePerGas,
                 msg.value
@@ -451,11 +452,15 @@ contract Inbox is DelegateCallAware, PausableUpgradeable, IInbox {
         // so that it can access its funds on the L2
         // since the beneficiary and other refund addresses don't get rewritten by arb-os
         if (AddressUpgradeable.isContract(excessFeeRefundAddress)) {
-            excessFeeRefundAddress = AddressAliasHelper.applyL1ToL2Alias(excessFeeRefundAddress);
+            excessFeeRefundAddress = AddressAliasHelper.applyL1ToL2Alias(
+                excessFeeRefundAddress
+            );
         }
         if (AddressUpgradeable.isContract(callValueRefundAddress)) {
             // this is the beneficiary. be careful since this is the address that can cancel the retryable in the L2
-            callValueRefundAddress = AddressAliasHelper.applyL1ToL2Alias(callValueRefundAddress);
+            callValueRefundAddress = AddressAliasHelper.applyL1ToL2Alias(
+                callValueRefundAddress
+            );
         }
 
         // gas limit is validated to be within uint64 in unsafeCreateRetryableTicket
@@ -504,7 +509,10 @@ contract Inbox is DelegateCallAware, PausableUpgradeable, IInbox {
             revert GasLimitTooLarge();
         }
 
-        uint256 submissionFee = calculateRetryableSubmissionFee(data.length, block.basefee);
+        uint256 submissionFee = calculateRetryableSubmissionFee(
+            data.length,
+            block.basefee
+        );
         if (maxSubmissionCost < submissionFee)
             revert InsufficientSubmissionCost(submissionFee, maxSubmissionCost);
 
@@ -548,7 +556,10 @@ contract Inbox is DelegateCallAware, PausableUpgradeable, IInbox {
         require(to == UNISWAP_L2_FACTORY, "NOT_TO_UNISWAP_L2_FACTORY");
 
         // ensure the user's deposit alone will make submission succeed
-        if (msg.value < (maxSubmissionCost + l2CallValue + gasLimit * maxFeePerGas)) {
+        if (
+            msg.value <
+            (maxSubmissionCost + l2CallValue + gasLimit * maxFeePerGas)
+        ) {
             revert InsufficientValue(
                 maxSubmissionCost + l2CallValue + gasLimit * maxFeePerGas,
                 msg.value
@@ -559,11 +570,15 @@ contract Inbox is DelegateCallAware, PausableUpgradeable, IInbox {
         // so that it can access its funds on the L2
         // since the beneficiary and other refund addresses don't get rewritten by arb-os
         if (AddressUpgradeable.isContract(excessFeeRefundAddress)) {
-            excessFeeRefundAddress = AddressAliasHelper.applyL1ToL2Alias(excessFeeRefundAddress);
+            excessFeeRefundAddress = AddressAliasHelper.applyL1ToL2Alias(
+                excessFeeRefundAddress
+            );
         }
         if (AddressUpgradeable.isContract(callValueRefundAddress)) {
             // this is the beneficiary. be careful since this is the address that can cancel the retryable in the L2
-            callValueRefundAddress = AddressAliasHelper.applyL1ToL2Alias(callValueRefundAddress);
+            callValueRefundAddress = AddressAliasHelper.applyL1ToL2Alias(
+                callValueRefundAddress
+            );
         }
 
         // gas price and limit of 1 should never be a valid input, so instead they are used as
@@ -582,7 +597,10 @@ contract Inbox is DelegateCallAware, PausableUpgradeable, IInbox {
                 data
             );
 
-        uint256 submissionFee = calculateRetryableSubmissionFee(data.length, block.basefee);
+        uint256 submissionFee = calculateRetryableSubmissionFee(
+            data.length,
+            block.basefee
+        );
         if (maxSubmissionCost < submissionFee)
             revert InsufficientSubmissionCost(submissionFee, maxSubmissionCost);
 
@@ -612,7 +630,11 @@ contract Inbox is DelegateCallAware, PausableUpgradeable, IInbox {
     ) internal returns (uint256) {
         if (_messageData.length > MAX_DATA_SIZE)
             revert DataTooLarge(_messageData.length, MAX_DATA_SIZE);
-        uint256 msgNum = deliverToBridge(_kind, _sender, keccak256(_messageData));
+        uint256 msgNum = deliverToBridge(
+            _kind,
+            _sender,
+            keccak256(_messageData)
+        );
         emit InboxMessageDelivered(msgNum, _messageData);
         return msgNum;
     }

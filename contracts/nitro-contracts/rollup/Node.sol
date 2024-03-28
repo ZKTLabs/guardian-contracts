@@ -93,7 +93,10 @@ library NodeLib {
      * @notice Update the child confirmed deadline
      * @param deadline The new deadline to set
      */
-    function newChildConfirmDeadline(Node storage self, uint64 deadline) internal {
+    function newChildConfirmDeadline(
+        Node storage self,
+        uint64 deadline
+    ) internal {
         self.noChildConfirmedBeforeBlock = deadline;
     }
 
@@ -108,6 +111,9 @@ library NodeLib {
      * @notice Check whether the current block number has met or passed deadline for children of this node to be confirmed
      */
     function requirePastChildConfirmDeadline(Node memory self) internal view {
-        require(block.number >= self.noChildConfirmedBeforeBlock, "CHILD_TOO_RECENT");
+        require(
+            block.number >= self.noChildConfirmedBeforeBlock,
+            "CHILD_TOO_RECENT"
+        );
     }
 }

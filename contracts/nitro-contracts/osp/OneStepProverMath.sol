@@ -318,7 +318,10 @@ contract OneStepProverMath is IOneStepProver {
         unchecked {
             if (opcodeOffset == 3) {
                 // div_s
-                if (b == 0 || (int64(a) == -9223372036854775808 && int64(b) == -1)) {
+                if (
+                    b == 0 ||
+                    (int64(a) == -9223372036854775808 && int64(b) == -1)
+                ) {
                     mach.status = MachineStatus.ERRORED;
                     return;
                 }
@@ -474,9 +477,12 @@ contract OneStepProverMath is IOneStepProver {
 
         uint16 opcode = inst.opcode;
 
-        function(Machine memory, Module memory, Instruction calldata, bytes calldata)
-            internal
-            pure impl;
+        function(
+            Machine memory,
+            Module memory,
+            Instruction calldata,
+            bytes calldata
+        ) internal pure impl;
         if (opcode == Instructions.I32_EQZ || opcode == Instructions.I64_EQZ) {
             impl = executeEqz;
         } else if (
@@ -489,7 +495,9 @@ contract OneStepProverMath is IOneStepProver {
             opcode <= Instructions.I32_UNOP_BASE + Instructions.IUNOP_LAST
         ) {
             impl = executeI32UnOp;
-        } else if (opcode >= Instructions.I32_ADD && opcode <= Instructions.I32_ROTR) {
+        } else if (
+            opcode >= Instructions.I32_ADD && opcode <= Instructions.I32_ROTR
+        ) {
             impl = executeI32BinOp;
         } else if (
             opcode >= Instructions.I64_RELOP_BASE &&
@@ -501,18 +509,25 @@ contract OneStepProverMath is IOneStepProver {
             opcode <= Instructions.I64_UNOP_BASE + Instructions.IUNOP_LAST
         ) {
             impl = executeI64UnOp;
-        } else if (opcode >= Instructions.I64_ADD && opcode <= Instructions.I64_ROTR) {
+        } else if (
+            opcode >= Instructions.I64_ADD && opcode <= Instructions.I64_ROTR
+        ) {
             impl = executeI64BinOp;
         } else if (opcode == Instructions.I32_WRAP_I64) {
             impl = executeI32WrapI64;
         } else if (
-            opcode == Instructions.I64_EXTEND_I32_S || opcode == Instructions.I64_EXTEND_I32_U
+            opcode == Instructions.I64_EXTEND_I32_S ||
+            opcode == Instructions.I64_EXTEND_I32_U
         ) {
             impl = executeI64ExtendI32;
-        } else if (opcode >= Instructions.I32_EXTEND_8S && opcode <= Instructions.I64_EXTEND_32S) {
+        } else if (
+            opcode >= Instructions.I32_EXTEND_8S &&
+            opcode <= Instructions.I64_EXTEND_32S
+        ) {
             impl = executeExtendSameType;
         } else if (
-            opcode >= Instructions.I32_REINTERPRET_F32 && opcode <= Instructions.F64_REINTERPRET_I64
+            opcode >= Instructions.I32_REINTERPRET_F32 &&
+            opcode <= Instructions.F64_REINTERPRET_I64
         ) {
             impl = executeReinterpret;
         } else {

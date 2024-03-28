@@ -7,15 +7,7 @@ pragma solidity ^0.8.4;
 import "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
 import "@openzeppelin/contracts-upgradeable/utils/AddressUpgradeable.sol";
 
-import {
-    NotContract,
-    NotRollupOrOwner,
-    NotDelayedInbox,
-    NotSequencerInbox,
-    NotOutbox,
-    InvalidOutboxSet,
-    BadSequencerMessageNumber
-} from "../libraries/Error.sol";
+import {NotContract, NotRollupOrOwner, NotDelayedInbox, NotSequencerInbox, NotOutbox, InvalidOutboxSet, BadSequencerMessageNumber} from "../libraries/Error.sol";
 import "./IBridge.sol";
 import "./Messages.sol";
 import "../libraries/DelegateCallAware.sol";
@@ -67,7 +59,11 @@ contract Bridge is Initializable, DelegateCallAware, IBridge {
         if (msg.sender != address(rollup)) {
             address rollupOwner = rollup.owner();
             if (msg.sender != rollupOwner) {
-                revert NotRollupOrOwner(msg.sender, address(rollup), rollupOwner);
+                revert NotRollupOrOwner(
+                    msg.sender,
+                    address(rollup),
+                    rollupOwner
+                );
             }
         }
         _;
@@ -117,7 +113,10 @@ contract Bridge is Initializable, DelegateCallAware, IBridge {
             prevMessageCount != 0 &&
             sequencerReportedSubMessageCount != 0
         ) {
-            revert BadSequencerMessageNumber(sequencerReportedSubMessageCount, prevMessageCount);
+            revert BadSequencerMessageNumber(
+                sequencerReportedSubMessageCount,
+                prevMessageCount
+            );
         }
         sequencerReportedSubMessageCount = newMessageCount;
         seqMessageIndex = sequencerInboxAccs.length;
@@ -132,11 +131,10 @@ contract Bridge is Initializable, DelegateCallAware, IBridge {
     }
 
     /// @inheritdoc IBridge
-    function submitBatchSpendingReport(address sender, bytes32 messageDataHash)
-        external
-        onlySequencerInbox
-        returns (uint256)
-    {
+    function submitBatchSpendingReport(
+        address sender,
+        bytes32 messageDataHash
+    ) external onlySequencerInbox returns (uint256) {
         return
             addMessageToDelayedAccumulator(
                 L1MessageType_batchPostingReport,
@@ -154,7 +152,8 @@ contract Bridge is Initializable, DelegateCallAware, IBridge {
         address sender,
         bytes32 messageDataHash
     ) external payable returns (uint256) {
-        if (!allowedDelayedInboxesMap[msg.sender].allowed) revert NotDelayedInbox(msg.sender);
+        if (!allowedDelayedInboxesMap[msg.sender].allowed)
+            revert NotDelayedInbox(msg.sender);
         return
             addMessageToDelayedAccumulator(
                 kind,
@@ -188,7 +187,9 @@ contract Bridge is Initializable, DelegateCallAware, IBridge {
         if (count > 0) {
             prevAcc = delayedInboxAccs[count - 1];
         }
-        delayedInboxAccs.push(Messages.accumulateInboxMessage(prevAcc, messageHash));
+        delayedInboxAccs.push(
+            Messages.accumulateInboxMessage(prevAcc, messageHash)
+        );
         emit MessageDelivered(
             count,
             prevAcc,
@@ -207,7 +208,8 @@ contract Bridge is Initializable, DelegateCallAware, IBridge {
         uint256 value,
         bytes calldata data
     ) external returns (bool success, bytes memory returnData) {
-        if (!allowedOutboxesMap[msg.sender].allowed) revert NotOutbox(msg.sender);
+        if (!allowedOutboxesMap[msg.sender].allowed)
+            revert NotOutbox(msg.sender);
         if (data.length > 0 && !to.isContract()) revert NotContract(to);
         address prevOutbox = _activeOutbox;
         _activeOutbox = msg.sender;
@@ -221,12 +223,17 @@ contract Bridge is Initializable, DelegateCallAware, IBridge {
         emit BridgeCallTriggered(msg.sender, to, value, data);
     }
 
-    function setSequencerInbox(address _sequencerInbox) external onlyRollupOrOwner {
+    function setSequencerInbox(
+        address _sequencerInbox
+    ) external onlyRollupOrOwner {
         sequencerInbox = _sequencerInbox;
         emit SequencerInboxUpdated(_sequencerInbox);
     }
 
-    function setDelayedInbox(address inbox, bool enabled) external onlyRollupOrOwner {
+    function setDelayedInbox(
+        address inbox,
+        bool enabled
+    ) external onlyRollupOrOwner {
         InOutInfo storage info = allowedDelayedInboxesMap[inbox];
         bool alreadyEnabled = info.allowed;
         emit InboxToggle(inbox, enabled);
@@ -234,19 +241,26 @@ contract Bridge is Initializable, DelegateCallAware, IBridge {
             return;
         }
         if (enabled) {
-            allowedDelayedInboxesMap[inbox] = InOutInfo(allowedDelayedInboxList.length, true);
+            allowedDelayedInboxesMap[inbox] = InOutInfo(
+                allowedDelayedInboxList.length,
+                true
+            );
             allowedDelayedInboxList.push(inbox);
         } else {
             allowedDelayedInboxList[info.index] = allowedDelayedInboxList[
                 allowedDelayedInboxList.length - 1
             ];
-            allowedDelayedInboxesMap[allowedDelayedInboxList[info.index]].index = info.index;
+            allowedDelayedInboxesMap[allowedDelayedInboxList[info.index]]
+                .index = info.index;
             allowedDelayedInboxList.pop();
             delete allowedDelayedInboxesMap[inbox];
         }
     }
 
-    function setOutbox(address outbox, bool enabled) external onlyRollupOrOwner {
+    function setOutbox(
+        address outbox,
+        bool enabled
+    ) external onlyRollupOrOwner {
         if (outbox == EMPTY_ACTIVEOUTBOX) revert InvalidOutboxSet(outbox);
 
         InOutInfo storage info = allowedOutboxesMap[outbox];
@@ -256,17 +270,25 @@ contract Bridge is Initializable, DelegateCallAware, IBridge {
             return;
         }
         if (enabled) {
-            allowedOutboxesMap[outbox] = InOutInfo(allowedOutboxList.length, true);
+            allowedOutboxesMap[outbox] = InOutInfo(
+                allowedOutboxList.length,
+                true
+            );
             allowedOutboxList.push(outbox);
         } else {
-            allowedOutboxList[info.index] = allowedOutboxList[allowedOutboxList.length - 1];
-            allowedOutboxesMap[allowedOutboxList[info.index]].index = info.index;
+            allowedOutboxList[info.index] = allowedOutboxList[
+                allowedOutboxList.length - 1
+            ];
+            allowedOutboxesMap[allowedOutboxList[info.index]].index = info
+                .index;
             allowedOutboxList.pop();
             delete allowedOutboxesMap[outbox];
         }
     }
 
-    function setSequencerReportedSubMessageCount(uint256 newMsgCount) external onlyRollupOrOwner {
+    function setSequencerReportedSubMessageCount(
+        uint256 newMsgCount
+    ) external onlyRollupOrOwner {
         sequencerReportedSubMessageCount = newMsgCount;
     }
 

@@ -63,26 +63,36 @@ contract BridgeCreator is Ownable {
         ISequencerInbox.MaxTimeVariation memory maxTimeVariation
     )
         external
-        returns (
-            Bridge,
-            SequencerInbox,
-            Inbox,
-            RollupEventInbox,
-            Outbox
-        )
+        returns (Bridge, SequencerInbox, Inbox, RollupEventInbox, Outbox)
     {
         CreateBridgeFrame memory frame;
         {
             frame.bridge = Bridge(
-                address(new TransparentUpgradeableProxy(address(bridgeTemplate), adminProxy, ""))
+                address(
+                    new TransparentUpgradeableProxy(
+                        address(bridgeTemplate),
+                        adminProxy,
+                        ""
+                    )
+                )
             );
             frame.sequencerInbox = SequencerInbox(
                 address(
-                    new TransparentUpgradeableProxy(address(sequencerInboxTemplate), adminProxy, "")
+                    new TransparentUpgradeableProxy(
+                        address(sequencerInboxTemplate),
+                        adminProxy,
+                        ""
+                    )
                 )
             );
             frame.inbox = Inbox(
-                address(new TransparentUpgradeableProxy(address(inboxTemplate), adminProxy, ""))
+                address(
+                    new TransparentUpgradeableProxy(
+                        address(inboxTemplate),
+                        adminProxy,
+                        ""
+                    )
+                )
             );
             frame.rollupEventInbox = RollupEventInbox(
                 address(
@@ -94,13 +104,25 @@ contract BridgeCreator is Ownable {
                 )
             );
             frame.outbox = Outbox(
-                address(new TransparentUpgradeableProxy(address(outboxTemplate), adminProxy, ""))
+                address(
+                    new TransparentUpgradeableProxy(
+                        address(outboxTemplate),
+                        adminProxy,
+                        ""
+                    )
+                )
             );
         }
 
         frame.bridge.initialize(IOwnable(rollup));
-        frame.sequencerInbox.initialize(IBridge(frame.bridge), maxTimeVariation);
-        frame.inbox.initialize(IBridge(frame.bridge), ISequencerInbox(frame.sequencerInbox));
+        frame.sequencerInbox.initialize(
+            IBridge(frame.bridge),
+            maxTimeVariation
+        );
+        frame.inbox.initialize(
+            IBridge(frame.bridge),
+            ISequencerInbox(frame.sequencerInbox)
+        );
         frame.rollupEventInbox.initialize(IBridge(frame.bridge));
         frame.outbox.initialize(IBridge(frame.bridge));
 

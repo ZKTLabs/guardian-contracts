@@ -11,7 +11,10 @@ struct ValueArray {
 }
 
 library ValueArrayLib {
-    function get(ValueArray memory arr, uint256 index) internal pure returns (Value memory) {
+    function get(
+        ValueArray memory arr,
+        uint256 index
+    ) internal pure returns (Value memory) {
         return arr.inner[index];
     }
 
@@ -36,7 +39,9 @@ library ValueArrayLib {
         arr.inner = newInner;
     }
 
-    function pop(ValueArray memory arr) internal pure returns (Value memory popped) {
+    function pop(
+        ValueArray memory arr
+    ) internal pure returns (Value memory popped) {
         popped = arr.inner[arr.inner.length - 1];
         Value[] memory newInner = new Value[](arr.inner.length - 1);
         for (uint256 i = 0; i < newInner.length; i++) {

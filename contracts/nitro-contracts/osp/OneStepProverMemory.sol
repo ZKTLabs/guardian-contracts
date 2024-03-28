@@ -19,7 +19,10 @@ contract OneStepProverMemory is IOneStepProver {
     uint256 private constant LEAF_SIZE = 32;
     uint64 private constant PAGE_SIZE = 65536;
 
-    function pullLeafByte(bytes32 leaf, uint256 idx) internal pure returns (uint8) {
+    function pullLeafByte(
+        bytes32 leaf,
+        uint256 idx
+    ) internal pure returns (uint8) {
         require(idx < LEAF_SIZE, "BAD_PULL_LEAF_BYTE_IDX");
         // Take into account that we are casting the leaf to a big-endian integer
         uint256 leafShift = (LEAF_SIZE - 1 - idx) * 8;
@@ -110,7 +113,8 @@ contract OneStepProverMemory is IOneStepProver {
         }
 
         // Neither of these can overflow as they're computed with much less than 256 bit integers.
-        uint256 startIdx = inst.argumentData + mach.valueStack.pop().assumeI32();
+        uint256 startIdx = inst.argumentData +
+            mach.valueStack.pop().assumeI32();
         if (startIdx + readBytes > mod.moduleMemory.size) {
             mach.status = MachineStatus.ERRORED;
             return;
@@ -125,12 +129,8 @@ contract OneStepProverMemory is IOneStepProver {
             uint256 leafIdx = idx / LEAF_SIZE;
             if (leafIdx != lastProvedLeafIdx) {
                 // This hits the stack size if we phrase it as mod.moduleMemory.proveLeaf(...)
-                (lastProvedLeafContents, proofOffset, ) = ModuleMemoryLib.proveLeaf(
-                    mod.moduleMemory,
-                    leafIdx,
-                    proof,
-                    proofOffset
-                );
+                (lastProvedLeafContents, proofOffset, ) = ModuleMemoryLib
+                    .proveLeaf(mod.moduleMemory, leafIdx, proof, proofOffset);
                 lastProvedLeafIdx = leafIdx;
             }
             uint256 indexWithinLeaf = idx % LEAF_SIZE;
@@ -209,7 +209,8 @@ contract OneStepProverMemory is IOneStepProver {
         }
 
         // Neither of these can overflow as they're computed with much less than 256 bit integers.
-        uint256 startIdx = inst.argumentData + mach.valueStack.pop().assumeI32();
+        uint256 startIdx = inst.argumentData +
+            mach.valueStack.pop().assumeI32();
         if (startIdx + writeBytes > mod.moduleMemory.size) {
             mach.status = MachineStatus.ERRORED;
             return;
@@ -225,13 +226,18 @@ contract OneStepProverMemory is IOneStepProver {
             if (leafIdx != lastProvedLeafIdx) {
                 if (lastProvedLeafIdx != ~uint256(0)) {
                     // Apply the last leaf update
-                    mod.moduleMemory.merkleRoot = lastProvedMerkle.computeRootFromMemory(
-                        lastProvedLeafIdx,
-                        lastProvedLeafContents
-                    );
+                    mod.moduleMemory.merkleRoot = lastProvedMerkle
+                        .computeRootFromMemory(
+                            lastProvedLeafIdx,
+                            lastProvedLeafContents
+                        );
                 }
                 // This hits the stack size if we phrase it as mod.moduleMemory.proveLeaf(...)
-                (lastProvedLeafContents, proofOffset, lastProvedMerkle) = ModuleMemoryLib.proveLeaf(
+                (
+                    lastProvedLeafContents,
+                    proofOffset,
+                    lastProvedMerkle
+                ) = ModuleMemoryLib.proveLeaf(
                     mod.moduleMemory,
                     leafIdx,
                     proof,
@@ -293,12 +299,21 @@ contract OneStepProverMemory is IOneStepProver {
 
         uint16 opcode = inst.opcode;
 
-        function(Machine memory, Module memory, Instruction calldata, bytes calldata)
-            internal
-            pure impl;
-        if (opcode >= Instructions.I32_LOAD && opcode <= Instructions.I64_LOAD32_U) {
+        function(
+            Machine memory,
+            Module memory,
+            Instruction calldata,
+            bytes calldata
+        ) internal pure impl;
+        if (
+            opcode >= Instructions.I32_LOAD &&
+            opcode <= Instructions.I64_LOAD32_U
+        ) {
             impl = executeMemoryLoad;
-        } else if (opcode >= Instructions.I32_STORE && opcode <= Instructions.I64_STORE32) {
+        } else if (
+            opcode >= Instructions.I32_STORE &&
+            opcode <= Instructions.I64_STORE32
+        ) {
             impl = executeMemoryStore;
         } else if (opcode == Instructions.MEMORY_SIZE) {
             impl = executeMemorySize;

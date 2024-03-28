@@ -21,7 +21,8 @@ struct Value {
 
 library ValueLib {
     function hash(Value memory val) internal pure returns (bytes32) {
-        return keccak256(abi.encodePacked("Value:", val.valueType, val.contents));
+        return
+            keccak256(abi.encodePacked("Value:", val.valueType, val.contents));
     }
 
     function maxValueType() internal pure returns (ValueType) {

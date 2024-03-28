@@ -20,11 +20,15 @@ library ValueStackLib {
         h = stack.remainingHash;
         uint256 len = stack.proved.length();
         for (uint256 i = 0; i < len; i++) {
-            h = keccak256(abi.encodePacked("Value stack:", stack.proved.get(i).hash(), h));
+            h = keccak256(
+                abi.encodePacked("Value stack:", stack.proved.get(i).hash(), h)
+            );
         }
     }
 
-    function peek(ValueStack memory stack) internal pure returns (Value memory) {
+    function peek(
+        ValueStack memory stack
+    ) internal pure returns (Value memory) {
         uint256 len = stack.proved.length();
         return stack.proved.get(len - 1);
     }

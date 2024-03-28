@@ -39,7 +39,9 @@ abstract contract DoubleLogicERC1967Upgrade is ERC1967Upgrade {
             Address.isContract(newImplementation),
             "ERC1967: new secondary implementation is not a contract"
         );
-        StorageSlot.getAddressSlot(_IMPLEMENTATION_SECONDARY_SLOT).value = newImplementation;
+        StorageSlot
+            .getAddressSlot(_IMPLEMENTATION_SECONDARY_SLOT)
+            .value = newImplementation;
     }
 
     /**
@@ -84,13 +86,17 @@ abstract contract DoubleLogicERC1967Upgrade is ERC1967Upgrade {
         if (StorageSlot.getBooleanSlot(_ROLLBACK_SECONDARY_SLOT).value) {
             _setSecondaryImplementation(newImplementation);
         } else {
-            try IERC1822Proxiable(newImplementation).proxiableUUID() returns (bytes32 slot) {
+            try IERC1822Proxiable(newImplementation).proxiableUUID() returns (
+                bytes32 slot
+            ) {
                 require(
                     slot == _IMPLEMENTATION_SECONDARY_SLOT,
                     "ERC1967Upgrade: unsupported secondary proxiableUUID"
                 );
             } catch {
-                revert("ERC1967Upgrade: new secondary implementation is not UUPS");
+                revert(
+                    "ERC1967Upgrade: new secondary implementation is not UUPS"
+                );
             }
             _upgradeSecondaryToAndCall(newImplementation, data, forceCall);
         }
@@ -114,13 +120,21 @@ contract AdminFallbackProxy is Proxy, DoubleLogicERC1967Upgrade {
         bytes memory userData,
         address adminAddr
     ) internal {
-        assert(_ADMIN_SLOT == bytes32(uint256(keccak256("eip1967.proxy.admin")) - 1));
         assert(
-            _IMPLEMENTATION_SLOT == bytes32(uint256(keccak256("eip1967.proxy.implementation")) - 1)
+            _ADMIN_SLOT ==
+                bytes32(uint256(keccak256("eip1967.proxy.admin")) - 1)
+        );
+        assert(
+            _IMPLEMENTATION_SLOT ==
+                bytes32(uint256(keccak256("eip1967.proxy.implementation")) - 1)
         );
         assert(
             _IMPLEMENTATION_SECONDARY_SLOT ==
-                bytes32(uint256(keccak256("eip1967.proxy.implementation.secondary")) - 1)
+                bytes32(
+                    uint256(
+                        keccak256("eip1967.proxy.implementation.secondary")
+                    ) - 1
+                )
         );
         _changeAdmin(adminAddr);
         _upgradeToAndCall(adminLogic, adminData, false);

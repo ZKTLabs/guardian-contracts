@@ -11,7 +11,9 @@ interface ArbAggregator {
     /// @notice Get the address of an arbitrarily chosen batch poster.
     /// @param addr ignored
     /// @return (batchPosterAddress, true)
-    function getPreferredAggregator(address addr) external view returns (address, bool);
+    function getPreferredAggregator(
+        address addr
+    ) external view returns (address, bool);
 
     /// @notice Deprecated, there is no longer a single preferred aggregator, use getBatchPosters instead
     /// @notice Get default aggregator.
@@ -29,13 +31,18 @@ interface ArbAggregator {
     /// @notice Get the address where fees to batchPoster are sent.
     /// @param batchPoster The batch poster to get the fee collector for
     /// @return The fee collectors address. This will sometimes but not always be the same as the batch poster's address.
-    function getFeeCollector(address batchPoster) external view returns (address);
+    function getFeeCollector(
+        address batchPoster
+    ) external view returns (address);
 
     /// @notice Set the address where fees to batchPoster are sent.
     /// This reverts unless called by the batch poster, its fee collector, or a chain owner
     /// @param batchPoster The batch poster to set the fee collector for
     /// @param newFeeCollector The new fee collector to set
-    function setFeeCollector(address batchPoster, address newFeeCollector) external;
+    function setFeeCollector(
+        address batchPoster,
+        address newFeeCollector
+    ) external;
 
     /// @notice Deprecated, always returns zero
     /// @notice Get the tx base fee (in approximate L1 gas) for aggregator

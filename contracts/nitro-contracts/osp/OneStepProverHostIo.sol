@@ -61,11 +61,9 @@ contract OneStepProverHostIo is IOneStepProver {
         uint256 proofOffset = 0;
         bytes32 startLeafContents;
         MerkleProof memory merkleProof;
-        (startLeafContents, proofOffset, merkleProof) = mod.moduleMemory.proveLeaf(
-            leafIdx,
-            proof,
-            proofOffset
-        );
+        (startLeafContents, proofOffset, merkleProof) = mod
+            .moduleMemory
+            .proveLeaf(leafIdx, proof, proofOffset);
 
         if (inst.opcode == Instructions.GET_GLOBAL_STATE_BYTES32) {
             mod.moduleMemory.merkleRoot = merkleProof.computeRootFromMemory(
@@ -79,7 +77,10 @@ contract OneStepProverHostIo is IOneStepProver {
         }
     }
 
-    function executeGetU64(Machine memory mach, GlobalState memory state) internal pure {
+    function executeGetU64(
+        Machine memory mach,
+        GlobalState memory state
+    ) internal pure {
         uint32 idx = mach.valueStack.pop().assumeI32();
 
         if (idx >= GlobalStateLib.U64_VALS_NUM) {
@@ -90,7 +91,10 @@ contract OneStepProverHostIo is IOneStepProver {
         mach.valueStack.push(ValueLib.newI64(state.u64Vals[idx]));
     }
 
-    function executeSetU64(Machine memory mach, GlobalState memory state) internal pure {
+    function executeSetU64(
+        Machine memory mach,
+        GlobalState memory state
+    ) internal pure {
         uint64 val = mach.valueStack.pop().assumeI64();
         uint32 idx = mach.valueStack.pop().assumeI32();
 
@@ -146,7 +150,10 @@ contract OneStepProverHostIo is IOneStepProver {
             leafContents = setLeafByte(leafContents, i, uint8(extracted[i]));
         }
 
-        mod.moduleMemory.merkleRoot = merkleProof.computeRootFromMemory(leafIdx, leafContents);
+        mod.moduleMemory.merkleRoot = merkleProof.computeRootFromMemory(
+            leafIdx,
+            leafContents
+        );
 
         mach.valueStack.push(ValueLib.newI32(uint32(extracted.length)));
     }
@@ -170,8 +177,13 @@ contract OneStepProverHostIo is IOneStepProver {
         if (afterDelayedMsg > 0) {
             delayedAcc = execCtx.bridge.delayedInboxAccs(afterDelayedMsg - 1);
         }
-        bytes32 acc = keccak256(abi.encodePacked(beforeAcc, messageHash, delayedAcc));
-        require(acc == execCtx.bridge.sequencerInboxAccs(msgIndex), "BAD_SEQINBOX_MESSAGE");
+        bytes32 acc = keccak256(
+            abi.encodePacked(beforeAcc, messageHash, delayedAcc)
+        );
+        require(
+            acc == execCtx.bridge.sequencerInboxAccs(msgIndex),
+            "BAD_SEQINBOX_MESSAGE"
+        );
         return true;
     }
 
@@ -194,11 +206,19 @@ contract OneStepProverHostIo is IOneStepProver {
         (sender, ) = Deserialize.u256(message, 1);
 
         bytes32 messageHash = keccak256(
-            abi.encodePacked(kind, uint160(sender), message[33:DELAYED_HEADER_LEN], messageDataHash)
+            abi.encodePacked(
+                kind,
+                uint160(sender),
+                message[33:DELAYED_HEADER_LEN],
+                messageDataHash
+            )
         );
         bytes32 acc = Messages.accumulateInboxMessage(beforeAcc, messageHash);
 
-        require(acc == execCtx.bridge.delayedInboxAccs(msgIndex), "BAD_DELAYED_MESSAGE");
+        require(
+            acc == execCtx.bridge.delayedInboxAccs(msgIndex),
+            "BAD_DELAYED_MESSAGE"
+        );
         return true;
     }
 
@@ -254,7 +274,11 @@ contract OneStepProverHostIo is IOneStepProver {
                 mach.status = MachineStatus.ERRORED;
                 return;
             }
-            success = inboxValidate(execCtx, uint64(msgIndex), proof[proofOffset:]);
+            success = inboxValidate(
+                execCtx,
+                uint64(msgIndex),
+                proof[proofOffset:]
+            );
             if (!success) {
                 mach.status = MachineStatus.ERRORED;
                 return;
@@ -273,7 +297,10 @@ contract OneStepProverHostIo is IOneStepProver {
             );
         }
 
-        mod.moduleMemory.merkleRoot = merkleProof.computeRootFromMemory(leafIdx, leafContents);
+        mod.moduleMemory.merkleRoot = merkleProof.computeRootFromMemory(
+            leafIdx,
+            leafContents
+        );
         mach.valueStack.push(ValueLib.newI32(i));
     }
 

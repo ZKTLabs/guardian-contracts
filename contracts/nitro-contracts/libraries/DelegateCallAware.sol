@@ -16,7 +16,10 @@ abstract contract DelegateCallAware {
      * callable on the proxy contract but not on the logic contract.
      */
     modifier onlyDelegated() {
-        require(address(this) != __self, "Function must be called through delegatecall");
+        require(
+            address(this) != __self,
+            "Function must be called through delegatecall"
+        );
         _;
     }
 
@@ -25,7 +28,10 @@ abstract contract DelegateCallAware {
      * callable on the implementing contract but not through proxies.
      */
     modifier notDelegated() {
-        require(address(this) == __self, "Function must not be called through delegatecall");
+        require(
+            address(this) == __self,
+            "Function must not be called through delegatecall"
+        );
         _;
     }
 

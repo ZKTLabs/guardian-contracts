@@ -23,5 +23,9 @@ abstract contract IOneStepProver {
         Module calldata mod,
         Instruction calldata instruction,
         bytes calldata proof
-    ) external view virtual returns (Machine memory result, Module memory resultMod);
+    )
+        external
+        view
+        virtual
+        returns (Machine memory result, Module memory resultMod);
 }

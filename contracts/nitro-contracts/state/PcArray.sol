@@ -9,15 +9,14 @@ struct PcArray {
 }
 
 library PcArrayLib {
-    function get(PcArray memory arr, uint256 index) internal pure returns (uint32) {
+    function get(
+        PcArray memory arr,
+        uint256 index
+    ) internal pure returns (uint32) {
         return arr.inner[index];
     }
 
-    function set(
-        PcArray memory arr,
-        uint256 index,
-        uint32 val
-    ) internal pure {
+    function set(PcArray memory arr, uint256 index, uint32 val) internal pure {
         arr.inner[index] = val;
     }
 

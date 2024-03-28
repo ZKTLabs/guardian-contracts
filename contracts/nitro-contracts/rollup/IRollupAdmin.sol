@@ -13,8 +13,10 @@ import "./Config.sol";
 interface IRollupAdmin {
     event OwnerFunctionCalled(uint256 indexed id);
 
-    function initialize(Config calldata config, ContractDependencies calldata connectedContracts)
-        external;
+    function initialize(
+        Config calldata config,
+        ContractDependencies calldata connectedContracts
+    ) external;
 
     /**
      * @notice Add a contract authorized to put messages into this rollup's inbox
@@ -52,7 +54,10 @@ interface IRollupAdmin {
      * @param _validator addresses to set in the whitelist
      * @param _val value to set in the whitelist for corresponding address
      */
-    function setValidator(address[] memory _validator, bool[] memory _val) external;
+    function setValidator(
+        address[] memory _validator,
+        bool[] memory _val
+    ) external;
 
     /**
      * @notice Set a new owner address for the rollup proxy
@@ -99,7 +104,10 @@ interface IRollupAdmin {
      */
     function upgradeBeacon(address beacon, address newImplementation) external;
 
-    function forceResolveChallenge(address[] memory stackerA, address[] memory stackerB) external;
+    function forceResolveChallenge(
+        address[] memory stackerA,
+        address[] memory stackerB
+    ) external;
 
     function forceRefundStaker(address[] memory stacker) external;
 
@@ -134,5 +142,7 @@ interface IRollupAdmin {
      * @notice set the validatorWhitelistDisabled flag
      * @param _validatorWhitelistDisabled new value of validatorWhitelistDisabled, i.e. true = disabled
      */
-    function setValidatorWhitelistDisabled(bool _validatorWhitelistDisabled) external;
+    function setValidatorWhitelistDisabled(
+        bool _validatorWhitelistDisabled
+    ) external;
 }

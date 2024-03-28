@@ -21,7 +21,8 @@ library MerkleProofLib {
         uint256 index,
         Value memory leaf
     ) internal pure returns (bytes32) {
-        return computeRootUnsafe(proof, index, leaf.hash(), "Value merkle tree:");
+        return
+            computeRootUnsafe(proof, index, leaf.hash(), "Value merkle tree:");
     }
 
     function computeRootFromInstruction(
@@ -29,7 +30,13 @@ library MerkleProofLib {
         uint256 index,
         Instruction memory inst
     ) internal pure returns (bytes32) {
-        return computeRootUnsafe(proof, index, Instructions.hash(inst), "Instruction merkle tree:");
+        return
+            computeRootUnsafe(
+                proof,
+                index,
+                Instructions.hash(inst),
+                "Instruction merkle tree:"
+            );
     }
 
     function computeRootFromFunction(
@@ -56,7 +63,9 @@ library MerkleProofLib {
         bytes32 funcTypeHash,
         Value memory val
     ) internal pure returns (bytes32) {
-        bytes32 h = keccak256(abi.encodePacked("Table element:", funcTypeHash, val.hash()));
+        bytes32 h = keccak256(
+            abi.encodePacked("Table element:", funcTypeHash, val.hash())
+        );
         return computeRootUnsafe(proof, index, h, "Table element merkle tree:");
     }
 
@@ -67,7 +76,9 @@ library MerkleProofLib {
         uint64 tableSize,
         bytes32 elementsRoot
     ) internal pure returns (bytes32) {
-        bytes32 h = keccak256(abi.encodePacked("Table:", tableType, tableSize, elementsRoot));
+        bytes32 h = keccak256(
+            abi.encodePacked("Table:", tableType, tableSize, elementsRoot)
+        );
         return computeRootUnsafe(proof, index, h, "Table merkle tree:");
     }
 
@@ -76,7 +87,8 @@ library MerkleProofLib {
         uint256 index,
         Module memory mod
     ) internal pure returns (bytes32) {
-        return computeRootUnsafe(proof, index, mod.hash(), "Module merkle tree:");
+        return
+            computeRootUnsafe(proof, index, mod.hash(), "Module merkle tree:");
     }
 
     // WARNING: leafHash must be computed in such a way that it cannot be a non-leaf hash.
@@ -89,9 +101,13 @@ library MerkleProofLib {
         h = leafHash;
         for (uint256 layer = 0; layer < proof.counterparts.length; layer++) {
             if (index & 1 == 0) {
-                h = keccak256(abi.encodePacked(prefix, h, proof.counterparts[layer]));
+                h = keccak256(
+                    abi.encodePacked(prefix, h, proof.counterparts[layer])
+                );
             } else {
-                h = keccak256(abi.encodePacked(prefix, proof.counterparts[layer], h));
+                h = keccak256(
+                    abi.encodePacked(prefix, proof.counterparts[layer], h)
+                );
             }
             index >>= 1;
         }

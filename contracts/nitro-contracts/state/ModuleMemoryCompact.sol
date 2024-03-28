@@ -12,6 +12,14 @@ struct ModuleMemory {
 
 library ModuleMemoryCompactLib {
     function hash(ModuleMemory memory mem) internal pure returns (bytes32) {
-        return keccak256(abi.encodePacked("Memory:", mem.size, mem.maxSize, mem.merkleRoot));
+        return
+            keccak256(
+                abi.encodePacked(
+                    "Memory:",
+                    mem.size,
+                    mem.maxSize,
+                    mem.merkleRoot
+                )
+            );
     }
 }

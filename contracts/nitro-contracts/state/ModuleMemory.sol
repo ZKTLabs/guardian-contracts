@@ -23,16 +23,15 @@ library ModuleMemoryLib {
     )
         internal
         pure
-        returns (
-            bytes32 contents,
-            uint256 offset,
-            MerkleProof memory merkle
-        )
+        returns (bytes32 contents, uint256 offset, MerkleProof memory merkle)
     {
         offset = startOffset;
         (contents, offset) = Deserialize.b32(proof, offset);
         (merkle, offset) = Deserialize.merkleProof(proof, offset);
-        bytes32 recomputedRoot = merkle.computeRootFromMemory(leafIdx, contents);
+        bytes32 recomputedRoot = merkle.computeRootFromMemory(
+            leafIdx,
+            contents
+        );
         require(recomputedRoot == mem.merkleRoot, "WRONG_MEM_ROOT");
     }
 }

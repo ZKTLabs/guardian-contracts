@@ -97,9 +97,10 @@ interface IBridge {
      *      to call `enqueueDelayedMessage` to avoid the gas overhead of an extra SLOAD in either
      *      every delayed inbox or every sequencer inbox call.
      */
-    function submitBatchSpendingReport(address batchPoster, bytes32 dataHash)
-        external
-        returns (uint256 msgNum);
+    function submitBatchSpendingReport(
+        address batchPoster,
+        bytes32 dataHash
+    ) external returns (uint256 msgNum);
 
     // ---------- onlyRollupOrOwner functions ----------
 

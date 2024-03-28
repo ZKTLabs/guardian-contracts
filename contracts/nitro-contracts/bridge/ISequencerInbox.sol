@@ -79,12 +79,7 @@ interface ISequencerInbox is IDelayedMessageProvider {
     function maxTimeVariation()
         external
         view
-        returns (
-            uint256,
-            uint256,
-            uint256,
-            uint256
-        );
+        returns (uint256, uint256, uint256, uint256);
 
     function dasKeySetInfo(bytes32) external view returns (bool, uint64);
 
@@ -117,7 +112,9 @@ interface ISequencerInbox is IDelayedMessageProvider {
     function isValidKeysetHash(bytes32 ksHash) external view returns (bool);
 
     /// @notice the creation block is intended to still be available after a keyset is deleted
-    function getKeysetCreationBlock(bytes32 ksHash) external view returns (uint256);
+    function getKeysetCreationBlock(
+        bytes32 ksHash
+    ) external view returns (uint256);
 
     // ---------- BatchPoster functions ----------
 
@@ -143,7 +140,9 @@ interface ISequencerInbox is IDelayedMessageProvider {
      * @notice Set max delay for sequencer inbox
      * @param maxTimeVariation_ the maximum time variation parameters
      */
-    function setMaxTimeVariation(MaxTimeVariation memory maxTimeVariation_) external;
+    function setMaxTimeVariation(
+        MaxTimeVariation memory maxTimeVariation_
+    ) external;
 
     /**
      * @notice Updates whether an address is authorized to be a batch poster at the sequencer inbox
@@ -174,5 +173,8 @@ interface ISequencerInbox is IDelayedMessageProvider {
 
     // ---------- initializer ----------
 
-    function initialize(IBridge bridge_, MaxTimeVariation calldata maxTimeVariation_) external;
+    function initialize(
+        IBridge bridge_,
+        MaxTimeVariation calldata maxTimeVariation_
+    ) external;
 }

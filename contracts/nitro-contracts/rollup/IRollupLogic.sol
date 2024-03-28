@@ -50,7 +50,9 @@ interface IRollupUserAbs is IRollupCore, IOwnable {
 
     function countStakedZombies(uint64 nodeNum) external view returns (uint256);
 
-    function countZombiesStakedOnChildren(uint64 nodeNum) external view returns (uint256);
+    function countZombiesStakedOnChildren(
+        uint64 nodeNum
+    ) external view returns (uint256);
 
     function requireUnresolvedExists() external view;
 
@@ -71,7 +73,10 @@ interface IRollupUserAbs is IRollupCore, IOwnable {
 }
 
 interface IRollupUser is IRollupUserAbs {
-    function newStakeOnExistingNode(uint64 nodeNum, bytes32 nodeHash) external payable;
+    function newStakeOnExistingNode(
+        uint64 nodeNum,
+        bytes32 nodeHash
+    ) external payable;
 
     function newStakeOnNewNode(
         Assertion calldata assertion,

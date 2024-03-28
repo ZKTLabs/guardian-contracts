@@ -15,29 +15,42 @@ import "@openzeppelin/contracts/proxy/beacon/UpgradeableBeacon.sol";
 
 import {NO_CHAL_INDEX} from "../libraries/Constants.sol";
 
-contract RollupAdminLogic is RollupCore, IRollupAdmin, DoubleLogicUUPSUpgradeable {
-    function initialize(Config calldata config, ContractDependencies calldata connectedContracts)
-        external
-        override
-        onlyProxy
-        initializer
-    {
+contract RollupAdminLogic is
+    RollupCore,
+    IRollupAdmin,
+    DoubleLogicUUPSUpgradeable
+{
+    function initialize(
+        Config calldata config,
+        ContractDependencies calldata connectedContracts
+    ) external override onlyProxy initializer {
         rollupDeploymentBlock = block.number;
         bridge = connectedContracts.bridge;
         sequencerInbox = connectedContracts.sequencerInbox;
-        connectedContracts.bridge.setDelayedInbox(address(connectedContracts.inbox), true);
-        connectedContracts.bridge.setSequencerInbox(address(connectedContracts.sequencerInbox));
+        connectedContracts.bridge.setDelayedInbox(
+            address(connectedContracts.inbox),
+            true
+        );
+        connectedContracts.bridge.setSequencerInbox(
+            address(connectedContracts.sequencerInbox)
+        );
 
         inbox = connectedContracts.inbox;
         outbox = connectedContracts.outbox;
-        connectedContracts.bridge.setOutbox(address(connectedContracts.outbox), true);
+        connectedContracts.bridge.setOutbox(
+            address(connectedContracts.outbox),
+            true
+        );
         rollupEventInbox = connectedContracts.rollupEventInbox;
         connectedContracts.bridge.setDelayedInbox(
             address(connectedContracts.rollupEventInbox),
             true
         );
 
-        connectedContracts.rollupEventInbox.rollupInitialized(config.chainId, config.chainConfig);
+        connectedContracts.rollupEventInbox.rollupInitialized(
+            config.chainId,
+            config.chainConfig
+        );
         connectedContracts.sequencerInbox.addSequencerL2Batch(
             0,
             "",
@@ -66,7 +79,10 @@ contract RollupAdminLogic is RollupCore, IRollupAdmin, DoubleLogicUUPSUpgradeabl
         require(config.loserStakeEscrow != _getAdmin(), "INVALID_ESCROW_ADMIN");
         // this next check shouldn't be an issue if the owner controls an AdminProxy
         // that accesses the admin facet, but still seems like a good extra precaution
-        require(config.loserStakeEscrow != config.owner, "INVALID_ESCROW_OWNER");
+        require(
+            config.loserStakeEscrow != config.owner,
+            "INVALID_ESCROW_OWNER"
+        );
         loserStakeEscrow = config.loserStakeEscrow;
 
         stakeToken = config.stakeToken;
@@ -154,7 +170,9 @@ contract RollupAdminLogic is RollupCore, IRollupAdmin, DoubleLogicUUPSUpgradeabl
     /// @notice allows the admin to upgrade the secondary logic contract (ie rollup user logic)
     /// @dev this function doesn't revert as this primary logic contract is only
     /// reachable by the proxy's admin
-    function _authorizeSecondaryUpgrade(address newImplementation) internal override {}
+    function _authorizeSecondaryUpgrade(
+        address newImplementation
+    ) internal override {}
 
     /**
      * @notice Set the addresses of the validator whitelist
@@ -163,7 +181,10 @@ contract RollupAdminLogic is RollupCore, IRollupAdmin, DoubleLogicUUPSUpgradeabl
      * @param _validator addresses to set in the whitelist
      * @param _val value to set in the whitelist for corresponding address
      */
-    function setValidator(address[] calldata _validator, bool[] calldata _val) external override {
+    function setValidator(
+        address[] calldata _validator,
+        bool[] calldata _val
+    ) external override {
         require(_validator.length > 0, "EMPTY_ARRAY");
         require(_validator.length == _val.length, "WRONG_LENGTH");
 
@@ -206,7 +227,9 @@ contract RollupAdminLogic is RollupCore, IRollupAdmin, DoubleLogicUUPSUpgradeabl
      * @notice Set number of extra blocks after a challenge
      * @param newExtraTimeBlocks new number of blocks
      */
-    function setExtraChallengeTimeBlocks(uint64 newExtraTimeBlocks) external override {
+    function setExtraChallengeTimeBlocks(
+        uint64 newExtraTimeBlocks
+    ) external override {
         extraChallengeTimeBlocks = newExtraTimeBlocks;
         emit OwnerFunctionCalled(10);
     }
@@ -238,7 +261,10 @@ contract RollupAdminLogic is RollupCore, IRollupAdmin, DoubleLogicUUPSUpgradeabl
         bool expectERC20Support = newStakeToken != address(0);
         // this assumes the rollup isn't its own admin. if needed, instead use a ProxyAdmin by OZ!
         bool actualERC20Support = IRollupUser(address(this)).isERC20Enabled();
-        require(actualERC20Support == expectERC20Support, "NO_USER_LOGIC_SUPPORT");
+        require(
+            actualERC20Support == expectERC20Support,
+            "NO_USER_LOGIC_SUPPORT"
+        );
         require(stakerCount() == 0, "NO_ACTIVE_STAKERS");
         require(totalWithdrawableFunds == 0, "NO_PENDING_WITHDRAW");
         stakeToken = newStakeToken;
@@ -250,16 +276,18 @@ contract RollupAdminLogic is RollupCore, IRollupAdmin, DoubleLogicUUPSUpgradeabl
      * @param beacon address of beacon to be upgraded
      * @param newImplementation new address of implementation
      */
-    function upgradeBeacon(address beacon, address newImplementation) external override {
+    function upgradeBeacon(
+        address beacon,
+        address newImplementation
+    ) external override {
         UpgradeableBeacon(beacon).upgradeTo(newImplementation);
         emit OwnerFunctionCalled(20);
     }
 
-    function forceResolveChallenge(address[] calldata stakerA, address[] calldata stakerB)
-        external
-        override
-        whenPaused
-    {
+    function forceResolveChallenge(
+        address[] calldata stakerA,
+        address[] calldata stakerB
+    ) external override whenPaused {
         require(stakerA.length > 0, "EMPTY_ARRAY");
         require(stakerA.length == stakerB.length, "WRONG_LENGTH");
         for (uint256 i = 0; i < stakerA.length; i++) {
@@ -273,10 +301,15 @@ contract RollupAdminLogic is RollupCore, IRollupAdmin, DoubleLogicUUPSUpgradeabl
         emit OwnerFunctionCalled(21);
     }
 
-    function forceRefundStaker(address[] calldata staker) external override whenPaused {
+    function forceRefundStaker(
+        address[] calldata staker
+    ) external override whenPaused {
         require(staker.length > 0, "EMPTY_ARRAY");
         for (uint256 i = 0; i < staker.length; i++) {
-            require(_stakerMap[staker[i]].currentChallenge == NO_CHAL_INDEX, "STAKER_IN_CHALL");
+            require(
+                _stakerMap[staker[i]].currentChallenge == NO_CHAL_INDEX,
+                "STAKER_IN_CHALL"
+            );
             reduceStakeTo(staker[i], 0);
             turnIntoZombie(staker[i]);
         }
@@ -291,7 +324,12 @@ contract RollupAdminLogic is RollupCore, IRollupAdmin, DoubleLogicUUPSUpgradeabl
     ) external override whenPaused {
         require(prevNode == latestConfirmed(), "ONLY_LATEST_CONFIRMED");
 
-        createNewNode(assertion, prevNode, prevNodeInboxMaxCount, expectedNodeHash);
+        createNewNode(
+            assertion,
+            prevNode,
+            prevNodeInboxMaxCount,
+            expectedNodeHash
+        );
 
         emit OwnerFunctionCalled(23);
     }
@@ -306,7 +344,9 @@ contract RollupAdminLogic is RollupCore, IRollupAdmin, DoubleLogicUUPSUpgradeabl
         emit OwnerFunctionCalled(24);
     }
 
-    function setLoserStakeEscrow(address newLoserStakerEscrow) external override {
+    function setLoserStakeEscrow(
+        address newLoserStakerEscrow
+    ) external override {
         // escrow holder can't be proxy admin, since escrow is only redeemable through
         // the primary user logic contract
         require(newLoserStakerEscrow != _getAdmin(), "INVALID_ESCROW");
@@ -341,12 +381,17 @@ contract RollupAdminLogic is RollupCore, IRollupAdmin, DoubleLogicUUPSUpgradeabl
         emit OwnerFunctionCalled(28);
     }
 
-    function createNitroMigrationGenesis(Assertion calldata assertion) external whenPaused {
+    function createNitroMigrationGenesis(
+        Assertion calldata assertion
+    ) external whenPaused {
         bytes32 expectedSendRoot = bytes32(0);
         uint64 expectedInboxCount = 1;
 
         require(latestNodeCreated() == 0, "NON_GENESIS_NODES_EXIST");
-        require(GlobalStateLib.isEmpty(assertion.beforeState.globalState), "NOT_EMPTY_BEFORE");
+        require(
+            GlobalStateLib.isEmpty(assertion.beforeState.globalState),
+            "NOT_EMPTY_BEFORE"
+        );
         require(
             assertion.beforeState.machineStatus == MachineStatus.FINISHED,
             "BEFORE_MACHINE_NOT_FINISHED"
@@ -360,12 +405,17 @@ contract RollupAdminLogic is RollupCore, IRollupAdmin, DoubleLogicUUPSUpgradeabl
             assertion.afterState.globalState.u64Vals[0] == expectedInboxCount,
             "INBOX_NOT_AT_ONE"
         );
-        require(assertion.afterState.globalState.u64Vals[1] == 0, "POSITION_IN_MESSAGE_NOT_ZERO");
+        require(
+            assertion.afterState.globalState.u64Vals[1] == 0,
+            "POSITION_IN_MESSAGE_NOT_ZERO"
+        );
         require(
             assertion.afterState.machineStatus == MachineStatus.FINISHED,
             "AFTER_MACHINE_NOT_FINISHED"
         );
-        bytes32 genesisBlockHash = assertion.afterState.globalState.bytes32Vals[0];
+        bytes32 genesisBlockHash = assertion.afterState.globalState.bytes32Vals[
+            0
+        ];
         createNewNode(assertion, 0, expectedInboxCount, bytes32(0));
         confirmNode(1, genesisBlockHash, expectedSendRoot);
         emit OwnerFunctionCalled(29);
@@ -375,7 +425,9 @@ contract RollupAdminLogic is RollupCore, IRollupAdmin, DoubleLogicUUPSUpgradeabl
      * @notice set the validatorWhitelistDisabled flag
      * @param _validatorWhitelistDisabled new value of validatorWhitelistDisabled, i.e. true = disabled
      */
-    function setValidatorWhitelistDisabled(bool _validatorWhitelistDisabled) external {
+    function setValidatorWhitelistDisabled(
+        bool _validatorWhitelistDisabled
+    ) external {
         validatorWhitelistDisabled = _validatorWhitelistDisabled;
         emit OwnerFunctionCalled(30);
     }

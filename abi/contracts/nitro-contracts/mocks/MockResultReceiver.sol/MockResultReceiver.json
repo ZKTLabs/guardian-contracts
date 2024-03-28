@@ -1,0 +1,179 @@
+[
+  {
+    "inputs": [
+      {
+        "internalType": "contract IChallengeManager",
+        "name": "manager_",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "nonpayable",
+    "type": "constructor"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "uint256",
+        "name": "challengeIndex",
+        "type": "uint256"
+      },
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "winner",
+        "type": "address"
+      },
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "loser",
+        "type": "address"
+      }
+    ],
+    "name": "ChallengeCompleted",
+    "type": "event"
+  },
+  {
+    "inputs": [],
+    "name": "challengeIndex",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "challengeIndex_",
+        "type": "uint256"
+      },
+      {
+        "internalType": "address",
+        "name": "winner_",
+        "type": "address"
+      },
+      {
+        "internalType": "address",
+        "name": "loser_",
+        "type": "address"
+      }
+    ],
+    "name": "completeChallenge",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "bytes32",
+        "name": "wasmModuleRoot_",
+        "type": "bytes32"
+      },
+      {
+        "internalType": "enum MachineStatus[2]",
+        "name": "startAndEndMachineStatuses_",
+        "type": "uint8[2]"
+      },
+      {
+        "components": [
+          {
+            "internalType": "bytes32[2]",
+            "name": "bytes32Vals",
+            "type": "bytes32[2]"
+          },
+          {
+            "internalType": "uint64[2]",
+            "name": "u64Vals",
+            "type": "uint64[2]"
+          }
+        ],
+        "internalType": "struct GlobalState[2]",
+        "name": "startAndEndGlobalStates_",
+        "type": "tuple[2]"
+      },
+      {
+        "internalType": "uint64",
+        "name": "numBlocks",
+        "type": "uint64"
+      },
+      {
+        "internalType": "address",
+        "name": "asserter_",
+        "type": "address"
+      },
+      {
+        "internalType": "address",
+        "name": "challenger_",
+        "type": "address"
+      },
+      {
+        "internalType": "uint256",
+        "name": "asserterTimeLeft_",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "challengerTimeLeft_",
+        "type": "uint256"
+      }
+    ],
+    "name": "createChallenge",
+    "outputs": [
+      {
+        "internalType": "uint64",
+        "name": "",
+        "type": "uint64"
+      }
+    ],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "loser",
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "manager",
+    "outputs": [
+      {
+        "internalType": "contract IChallengeManager",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "winner",
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  }
+]

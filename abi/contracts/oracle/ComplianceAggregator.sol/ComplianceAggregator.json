@@ -1,0 +1,15 @@
+[
+  {
+    "inputs": [],
+    "name": "stub",
+    "outputs": [
+      {
+        "internalType": "contract IComplianceRegistryStub",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  }
+]

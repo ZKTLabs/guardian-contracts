@@ -13,5 +13,8 @@ interface IRollupEventInbox {
 
     function rollup() external view returns (address);
 
-    function rollupInitialized(uint256 chainId, string calldata chainConfig) external;
+    function rollupInitialized(
+        uint256 chainId,
+        string calldata chainConfig
+    ) external;
 }

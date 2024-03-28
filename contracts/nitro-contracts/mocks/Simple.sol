@@ -31,7 +31,10 @@ contract Simple {
 
     function incrementRedeem() external {
         counter++;
-        emit RedeemedEvent(msg.sender, ArbRetryableTx(address(110)).getCurrentRedeemer());
+        emit RedeemedEvent(
+            msg.sender,
+            ArbRetryableTx(address(110)).getCurrentRedeemer()
+        );
     }
 
     function emitNullEvent() external {
@@ -39,7 +42,10 @@ contract Simple {
     }
 
     function checkBlockHashes() external view returns (uint256) {
-        require(blockhash(block.number - 1) != blockhash(block.number - 2), "SAME_BLOCK_HASH");
+        require(
+            blockhash(block.number - 1) != blockhash(block.number - 2),
+            "SAME_BLOCK_HASH"
+        );
         return block.number;
     }
 
@@ -53,9 +59,15 @@ contract Simple {
         revert("SOLIDITY_REVERTING");
     }
 
-    function checkIsTopLevelOrWasAliased(bool useTopLevel, bool expected) public view {
+    function checkIsTopLevelOrWasAliased(
+        bool useTopLevel,
+        bool expected
+    ) public view {
         if (useTopLevel) {
-            require(ArbSys(address(100)).isTopLevelCall() == expected, "UNEXPECTED_RESULT");
+            require(
+                ArbSys(address(100)).isTopLevelCall() == expected,
+                "UNEXPECTED_RESULT"
+            );
         } else {
             require(
                 ArbSys(address(100)).wasMyCallersAddressAliased() == expected,
@@ -74,7 +86,10 @@ contract Simple {
     ) public {
         // DIRECT CALL
         if (useTopLevel) {
-            require(ArbSys(address(100)).isTopLevelCall() == directCase, "UNEXPECTED_RESULT");
+            require(
+                ArbSys(address(100)).isTopLevelCall() == directCase,
+                "UNEXPECTED_RESULT"
+            );
         } else {
             require(
                 ArbSys(address(100)).wasMyCallersAddressAliased() == directCase,
@@ -101,7 +116,15 @@ contract Simple {
             callcodeCase
         );
         assembly {
-            success := callcode(gas(), address(), 0, add(data, 32), mload(data), 0, 0)
+            success := callcode(
+                gas(),
+                address(),
+                0,
+                add(data, 32),
+                mload(data),
+                0,
+                0
+            )
         }
         require(success, "CALLCODE_FAILED");
 
@@ -115,7 +138,10 @@ contract Simple {
         require(success, "CALL_FAILED");
     }
 
-    function checkGasUsed(address to, bytes calldata input) external view returns (uint256) {
+    function checkGasUsed(
+        address to,
+        bytes calldata input
+    ) external view returns (uint256) {
         uint256 before = gasleft();
         // The inner call may revert, but we still want to return the amount of gas used,
         // so we ignore the result of this call.

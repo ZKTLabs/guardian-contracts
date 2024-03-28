@@ -14,7 +14,11 @@ import {AlreadyInit, HadZeroInit} from "../libraries/Error.sol";
 /**
  * @title The inbox for rollup protocol events
  */
-contract RollupEventInbox is IRollupEventInbox, IDelayedMessageProvider, DelegateCallAware {
+contract RollupEventInbox is
+    IRollupEventInbox,
+    IDelayedMessageProvider,
+    DelegateCallAware
+{
     IBridge public override bridge;
     address public override rollup;
 
@@ -30,11 +34,10 @@ contract RollupEventInbox is IRollupEventInbox, IDelayedMessageProvider, Delegat
         rollup = address(_bridge.rollup());
     }
 
-    function rollupInitialized(uint256 chainId, string calldata chainConfig)
-        external
-        override
-        onlyRollup
-    {
+    function rollupInitialized(
+        uint256 chainId,
+        string calldata chainConfig
+    ) external override onlyRollup {
         require(bytes(chainConfig).length > 0, "EMPTY_CHAIN_CONFIG");
         bytes memory initMsg = abi.encodePacked(chainId, uint8(0), chainConfig);
         uint256 num = bridge.enqueueDelayedMessage(

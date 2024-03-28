@@ -8,7 +8,10 @@ pragma solidity >=0.6.9 <0.9.0;
 import "./IBridge.sol";
 
 interface IOutbox {
-    event SendRootUpdated(bytes32 indexed outputRoot, bytes32 indexed l2BlockHash);
+    event SendRootUpdated(
+        bytes32 indexed outputRoot,
+        bytes32 indexed l2BlockHash
+    );
     event OutBoxTransactionExecuted(
         address indexed to,
         address indexed l2Sender,

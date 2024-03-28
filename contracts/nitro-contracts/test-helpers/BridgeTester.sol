@@ -7,14 +7,7 @@ pragma solidity ^0.8.4;
 import "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
 import "@openzeppelin/contracts-upgradeable/utils/AddressUpgradeable.sol";
 
-import {
-    NotContract,
-    NotRollupOrOwner,
-    NotDelayedInbox,
-    NotSequencerInbox,
-    NotOutbox,
-    InvalidOutboxSet
-} from "../libraries/Error.sol";
+import {NotContract, NotRollupOrOwner, NotDelayedInbox, NotSequencerInbox, NotOutbox, InvalidOutboxSet} from "../libraries/Error.sol";
 import "../bridge/IBridge.sol";
 import "../bridge/Messages.sol";
 import "../libraries/DelegateCallAware.sol";
@@ -49,13 +42,19 @@ contract BridgeTester is Initializable, DelegateCallAware, IBridge {
         if (msg.sender != address(rollup)) {
             address rollupOwner = rollup.owner();
             if (msg.sender != rollupOwner) {
-                revert NotRollupOrOwner(msg.sender, address(rollup), rollupOwner);
+                revert NotRollupOrOwner(
+                    msg.sender,
+                    address(rollup),
+                    rollupOwner
+                );
             }
         }
         _;
     }
 
-    function setSequencerInbox(address _sequencerInbox) external override onlyRollupOrOwner {
+    function setSequencerInbox(
+        address _sequencerInbox
+    ) external override onlyRollupOrOwner {
         sequencerInbox = _sequencerInbox;
         emit SequencerInboxUpdated(_sequencerInbox);
     }
@@ -78,11 +77,15 @@ contract BridgeTester is Initializable, DelegateCallAware, IBridge {
         return _activeOutbox;
     }
 
-    function allowedDelayedInboxes(address inbox) external view override returns (bool) {
+    function allowedDelayedInboxes(
+        address inbox
+    ) external view override returns (bool) {
         return allowedInboxesMap[inbox].allowed;
     }
 
-    function allowedOutboxes(address outbox) external view override returns (bool) {
+    function allowedOutboxes(
+        address outbox
+    ) external view override returns (bool) {
         return allowedOutboxesMap[outbox].allowed;
     }
 
@@ -103,10 +106,10 @@ contract BridgeTester is Initializable, DelegateCallAware, IBridge {
         // TODO: implement stub logic
     }
 
-    function submitBatchSpendingReport(address batchPoster, bytes32 dataHash)
-        external
-        returns (uint256)
-    {
+    function submitBatchSpendingReport(
+        address batchPoster,
+        bytes32 dataHash
+    ) external returns (uint256) {
         // TODO: implement stub
     }
 
@@ -120,7 +123,8 @@ contract BridgeTester is Initializable, DelegateCallAware, IBridge {
         address sender,
         bytes32 messageDataHash
     ) external payable override returns (uint256) {
-        if (!allowedInboxesMap[msg.sender].allowed) revert NotDelayedInbox(msg.sender);
+        if (!allowedInboxesMap[msg.sender].allowed)
+            revert NotDelayedInbox(msg.sender);
         return
             addMessageToDelayedAccumulator(
                 kind,
@@ -154,7 +158,9 @@ contract BridgeTester is Initializable, DelegateCallAware, IBridge {
         if (count > 0) {
             prevAcc = delayedInboxAccs[count - 1];
         }
-        delayedInboxAccs.push(Messages.accumulateInboxMessage(prevAcc, messageHash));
+        delayedInboxAccs.push(
+            Messages.accumulateInboxMessage(prevAcc, messageHash)
+        );
         emit MessageDelivered(
             count,
             prevAcc,
@@ -173,7 +179,8 @@ contract BridgeTester is Initializable, DelegateCallAware, IBridge {
         uint256 value,
         bytes calldata data
     ) external override returns (bool success, bytes memory returnData) {
-        if (!allowedOutboxesMap[msg.sender].allowed) revert NotOutbox(msg.sender);
+        if (!allowedOutboxesMap[msg.sender].allowed)
+            revert NotOutbox(msg.sender);
         if (data.length > 0 && !to.isContract()) revert NotContract(to);
         address prevOutbox = _activeOutbox;
         _activeOutbox = msg.sender;
@@ -187,7 +194,10 @@ contract BridgeTester is Initializable, DelegateCallAware, IBridge {
         emit BridgeCallTriggered(msg.sender, to, value, data);
     }
 
-    function setDelayedInbox(address inbox, bool enabled) external override onlyRollupOrOwner {
+    function setDelayedInbox(
+        address inbox,
+        bool enabled
+    ) external override onlyRollupOrOwner {
         InOutInfo storage info = allowedInboxesMap[inbox];
         bool alreadyEnabled = info.allowed;
         emit InboxToggle(inbox, enabled);
@@ -195,19 +205,26 @@ contract BridgeTester is Initializable, DelegateCallAware, IBridge {
             return;
         }
         if (enabled) {
-            allowedInboxesMap[inbox] = InOutInfo(allowedDelayedInboxList.length, true);
+            allowedInboxesMap[inbox] = InOutInfo(
+                allowedDelayedInboxList.length,
+                true
+            );
             allowedDelayedInboxList.push(inbox);
         } else {
             allowedDelayedInboxList[info.index] = allowedDelayedInboxList[
                 allowedDelayedInboxList.length - 1
             ];
-            allowedInboxesMap[allowedDelayedInboxList[info.index]].index = info.index;
+            allowedInboxesMap[allowedDelayedInboxList[info.index]].index = info
+                .index;
             allowedDelayedInboxList.pop();
             delete allowedInboxesMap[inbox];
         }
     }
 
-    function setOutbox(address outbox, bool enabled) external override onlyRollupOrOwner {
+    function setOutbox(
+        address outbox,
+        bool enabled
+    ) external override onlyRollupOrOwner {
         InOutInfo storage info = allowedOutboxesMap[outbox];
         bool alreadyEnabled = info.allowed;
         emit OutboxToggle(outbox, enabled);
@@ -215,11 +232,17 @@ contract BridgeTester is Initializable, DelegateCallAware, IBridge {
             return;
         }
         if (enabled) {
-            allowedOutboxesMap[outbox] = InOutInfo(allowedOutboxList.length, true);
+            allowedOutboxesMap[outbox] = InOutInfo(
+                allowedOutboxList.length,
+                true
+            );
             allowedOutboxList.push(outbox);
         } else {
-            allowedOutboxList[info.index] = allowedOutboxList[allowedOutboxList.length - 1];
-            allowedOutboxesMap[allowedOutboxList[info.index]].index = info.index;
+            allowedOutboxList[info.index] = allowedOutboxList[
+                allowedOutboxList.length - 1
+            ];
+            allowedOutboxesMap[allowedOutboxList[info.index]].index = info
+                .index;
             allowedOutboxList.pop();
             delete allowedOutboxesMap[outbox];
         }
