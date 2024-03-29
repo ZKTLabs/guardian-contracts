@@ -5,7 +5,7 @@ import {AccessControl} from "@openzeppelin/contracts/access/AccessControl.sol";
 import {ECDSA} from "@openzeppelin/contracts/utils/cryptography/ECDSA.sol";
 import {IProposalManagement} from "../interfaces/IProposalManagement.sol";
 import {IComplianceRegistryStub} from "../interfaces/IComplianceRegistryStub.sol";
-import {ISentryGuardianNode} from "../interfaces/ISentryGuardianNode.sol";
+import {IGuardianNode} from "../interfaces/IGuardianNode.sol";
 import {ProposalCommon} from "../libraries/ProposalCommon.sol";
 
 error ProposalManagement__AlreadyExistProposal(bytes32 proposalId);
@@ -20,19 +20,19 @@ contract ProposalManagement is IProposalManagement, AccessControl {
 
     uint256 public constant EXPIRY_DAYS = 7 days;
 
-    constructor(address sentryGuardianNode, address complianceRegistryStub) {
+    constructor(address guardianNode, address complianceRegistryStub) {
         _setupRole(ADMIN_ROLE, _msgSender());
         _setRoleAdmin(SPEAKER_ROLE, ADMIN_ROLE);
         _setRoleAdmin(VOTER_ROLE, ADMIN_ROLE);
         _setRoleAdmin(GUARDIAN_ROLE, ADMIN_ROLE);
 
-        sentry = ISentryGuardianNode(sentryGuardianNode);
+        sentry = IGuardianNode(guardianNode);
         stub = IComplianceRegistryStub(complianceRegistryStub);
     }
 
     bytes32[] public proposalIdList;
     mapping(bytes32 => ProposalCommon.Proposal) public proposals;
-    ISentryGuardianNode public sentry;
+    IGuardianNode public sentry;
     IComplianceRegistryStub public stub;
 
     function createProposal(

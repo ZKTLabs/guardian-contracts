@@ -7,6 +7,6 @@ interface ISentryGuardianNodeSlot {
     }
 }
 
-interface ISentryGuardianNode is ISentryGuardianNodeSlot {
+interface IGuardianNode is ISentryGuardianNodeSlot {
     function activeNodes() external view returns (uint256);
 }

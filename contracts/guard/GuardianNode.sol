@@ -2,9 +2,9 @@
 pragma solidity ^0.8.0;
 
 import {AccessControl} from "@openzeppelin/contracts/access/AccessControl.sol";
-import {ISentryGuardianNode} from "../interfaces/ISentryGuardianNode.sol";
+import {IGuardianNode} from "../interfaces/IGuardianNode.sol";
 
-contract SentryGuardianNode is ISentryGuardianNode, AccessControl {
+contract GuardianNode is IGuardianNode, AccessControl {
     bytes32 public constant ADMIN_ROLE = keccak256("ADMIN_ROLE");
     bytes32 public constant GUARDIAN_ROLE = keccak256("GUARDIAN_ROLE");
 
