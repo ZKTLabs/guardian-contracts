@@ -3,7 +3,7 @@
     "inputs": [
       {
         "internalType": "address",
-        "name": "sentryGuardianNode",
+        "name": "guardianNode",
         "type": "address"
       },
       {
@@ -441,7 +441,7 @@
     "name": "sentry",
     "outputs": [
       {
-        "internalType": "contract ISentryGuardianNode",
+        "internalType": "contract IGuardianNode",
         "name": "",
         "type": "address"
       }

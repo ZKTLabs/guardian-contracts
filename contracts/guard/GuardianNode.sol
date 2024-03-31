@@ -25,4 +25,16 @@ contract GuardianNode is IGuardianNode, AccessControl {
     function activeNodes() external view override returns (uint256) {
         return slot0.activeNodes;
     }
+
+    function voteParticipated(address addr) external view returns (uint256) {
+        return 0;
+    }
+
+    function consecutiveOnlineSession(address addr) external view returns (uint256) {
+        return 0;
+    }
+
+    function zktEarned(address addr) external view returns (uint256) {
+        return 0;
+    }
 }
