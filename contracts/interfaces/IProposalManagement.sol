@@ -9,7 +9,7 @@ interface IProposalManagementEvent {
 interface IProposalManagement is IProposalManagementEvent {
     function createProposal(
         bytes32 proposalId,
-        address[] calldata targetAddresses,
+        bytes[] calldata targetAddresses,
         bool isWhitelist,
         string calldata description,
         bytes calldata signature

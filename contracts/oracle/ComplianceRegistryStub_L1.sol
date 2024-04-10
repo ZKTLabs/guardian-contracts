@@ -46,8 +46,10 @@ contract ComplianceRegistryStub_L1 is IComplianceRegistryStub, AccessControl {
         ProposalCommon.Proposal memory proposal,
         IComplianceRegistry _registry
     ) internal {
-        for (uint256 idx = 0; idx < proposal.targetAddresses.length; idx++) {
-            address target = proposal.targetAddresses[idx];
+        for (uint256 idx = 0; idx < proposal.targets.length; idx++) {
+            bytes memory data = proposal.targets[idx];
+            (address target, bytes32 networkHash) = _registry.decodeBytes(data);
+            if (target == address(0)) continue;
             if (_registry.checkAddress(target)) {
                 _registry.revokeCompliance(
                     target,

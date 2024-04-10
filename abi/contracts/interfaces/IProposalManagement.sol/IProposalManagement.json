@@ -33,9 +33,9 @@
         "type": "bytes32"
       },
       {
-        "internalType": "address[]",
+        "internalType": "bytes[]",
         "name": "targetAddresses",
-        "type": "address[]"
+        "type": "bytes[]"
       },
       {
         "internalType": "bool",

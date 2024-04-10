@@ -3,6 +3,11 @@ pragma solidity ^0.8.0;
 
 import {ProposalCommon} from "../libraries/ProposalCommon.sol";
 
+interface IComplianceEvent {
+
+    event AddProposalToAnotherNetworkList(bytes data, bytes32 networkHash);
+}
+
 interface IComplianceEntry {
     struct Compliance {
         bytes32 proposalId;
@@ -12,7 +17,7 @@ interface IComplianceEntry {
     }
 }
 
-interface IComplianceRegistry is IComplianceEntry {
+interface IComplianceRegistry is IComplianceEntry, IComplianceEvent {
     function addProposalToList(
         ProposalCommon.Proposal memory proposal
     ) external;
@@ -24,4 +29,6 @@ interface IComplianceRegistry is IComplianceEntry {
         address author,
         bytes32 proposalId
     ) external;
+
+    function decodeBytes(bytes memory data) external view returns (address, bytes32);
 }

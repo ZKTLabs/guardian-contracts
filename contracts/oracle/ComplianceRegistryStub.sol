@@ -13,16 +13,19 @@ contract ComplianceRegistryStub is IComplianceRegistryStub, AccessControl {
     bytes32 public constant PROPOSAL_MANAGEMENT_ROLE =
         keccak256("PROPOSAL_MANAGEMENT_ROLE");
 
-    constructor(address _whitelistRegistry, address _blacklistRegistry) {
+    IComplianceRegistry public whitelistRegistry;
+    IComplianceRegistry public blacklistRegistry;
+
+    constructor(
+        address _whitelistRegistry,
+        address _blacklistRegistry
+    ) {
         _setupRole(ADMIN_ROLE, _msgSender());
         _setRoleAdmin(PROPOSAL_MANAGEMENT_ROLE, ADMIN_ROLE);
 
         whitelistRegistry = IComplianceRegistry(_whitelistRegistry);
         blacklistRegistry = IComplianceRegistry(_blacklistRegistry);
     }
-
-    IComplianceRegistry public whitelistRegistry;
-    IComplianceRegistry public blacklistRegistry;
 
     function confirmProposal(
         ProposalCommon.Proposal memory proposal
@@ -46,8 +49,10 @@ contract ComplianceRegistryStub is IComplianceRegistryStub, AccessControl {
         ProposalCommon.Proposal memory proposal,
         IComplianceRegistry _registry
     ) internal {
-        for (uint256 idx = 0; idx < proposal.targetAddresses.length; idx++) {
-            address target = proposal.targetAddresses[idx];
+        for (uint256 idx = 0; idx < proposal.targets.length; idx++) {
+            bytes memory data = proposal.targets[idx];
+            (address target, bytes32 networkHash) = _registry.decodeBytes(data);
+            if (target == address(0)) continue;
             if (_registry.checkAddress(target)) {
                 _registry.revokeCompliance(
                     target,

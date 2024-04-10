@@ -188,9 +188,9 @@
             "type": "address"
           },
           {
-            "internalType": "address[]",
-            "name": "targetAddresses",
-            "type": "address[]"
+            "internalType": "bytes[]",
+            "name": "targets",
+            "type": "bytes[]"
           },
           {
             "internalType": "bool",

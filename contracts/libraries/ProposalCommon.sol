@@ -12,7 +12,7 @@ library ProposalCommon {
     struct Proposal {
         bytes32 id;
         address author;
-        address[] targetAddresses;
+        bytes[] targets;
         bool isWhitelist;
         string description;
         uint256 timestamp;

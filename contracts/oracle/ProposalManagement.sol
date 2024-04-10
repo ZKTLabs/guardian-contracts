@@ -20,7 +20,10 @@ contract ProposalManagement is IProposalManagement, AccessControl {
 
     uint256 public constant EXPIRY_DAYS = 7 days;
 
-    constructor(address guardianNode, address complianceRegistryStub) {
+    constructor(
+        address guardianNode,
+        address complianceRegistryStub
+    ) {
         _setupRole(ADMIN_ROLE, _msgSender());
         _setRoleAdmin(SPEAKER_ROLE, ADMIN_ROLE);
         _setRoleAdmin(VOTER_ROLE, ADMIN_ROLE);
@@ -37,7 +40,7 @@ contract ProposalManagement is IProposalManagement, AccessControl {
 
     function createProposal(
         bytes32 proposalId,
-        address[] calldata targetAddresses,
+        bytes[] calldata targets,
         bool isWhitelist,
         string calldata description,
         bytes calldata signature
@@ -48,15 +51,15 @@ contract ProposalManagement is IProposalManagement, AccessControl {
         ) {
             revert ProposalManagement__AlreadyExistProposal(proposalId);
         }
-        bytes memory addressesBytes;
-        for (uint i = 0; i < targetAddresses.length; i++) {
-            addressesBytes = abi.encodePacked(
-                addressesBytes,
-                targetAddresses[i]
+        bytes memory targetBytes;
+        for (uint i = 0; i < targets.length; i++) {
+            targetBytes = abi.encodePacked(
+                targetBytes,
+                targets[i]
             );
         }
         bytes32 hash = keccak256(
-            abi.encodePacked(proposalId, addressesBytes, isWhitelist)
+            abi.encodePacked(proposalId, targetBytes, isWhitelist)
         );
         if (ECDSA.recover(hash, signature) != _msgSender())
             revert ProposalManagement__InvalidSignature();
@@ -66,7 +69,7 @@ contract ProposalManagement is IProposalManagement, AccessControl {
         proposals[proposalId] = ProposalCommon.Proposal({
             id: proposalId,
             author: _msgSender(),
-            targetAddresses: targetAddresses,
+            targets: targets,
             isWhitelist: isWhitelist,
             description: description,
             timestamp: block.timestamp,

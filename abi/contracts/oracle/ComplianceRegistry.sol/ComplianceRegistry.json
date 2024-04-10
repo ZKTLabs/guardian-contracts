@@ -5,10 +5,34 @@
         "internalType": "bool",
         "name": "_isWhitelistRegistry",
         "type": "bool"
+      },
+      {
+        "internalType": "address",
+        "name": "_networkRegistry",
+        "type": "address"
       }
     ],
     "stateMutability": "nonpayable",
     "type": "constructor"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "bytes",
+        "name": "data",
+        "type": "bytes"
+      },
+      {
+        "indexed": false,
+        "internalType": "bytes32",
+        "name": "networkHash",
+        "type": "bytes32"
+      }
+    ],
+    "name": "AddProposalToAnotherNetworkList",
+    "type": "event"
   },
   {
     "anonymous": false,
@@ -139,9 +163,9 @@
             "type": "address"
           },
           {
-            "internalType": "address[]",
-            "name": "targetAddresses",
-            "type": "address[]"
+            "internalType": "bytes[]",
+            "name": "targets",
+            "type": "bytes[]"
           },
           {
             "internalType": "bool",
@@ -245,6 +269,30 @@
   {
     "inputs": [
       {
+        "internalType": "bytes",
+        "name": "data",
+        "type": "bytes"
+      }
+    ],
+    "name": "decodeBytes",
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      },
+      {
+        "internalType": "bytes32",
+        "name": "",
+        "type": "bytes32"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
         "internalType": "bytes32",
         "name": "role",
         "type": "bytes32"
@@ -311,6 +359,19 @@
         "internalType": "bool",
         "name": "",
         "type": "bool"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "networkRegistry",
+    "outputs": [
+      {
+        "internalType": "contract INetworkSupportedRegistry",
+        "name": "",
+        "type": "address"
       }
     ],
     "stateMutability": "view",

@@ -1,0 +1,21 @@
+[
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "bytes",
+        "name": "data",
+        "type": "bytes"
+      },
+      {
+        "indexed": false,
+        "internalType": "bytes32",
+        "name": "networkHash",
+        "type": "bytes32"
+      }
+    ],
+    "name": "AddProposalToAnotherNetworkList",
+    "type": "event"
+  }
+]
