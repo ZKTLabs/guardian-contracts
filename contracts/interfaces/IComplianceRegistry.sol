@@ -5,7 +5,7 @@ import {ProposalCommon} from "../libraries/ProposalCommon.sol";
 
 interface IComplianceEvent {
 
-    event AddProposalToAnotherNetworkList(bytes data, bytes32 networkHash);
+    event AddProposalToAnotherNetworkList(bool isWhitelistRegistry, bytes data, bytes32 networkHash);
 }
 
 interface IComplianceEntry {

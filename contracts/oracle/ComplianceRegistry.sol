@@ -34,7 +34,7 @@ contract ComplianceRegistry is IComplianceRegistry, AccessControl {
             (address target, bytes32 networkHash) = decodeBytes(data);
             if (complianceList[target].isInList) continue;
             if (target == address(0)) {
-                emit AddProposalToAnotherNetworkList(data, networkHash);
+                emit AddProposalToAnotherNetworkList(isWhitelistRegistry, data, networkHash);
             }
             complianceList[target] = Compliance({
                 proposalId: proposal.id,
