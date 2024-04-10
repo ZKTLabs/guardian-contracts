@@ -11,6 +11,12 @@ import 'hardhat-gas-reporter';
 import 'solidity-coverage';
 
 
+const {
+  SEPOLIA_DEPLOYER,
+  ZKT_DEPLOYER,
+  INFURA_API_KEY,
+} = process.env
+
 const DEFAULT_COMPILER_SETTINGS = {
   version: "0.8.20",
   settings: {
@@ -38,8 +44,12 @@ const config: HardhatUserConfig = {
     zkt_test: {
       url: "https://zkt-network.rpc.caldera.xyz/http",  // RPC URL Here
       chainId: 48238,
-      accounts: process.env.ZK_DEPLOYER_PRIVATE_KEY !== undefined ? [process.env.ZKT_DEPLOYER_PRIVATE_KEY as string]: [],
-    }
+      accounts:  [ZKT_DEPLOYER as string],
+    },
+    sepolia: {
+      url: `https://sepolia.infura.io/v3/${INFURA_API_KEY}`,
+      accounts: [SEPOLIA_DEPLOYER as string]
+    },
   },
   gasReporter: {
     enabled: process.env.REPORT_GAS !== undefined,

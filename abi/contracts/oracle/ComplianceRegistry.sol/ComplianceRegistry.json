@@ -20,6 +20,12 @@
     "inputs": [
       {
         "indexed": false,
+        "internalType": "bool",
+        "name": "isWhitelistRegistry",
+        "type": "bool"
+      },
+      {
+        "indexed": false,
         "internalType": "bytes",
         "name": "data",
         "type": "bytes"
@@ -391,29 +397,6 @@
       }
     ],
     "name": "renounceRole",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "account",
-        "type": "address"
-      },
-      {
-        "internalType": "address",
-        "name": "author",
-        "type": "address"
-      },
-      {
-        "internalType": "bytes32",
-        "name": "proposalId",
-        "type": "bytes32"
-      }
-    ],
-    "name": "revokeCompliance",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"

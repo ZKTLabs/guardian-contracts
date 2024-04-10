@@ -11,7 +11,7 @@ contract ComplianceRegistry is IComplianceRegistry, AccessControl {
     bytes32 public constant COMPLIANCE_REGISTRY_STUB_ROLE =
         keccak256("COMPLIANCE_REGISTRY_STUB_ROLE");
 
-    bool public isWhitelistRegistry;
+    bool public override isWhitelistRegistry;
     mapping(address => Compliance) public complianceList;
     INetworkSupportedRegistry public networkRegistry;
 
@@ -49,18 +49,6 @@ contract ComplianceRegistry is IComplianceRegistry, AccessControl {
         address account
     ) external view override returns (bool) {
         return complianceList[account].isInList;
-    }
-
-    function revokeCompliance(
-        address account,
-        address author,
-        bytes32 proposalId
-    ) external override onlyRole(COMPLIANCE_REGISTRY_STUB_ROLE) {
-        complianceList[account].isInList = false;
-        complianceList[account].proposalId = proposalId;
-        complianceList[account].description = "revoke";
-        complianceList[account].author = author;
-        delete complianceList[account];
     }
 
     function decodeBytes(bytes memory data) public override view returns (address, bytes32)

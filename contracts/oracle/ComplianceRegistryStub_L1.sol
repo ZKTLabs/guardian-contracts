@@ -32,31 +32,9 @@ contract ComplianceRegistryStub_L1 is IComplianceRegistryStub, AccessControl {
         if (proposal.isWhitelist) {
             whitelistRegistry.addProposalToList(proposal);
             emit AddToWhitelist(proposal.id);
-
-            _revokeCompliance(proposal, blacklistRegistry);
         } else {
             blacklistRegistry.addProposalToList(proposal);
             emit AddToBlacklist(proposal.id);
-
-            _revokeCompliance(proposal, whitelistRegistry);
-        }
-    }
-
-    function _revokeCompliance(
-        ProposalCommon.Proposal memory proposal,
-        IComplianceRegistry _registry
-    ) internal {
-        for (uint256 idx = 0; idx < proposal.targets.length; idx++) {
-            bytes memory data = proposal.targets[idx];
-            (address target, bytes32 networkHash) = _registry.decodeBytes(data);
-            if (target == address(0)) continue;
-            if (_registry.checkAddress(target)) {
-                _registry.revokeCompliance(
-                    target,
-                    proposal.author,
-                    proposal.id
-                );
-            }
         }
     }
 

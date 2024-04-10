@@ -121,6 +121,58 @@
   {
     "inputs": [
       {
+        "internalType": "bytes32[]",
+        "name": "networkHashes",
+        "type": "bytes32[]"
+      }
+    ],
+    "name": "batchAddNetworks",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "string[]",
+        "name": "networkNames",
+        "type": "string[]"
+      }
+    ],
+    "name": "batchAddNetworks",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "bytes32[]",
+        "name": "networkHashes",
+        "type": "bytes32[]"
+      }
+    ],
+    "name": "batchRevokeNetworks",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "string[]",
+        "name": "networkNames",
+        "type": "string[]"
+      }
+    ],
+    "name": "batchRevokeNetworks",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
         "internalType": "string",
         "name": "networkName",
         "type": "string"

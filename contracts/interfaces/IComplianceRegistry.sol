@@ -24,11 +24,7 @@ interface IComplianceRegistry is IComplianceEntry, IComplianceEvent {
 
     function checkAddress(address account) external view returns (bool);
 
-    function revokeCompliance(
-        address account,
-        address author,
-        bytes32 proposalId
-    ) external;
+    function isWhitelistRegistry() external view returns (bool);
 
     function decodeBytes(bytes memory data) external view returns (address, bytes32);
 }
