@@ -12,13 +12,10 @@ contract ComplianceRegistry is IComplianceRegistry, AccessControl {
         keccak256("COMPLIANCE_REGISTRY_STUB_ROLE");
 
     bool public override isWhitelistRegistry;
-    mapping(address => Compliance) public complianceList;
+    mapping(bytes32 => Compliance) public complianceList;
     INetworkSupportedRegistry public networkRegistry;
 
-    constructor(
-        bool _isWhitelistRegistry,
-        address _networkRegistry
-    ) {
+    constructor(bool _isWhitelistRegistry, address _networkRegistry) {
         _setupRole(ADMIN_ROLE, _msgSender());
         _setRoleAdmin(COMPLIANCE_REGISTRY_STUB_ROLE, ADMIN_ROLE);
 
@@ -32,28 +29,42 @@ contract ComplianceRegistry is IComplianceRegistry, AccessControl {
         for (uint256 idx = 0; idx < proposal.targets.length; idx++) {
             bytes memory data = proposal.targets[idx];
             (address target, bytes32 networkHash) = decodeBytes(data);
-            if (complianceList[target].isInList) continue;
+            bytes32 addressKey = getAddressKey(target);
+            if (complianceList[addressKey].isInList) continue;
             if (target == address(0)) {
-                emit AddProposalToAnotherNetworkList(isWhitelistRegistry, data, networkHash);
+                emit AddProposalToAnotherNetworkList(
+                    isWhitelistRegistry,
+                    data,
+                    networkHash
+                );
             }
-            complianceList[target] = Compliance({
+            complianceList[addressKey] = Compliance({
                 proposalId: proposal.id,
                 isInList: true,
+                target: target,
                 author: proposal.author,
                 description: proposal.description
             });
         }
     }
 
+    function getAddressKey(address target) public pure returns (bytes32) {
+        return keccak256(abi.encodePacked(target, "ZKT"));
+    }
+
     function checkAddress(
         address account
     ) external view override returns (bool) {
-        return complianceList[account].isInList;
+        return complianceList[getAddressKey(account)].isInList;
     }
 
-    function decodeBytes(bytes memory data) public override view returns (address, bytes32)
-    {
-        (bytes memory addressBytes, bytes32 networkHash) = abi.decode(data, (bytes, bytes32));
+    function decodeBytes(
+        bytes memory data
+    ) public view override returns (address, bytes32) {
+        (bytes memory addressBytes, bytes32 networkHash) = abi.decode(
+            data,
+            (bytes, bytes32)
+        );
         if (networkRegistry.isNetworkSupported(networkHash)) {
             address targetAddress = abi.decode(addressBytes, (address));
             return (targetAddress, networkHash);

@@ -20,10 +20,7 @@ contract ProposalManagement is IProposalManagement, AccessControl {
 
     uint256 public constant EXPIRY_DAYS = 7 days;
 
-    constructor(
-        address guardianNode,
-        address complianceRegistryStub
-    ) {
+    constructor(address guardianNode, address complianceRegistryStub) {
         _setupRole(ADMIN_ROLE, _msgSender());
         _setRoleAdmin(SPEAKER_ROLE, ADMIN_ROLE);
         _setRoleAdmin(VOTER_ROLE, ADMIN_ROLE);
@@ -53,10 +50,7 @@ contract ProposalManagement is IProposalManagement, AccessControl {
         }
         bytes memory targetBytes;
         for (uint i = 0; i < targets.length; i++) {
-            targetBytes = abi.encodePacked(
-                targetBytes,
-                targets[i]
-            );
+            targetBytes = abi.encodePacked(targetBytes, targets[i]);
         }
         bytes32 hash = keccak256(
             abi.encodePacked(proposalId, targetBytes, isWhitelist)

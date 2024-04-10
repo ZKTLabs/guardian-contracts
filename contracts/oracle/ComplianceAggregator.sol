@@ -7,7 +7,6 @@ error ComplianceAggregator__OnlyWhitelistAction();
 error ComplianceAggregator__ExcludeBlacklistAction();
 
 abstract contract ComplianceAggregator {
-
     modifier onlyWhitelistAction() {
         if (!stub.isWhitelist(msg.sender))
             revert ComplianceAggregator__OnlyWhitelistAction();

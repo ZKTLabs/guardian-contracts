@@ -16,10 +16,7 @@ contract ComplianceRegistryStub is IComplianceRegistryStub, AccessControl {
     IComplianceRegistry public whitelistRegistry;
     IComplianceRegistry public blacklistRegistry;
 
-    constructor(
-        address _whitelistRegistry,
-        address _blacklistRegistry
-    ) {
+    constructor(address _whitelistRegistry, address _blacklistRegistry) {
         _setupRole(ADMIN_ROLE, _msgSender());
         _setRoleAdmin(PROPOSAL_MANAGEMENT_ROLE, ADMIN_ROLE);
 

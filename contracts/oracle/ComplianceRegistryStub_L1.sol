@@ -10,8 +10,7 @@ error ComplianceRegistryStub_L1__InvalidConfirmProposalStatus();
 
 contract ComplianceRegistryStub_L1 is IComplianceRegistryStub, AccessControl {
     bytes32 public constant ADMIN_ROLE = keccak256("ADMIN_ROLE");
-    bytes32 public constant GUARDIAN_NODE =
-        keccak256("GUARDIAN_NODE");
+    bytes32 public constant GUARDIAN_NODE = keccak256("GUARDIAN_NODE");
 
     constructor(address _whitelistRegistry, address _blacklistRegistry) {
         _setupRole(ADMIN_ROLE, _msgSender());
