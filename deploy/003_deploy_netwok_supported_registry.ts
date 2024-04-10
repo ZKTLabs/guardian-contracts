@@ -26,11 +26,11 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
     "NetworkSupportedRegistry",
     deployResulted.address
   );
-  const tx = await networkSupportedRegistry["batchAddNetworks(string[])"](
-    supportedNetworkNames
-  );
-  await tx.wait();
-  console.log(`batchAddNetworks finish: ${tx.hash}`);
+  // const tx = await networkSupportedRegistry["batchAddNetworks(string[])"](
+  //   supportedNetworkNames
+  // );
+  // await tx.wait();
+  // console.log(`batchAddNetworks finish: ${tx.hash}`);
 };
 
 func.id = "deploy_network_supported_registry";
