@@ -16,10 +16,11 @@ contract ComplianceRegistry is IComplianceRegistry, AccessControlUpgradeable {
     mapping(bytes32 => Compliance) public complianceList;
     INetworkSupportedRegistry public networkRegistry;
 
-    function initialize(address _admin, bool _isWhitelistRegistry, address _networkRegistry)
-        public
-        initializer
-    {
+    function initialize(
+        address _admin,
+        bool _isWhitelistRegistry,
+        address _networkRegistry
+    ) public initializer {
         __AccessControl_init();
 
         _setupRole(ADMIN_ROLE, _admin);
@@ -33,7 +34,11 @@ contract ComplianceRegistry is IComplianceRegistry, AccessControlUpgradeable {
     ) external override onlyRole(COMPLIANCE_REGISTRY_STUB_ROLE) {
         for (uint256 idx = 0; idx < proposal.targets.length; idx++) {
             bytes memory data = proposal.targets[idx];
-            (address target, bytes32 networkHash, bytes memory labels) = decodeBytes(data);
+            (
+                address target,
+                bytes32 networkHash,
+                bytes memory labels
+            ) = decodeBytes(data);
             bytes32 addressKey = getAddressKey(target);
             if (complianceList[addressKey].isInList) continue;
             if (target == address(0)) {
@@ -58,10 +63,14 @@ contract ComplianceRegistry is IComplianceRegistry, AccessControlUpgradeable {
         return keccak256(abi.encodePacked(account, "ZKT"));
     }
 
-    function getComplianceLabels(address account) public view returns (string[] memory) {
+    function getComplianceLabels(
+        address account
+    ) public view returns (string[] memory) {
         bytes32 key = getAddressKey(account);
         if (!complianceList[key].isInList) return new string[](0);
-        string[] memory labels = ProposalLabel.unpack(complianceList[key].labels);
+        string[] memory labels = ProposalLabel.unpack(
+            complianceList[key].labels
+        );
         return labels;
     }
 
@@ -78,10 +87,7 @@ contract ComplianceRegistry is IComplianceRegistry, AccessControlUpgradeable {
             bytes memory addressBytes,
             bytes32 networkHash,
             bytes memory labels
-        ) = abi.decode(
-            data,
-            (bytes, bytes32, bytes)
-        );
+        ) = abi.decode(data, (bytes, bytes32, bytes));
         if (networkRegistry.isNetworkSupported(networkHash)) {
             address targetAddress = abi.decode(addressBytes, (address));
             return (targetAddress, networkHash, labels);

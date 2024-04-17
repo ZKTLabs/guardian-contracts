@@ -5,16 +5,23 @@ library ProposalLabel {
     function pack(string[] memory input) public pure returns (bytes memory) {
         uint256 offset = 0x20;
         bytes memory packedData = new bytes(0);
-        for (uint256 idx = 0; idx < input.length;) {
+        for (uint256 idx = 0; idx < input.length; ) {
             bytes memory strBytes = bytes(input[idx]);
             uint256 strLength = strBytes.length;
-            require(strLength <= 0xFF, "ProposalLabel: Each string length cannot exceed 255 bytes");
+            require(
+                strLength <= 0xFF,
+                "ProposalLabel: Each string length cannot exceed 255 bytes"
+            );
             packedData = expandTo(packedData, offset + strLength + 1); // +1 for prefix length
             assembly {
-                mstore8(add(packedData, offset), strLength)  // store string length first.
+                mstore8(add(packedData, offset), strLength) // store string length first.
                 let strOffset := add(strBytes, 0x20) // first byte location of strBytes
                 let packedOffset := add(add(packedData, offset), 1)
-                for {let i := 0} lt(i, strLength) {i := add(i, 1)} {
+                for {
+                    let i := 0
+                } lt(i, strLength) {
+                    i := add(i, 1)
+                } {
                     mstore8(add(packedOffset, i), mload(add(strOffset, i)))
                 }
             }
@@ -26,12 +33,14 @@ library ProposalLabel {
         return packedData;
     }
 
-    function unpack(bytes memory packedData) public pure returns (string[] memory) {
+    function unpack(
+        bytes memory packedData
+    ) public pure returns (string[] memory) {
         uint256 offset = 0x20;
         uint256 strCount = count(packedData);
 
         string[] memory results = new string[](strCount);
-        for (uint256 idx = 0; idx < strCount; )  {
+        for (uint256 idx = 0; idx < strCount; ) {
             uint256 strLength;
             assembly {
                 strLength := mload(add(packedData, offset))
@@ -41,7 +50,11 @@ library ProposalLabel {
             assembly {
                 let strOffset := add(strBytes, 0x20)
                 let packedOffset := add(add(packedData, offset), 1)
-                for {let i := 0} lt(i, strLength) { i := add(i, 1)} {
+                for {
+                    let i := 0
+                } lt(i, strLength) {
+                    i := add(i, 1)
+                } {
                     mstore8(add(strOffset, i), mload(add(packedOffset, i)))
                 }
             }
@@ -53,7 +66,10 @@ library ProposalLabel {
         return results;
     }
 
-    function expandTo(bytes memory data, uint256 length) private pure returns (bytes memory expandedData) {
+    function expandTo(
+        bytes memory data,
+        uint256 length
+    ) private pure returns (bytes memory expandedData) {
         uint256 dataLength = data.length;
         if (length <= dataLength) return data;
 
@@ -62,7 +78,11 @@ library ProposalLabel {
             let dataOffset := add(data, 0x20)
             let expandedOffset := add(expandedData, 0x20)
 
-            for {let i := 0} lt(i, dataLength) {i := add(i, 0x20)} {
+            for {
+                let i := 0
+            } lt(i, dataLength) {
+                i := add(i, 0x20)
+            } {
                 mstore(add(expandedOffset, i), mload(add(dataOffset, i)))
             }
         }

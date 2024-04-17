@@ -17,10 +17,10 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
       proxyContract: "OpenZeppelinTransparentProxy",
       execute: {
         init: {
-          methodName: 'initialize',
-          args: [deployer, true, await networkSupportedRegistry.getAddress()]
-        }
-      }
+          methodName: "initialize",
+          args: [deployer, true, await networkSupportedRegistry.getAddress()],
+        },
+      },
     },
   });
 };

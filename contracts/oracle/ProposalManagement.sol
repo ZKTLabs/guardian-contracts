@@ -13,10 +13,14 @@ error ProposalManagement__InvalidSignature();
 error ProposalManagement__OnlyVoteForPendingProposal();
 
 contract ProposalManagement is IProposalManagement, AccessControl {
-    bytes32 public constant ADMIN_ROLE = keccak256("proposal-management.admin.role");
-    bytes32 public constant SPEAKER_ROLE = keccak256("proposal-management.speaker.role");
-    bytes32 public constant VOTER_ROLE = keccak256("proposal-management.voter.role");
-    bytes32 public constant GUARDIAN_ROLE = keccak256("proposal-management.guardian.role");
+    bytes32 public constant ADMIN_ROLE =
+        keccak256("proposal-management.admin.role");
+    bytes32 public constant SPEAKER_ROLE =
+        keccak256("proposal-management.speaker.role");
+    bytes32 public constant VOTER_ROLE =
+        keccak256("proposal-management.voter.role");
+    bytes32 public constant GUARDIAN_ROLE =
+        keccak256("proposal-management.guardian.role");
 
     uint256 public constant EXPIRY_DAYS = 7 days;
 

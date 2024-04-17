@@ -10,9 +10,14 @@ error ComplianceRegistryStub__InvalidConfirmProposalStatus();
 error ComplianceRegistryStub__WhitelistRegistryNotEnough();
 error ComplianceRegistryStub__BlacklistRegistryNotEnough();
 
-contract ComplianceRegistryStub is IComplianceRegistryStub, AccessControlUpgradeable {
-    bytes32 public constant ADMIN_ROLE = keccak256("compliance-registry-stub.admin.role");
-    bytes32 public constant MANAGER_ROLE = keccak256("compliance-registry-stub.manager.role");
+contract ComplianceRegistryStub is
+    IComplianceRegistryStub,
+    AccessControlUpgradeable
+{
+    bytes32 public constant ADMIN_ROLE =
+        keccak256("compliance-registry-stub.admin.role");
+    bytes32 public constant MANAGER_ROLE =
+        keccak256("compliance-registry-stub.manager.role");
     bytes32 public constant PROPOSAL_MANAGEMENT_ROLE =
         keccak256("compliance-registry-stub.proposal_management.role");
 
@@ -33,18 +38,17 @@ contract ComplianceRegistryStub is IComplianceRegistryStub, AccessControlUpgrade
         cumulativeProposals[1] = 0;
     }
 
-    function updateMaxProposalEachRegistries(uint256[] memory _maxProposalEachRegistries)
-        external
-        onlyRole(MANAGER_ROLE)
-    {
+    function updateMaxProposalEachRegistries(
+        uint256[] memory _maxProposalEachRegistries
+    ) external onlyRole(MANAGER_ROLE) {
         maxProposalEachRegistries[0] = _maxProposalEachRegistries[0];
         maxProposalEachRegistries[1] = _maxProposalEachRegistries[1];
     }
 
-    function addRegistry(IComplianceRegistry registry, bool useWhitelist)
-        external
-        onlyRole(MANAGER_ROLE)
-    {
+    function addRegistry(
+        IComplianceRegistry registry,
+        bool useWhitelist
+    ) external onlyRole(MANAGER_ROLE) {
         IComplianceRegistry[] storage registries;
         if (useWhitelist) {
             registries = whitelistRegistries;
@@ -66,17 +70,29 @@ contract ComplianceRegistryStub is IComplianceRegistryStub, AccessControlUpgrade
         if (proposal.status != ProposalCommon.ProposalStatus.Approved)
             revert ComplianceRegistryStub__InvalidConfirmProposalStatus();
         if (proposal.isWhitelist) {
-            uint256 pivot = cumulativeProposals[0] / maxProposalEachRegistries[0];
-            if (pivot > whitelistRegistries.length) revert ComplianceRegistryStub__WhitelistRegistryNotEnough();
+            uint256 pivot = cumulativeProposals[0] /
+                maxProposalEachRegistries[0];
+            if (pivot > whitelistRegistries.length)
+                revert ComplianceRegistryStub__WhitelistRegistryNotEnough();
             IComplianceRegistry whitelistRegistry = whitelistRegistries[pivot];
             whitelistRegistry.addProposalToList(proposal);
-            emit AddProposalToRegistryList(address(whitelistRegistry), true, proposal.id);
+            emit AddProposalToRegistryList(
+                address(whitelistRegistry),
+                true,
+                proposal.id
+            );
         } else {
-            uint256 pivot = cumulativeProposals[0] / maxProposalEachRegistries[0];
-            if (pivot > blacklistRegistries.length) revert ComplianceRegistryStub__WhitelistRegistryNotEnough();
+            uint256 pivot = cumulativeProposals[0] /
+                maxProposalEachRegistries[0];
+            if (pivot > blacklistRegistries.length)
+                revert ComplianceRegistryStub__WhitelistRegistryNotEnough();
             IComplianceRegistry blacklistRegistry = blacklistRegistries[pivot];
             blacklistRegistry.addProposalToList(proposal);
-            emit AddProposalToRegistryList(address(blacklistRegistry), false, proposal.id);
+            emit AddProposalToRegistryList(
+                address(blacklistRegistry),
+                false,
+                proposal.id
+            );
         }
     }
 
