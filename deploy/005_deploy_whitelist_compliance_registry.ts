@@ -12,8 +12,16 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
   await deploy("WhiteComplianceRegistry", {
     from: deployer,
     contract: "ComplianceRegistry",
-    args: [true, await networkSupportedRegistry.getAddress()],
-    log: true,
+    proxy: {
+      owner: deployer,
+      proxyContract: "OpenZeppelinTransparentProxy",
+      execute: {
+        init: {
+          methodName: 'initialize',
+          args: [deployer, true, await networkSupportedRegistry.getAddress()]
+        }
+      }
+    },
   });
 };
 

@@ -1,23 +1,12 @@
 [
   {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "_whitelistRegistry",
-        "type": "address"
-      },
-      {
-        "internalType": "address",
-        "name": "_blacklistRegistry",
-        "type": "address"
-      }
-    ],
-    "stateMutability": "nonpayable",
-    "type": "constructor"
+    "inputs": [],
+    "name": "ComplianceRegistryStub__InvalidConfirmProposalStatus",
+    "type": "error"
   },
   {
     "inputs": [],
-    "name": "ComplianceRegistryStub__InvalidConfirmProposalStatus",
+    "name": "ComplianceRegistryStub__WhitelistRegistryNotEnough",
     "type": "error"
   },
   {
@@ -25,17 +14,16 @@
     "inputs": [
       {
         "indexed": false,
-        "internalType": "bytes32",
+        "internalType": "address",
         "name": "",
-        "type": "bytes32"
-      }
-    ],
-    "name": "AddToBlacklist",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "bool",
+        "name": "",
+        "type": "bool"
+      },
       {
         "indexed": false,
         "internalType": "bytes32",
@@ -43,7 +31,26 @@
         "type": "bytes32"
       }
     ],
-    "name": "AddToWhitelist",
+    "name": "AddProposalToRegistryList",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "bool",
+        "name": "",
+        "type": "bool"
+      }
+    ],
+    "name": "AddRegistryToList",
     "type": "event"
   },
   {
@@ -149,7 +156,7 @@
   },
   {
     "inputs": [],
-    "name": "PROPOSAL_MANAGEMENT_ROLE",
+    "name": "MANAGER_ROLE",
     "outputs": [
       {
         "internalType": "bytes32",
@@ -162,7 +169,44 @@
   },
   {
     "inputs": [],
-    "name": "blacklistRegistry",
+    "name": "PROPOSAL_MANAGEMENT_ROLE",
+    "outputs": [
+      {
+        "internalType": "bytes32",
+        "name": "",
+        "type": "bytes32"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "contract IComplianceRegistry",
+        "name": "registry",
+        "type": "address"
+      },
+      {
+        "internalType": "bool",
+        "name": "useWhitelist",
+        "type": "bool"
+      }
+    ],
+    "name": "addRegistry",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "name": "blacklistRegistries",
     "outputs": [
       {
         "internalType": "contract IComplianceRegistry",
@@ -241,6 +285,25 @@
   {
     "inputs": [
       {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "name": "cumulativeProposals",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
         "internalType": "bytes32",
         "name": "role",
         "type": "bytes32"
@@ -303,6 +366,19 @@
     "inputs": [
       {
         "internalType": "address",
+        "name": "_admin",
+        "type": "address"
+      }
+    ],
+    "name": "initialize",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
         "name": "account",
         "type": "address"
       }
@@ -332,6 +408,25 @@
         "internalType": "bool",
         "name": "",
         "type": "bool"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "name": "maxProposalEachRegistries",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
       }
     ],
     "stateMutability": "view",
@@ -393,8 +488,27 @@
     "type": "function"
   },
   {
-    "inputs": [],
-    "name": "whitelistRegistry",
+    "inputs": [
+      {
+        "internalType": "uint256[]",
+        "name": "_maxProposalEachRegistries",
+        "type": "uint256[]"
+      }
+    ],
+    "name": "updateMaxProposalEachRegistries",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "name": "whitelistRegistries",
     "outputs": [
       {
         "internalType": "contract IComplianceRegistry",

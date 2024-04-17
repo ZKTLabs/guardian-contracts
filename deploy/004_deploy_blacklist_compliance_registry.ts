@@ -9,10 +9,19 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
   const networkSupportedRegistry = await ethers.getContract(
     "NetworkSupportedRegistry"
   );
-  await deploy("BlackComplianceRegistry", {
+  await deploy("BlackComplianceRegistry-1", {
     from: deployer,
     contract: "ComplianceRegistry",
-    args: [false, await networkSupportedRegistry.getAddress()],
+    proxy: {
+      owner: deployer,
+      proxyContract: "OpenZeppelinTransparentProxy",
+      execute: {
+        init: {
+          methodName: 'initialize',
+          args: [deployer, false, await networkSupportedRegistry.getAddress()]
+        }
+      }
+    },
     log: true,
   });
 };

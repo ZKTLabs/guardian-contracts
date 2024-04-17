@@ -16,8 +16,8 @@ interface IComplianceEntry {
         bytes32 proposalId;
         address target;
         address author;
-        string description;
         bool isInList;
+        bytes labels;
     }
 }
 
@@ -32,5 +32,5 @@ interface IComplianceRegistry is IComplianceEntry, IComplianceEvent {
 
     function decodeBytes(
         bytes memory data
-    ) external view returns (address, bytes32);
+    ) external view returns (address, bytes32, bytes memory);
 }

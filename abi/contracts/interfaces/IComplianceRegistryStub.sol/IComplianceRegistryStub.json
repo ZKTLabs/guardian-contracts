@@ -4,17 +4,16 @@
     "inputs": [
       {
         "indexed": false,
-        "internalType": "bytes32",
+        "internalType": "address",
         "name": "",
-        "type": "bytes32"
-      }
-    ],
-    "name": "AddToBlacklist",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "bool",
+        "name": "",
+        "type": "bool"
+      },
       {
         "indexed": false,
         "internalType": "bytes32",
@@ -22,7 +21,26 @@
         "type": "bytes32"
       }
     ],
-    "name": "AddToWhitelist",
+    "name": "AddProposalToRegistryList",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "bool",
+        "name": "",
+        "type": "bool"
+      }
+    ],
+    "name": "AddRegistryToList",
     "type": "event"
   },
   {

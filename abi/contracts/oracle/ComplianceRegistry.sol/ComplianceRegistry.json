@@ -1,21 +1,5 @@
 [
   {
-    "inputs": [
-      {
-        "internalType": "bool",
-        "name": "_isWhitelistRegistry",
-        "type": "bool"
-      },
-      {
-        "internalType": "address",
-        "name": "_networkRegistry",
-        "type": "address"
-      }
-    ],
-    "stateMutability": "nonpayable",
-    "type": "constructor"
-  },
-  {
     "anonymous": false,
     "inputs": [
       {
@@ -264,14 +248,14 @@
         "type": "address"
       },
       {
-        "internalType": "string",
-        "name": "description",
-        "type": "string"
-      },
-      {
         "internalType": "bool",
         "name": "isInList",
         "type": "bool"
+      },
+      {
+        "internalType": "bytes",
+        "name": "labels",
+        "type": "bytes"
       }
     ],
     "stateMutability": "view",
@@ -296,6 +280,11 @@
         "internalType": "bytes32",
         "name": "",
         "type": "bytes32"
+      },
+      {
+        "internalType": "bytes",
+        "name": "",
+        "type": "bytes"
       }
     ],
     "stateMutability": "view",
@@ -305,7 +294,7 @@
     "inputs": [
       {
         "internalType": "address",
-        "name": "target",
+        "name": "account",
         "type": "address"
       }
     ],
@@ -318,6 +307,25 @@
       }
     ],
     "stateMutability": "pure",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "account",
+        "type": "address"
+      }
+    ],
+    "name": "getComplianceLabels",
+    "outputs": [
+      {
+        "internalType": "string[]",
+        "name": "",
+        "type": "string[]"
+      }
+    ],
+    "stateMutability": "view",
     "type": "function"
   },
   {
@@ -379,6 +387,29 @@
       }
     ],
     "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "_admin",
+        "type": "address"
+      },
+      {
+        "internalType": "bool",
+        "name": "_isWhitelistRegistry",
+        "type": "bool"
+      },
+      {
+        "internalType": "address",
+        "name": "_networkRegistry",
+        "type": "address"
+      }
+    ],
+    "name": "initialize",
+    "outputs": [],
+    "stateMutability": "nonpayable",
     "type": "function"
   },
   {

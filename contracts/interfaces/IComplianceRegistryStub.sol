@@ -4,9 +4,9 @@ pragma solidity ^0.8.0;
 import {ProposalCommon} from "../libraries/ProposalCommon.sol";
 
 interface IComplianceRegistryStubEvent {
-    event AddToBlacklist(bytes32);
+    event AddProposalToRegistryList(address, bool, bytes32);
 
-    event AddToWhitelist(bytes32);
+    event AddRegistryToList(address, bool);
 }
 
 interface IComplianceRegistryStub is IComplianceRegistryStubEvent {

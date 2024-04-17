@@ -11,8 +11,17 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
   const black = (await ethers.getContract("BlackComplianceRegistry")) as ComplianceRegistry;
   const deployedResult = await deploy("ComplianceRegistryStub_L1", {
     from: deployer,
-    args: [await white.getAddress(), await black.getAddress()],
-    log: true,
+    contract: "ComplianceRegistryStub_L1",
+    proxy: {
+      owner: deployer,
+      proxyContract: "OpenZeppelinTransparentProxy",
+      execute: {
+        init: {
+          methodName: 'initialize',
+          args: [deployer]
+        }
+      }
+    },
   });
   const tx0 = await white.grantRole(await white.COMPLIANCE_REGISTRY_STUB_ROLE(), deployedResult.address);
   await tx0.wait()
