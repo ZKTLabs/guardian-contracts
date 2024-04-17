@@ -10,6 +10,8 @@ error NetworkSupportedRegistry__NetworkNotExisted();
 contract NetworkSupportedRegistry is INetworkSupportedRegistry, Ownable {
     mapping(bytes32 => bool) private supportedNetworks;
 
+    constructor() Ownable(_msgSender()) {}
+
     function isNetworkSupported(
         bytes32 networkHash
     ) external view returns (bool) {

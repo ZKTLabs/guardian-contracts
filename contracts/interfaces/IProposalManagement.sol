@@ -4,13 +4,15 @@ pragma solidity ^0.8.0;
 interface IProposalManagementEvent {
     event ConfirmProposal(bytes32 proposalId);
     event RejectProposal(bytes32 proposalId);
+    event UpdateRegionComplianceRegistryStub(string, bytes, address);
 }
 
 interface IProposalManagement is IProposalManagementEvent {
     function createProposal(
         bytes32 proposalId,
-        bytes[] calldata targetAddresses,
+        bytes[] calldata targets,
         bool isWhitelist,
+        string calldata region,
         string calldata description,
         bytes calldata signature
     ) external;

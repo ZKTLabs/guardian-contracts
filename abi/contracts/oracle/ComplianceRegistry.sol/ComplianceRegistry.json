@@ -1,5 +1,47 @@
 [
   {
+    "inputs": [
+      {
+        "internalType": "bool",
+        "name": "_isWhitelistRegistry",
+        "type": "bool"
+      },
+      {
+        "internalType": "address",
+        "name": "_admin",
+        "type": "address"
+      },
+      {
+        "internalType": "address",
+        "name": "_networkRegistry",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "nonpayable",
+    "type": "constructor"
+  },
+  {
+    "inputs": [],
+    "name": "AccessControlBadConfirmation",
+    "type": "error"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "account",
+        "type": "address"
+      },
+      {
+        "internalType": "bytes32",
+        "name": "neededRole",
+        "type": "bytes32"
+      }
+    ],
+    "name": "AccessControlUnauthorizedAccount",
+    "type": "error"
+  },
+  {
     "anonymous": false,
     "inputs": [
       {
@@ -165,6 +207,11 @@
           {
             "internalType": "string",
             "name": "description",
+            "type": "string"
+          },
+          {
+            "internalType": "string",
+            "name": "region",
             "type": "string"
           },
           {
@@ -390,29 +437,6 @@
     "type": "function"
   },
   {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "_admin",
-        "type": "address"
-      },
-      {
-        "internalType": "bool",
-        "name": "_isWhitelistRegistry",
-        "type": "bool"
-      },
-      {
-        "internalType": "address",
-        "name": "_networkRegistry",
-        "type": "address"
-      }
-    ],
-    "name": "initialize",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
     "inputs": [],
     "name": "isWhitelistRegistry",
     "outputs": [
@@ -447,7 +471,7 @@
       },
       {
         "internalType": "address",
-        "name": "account",
+        "name": "callerConfirmation",
         "type": "address"
       }
     ],

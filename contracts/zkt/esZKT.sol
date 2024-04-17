@@ -5,7 +5,7 @@ pragma solidity ^0.8.0;
 import "@openzeppelin/contracts-upgradeable/token/ERC20/ERC20Upgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/token/ERC20/extensions/ERC20BurnableUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/access/AccessControlUpgradeable.sol";
-import "@openzeppelin/contracts-upgradeable/utils/structs/EnumerableSetUpgradeable.sol";
+import "@openzeppelin/contracts/utils/structs/EnumerableSet.sol";
 import "./ZKT.sol";
 
 contract esZKT is
@@ -13,9 +13,9 @@ contract esZKT is
     ERC20BurnableUpgradeable,
     AccessControlUpgradeable
 {
-    using EnumerableSetUpgradeable for EnumerableSetUpgradeable.AddressSet;
+    using EnumerableSet for EnumerableSet.AddressSet;
 
-    EnumerableSetUpgradeable.AddressSet private _whitelist;
+    EnumerableSet.AddressSet private _whitelist;
     bytes32 public constant MINTER_ROLE = keccak256("MINTER_ROLE");
     address public zkt;
     bool private _redemptionActive;

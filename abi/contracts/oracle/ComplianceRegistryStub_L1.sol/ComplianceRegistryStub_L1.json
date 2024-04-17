@@ -1,12 +1,43 @@
 [
   {
     "inputs": [],
+    "name": "AccessControlBadConfirmation",
+    "type": "error"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "account",
+        "type": "address"
+      },
+      {
+        "internalType": "bytes32",
+        "name": "neededRole",
+        "type": "bytes32"
+      }
+    ],
+    "name": "AccessControlUnauthorizedAccount",
+    "type": "error"
+  },
+  {
+    "inputs": [],
     "name": "ComplianceRegistryStub_L1__InvalidConfirmProposalStatus",
     "type": "error"
   },
   {
     "inputs": [],
     "name": "ComplianceRegistryStub_L1__WhitelistRegistryNotEnough",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "InvalidInitialization",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "NotInitializing",
     "type": "error"
   },
   {
@@ -51,6 +82,19 @@
       }
     ],
     "name": "AddRegistryToList",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "uint64",
+        "name": "version",
+        "type": "uint64"
+      }
+    ],
+    "name": "Initialized",
     "type": "event"
   },
   {
@@ -244,6 +288,11 @@
           {
             "internalType": "string",
             "name": "description",
+            "type": "string"
+          },
+          {
+            "internalType": "string",
+            "name": "region",
             "type": "string"
           },
           {
@@ -441,7 +490,7 @@
       },
       {
         "internalType": "address",
-        "name": "account",
+        "name": "callerConfirmation",
         "type": "address"
       }
     ],

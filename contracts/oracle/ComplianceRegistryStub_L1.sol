@@ -28,7 +28,7 @@ contract ComplianceRegistryStub_L1 is
     uint256[2] public cumulativeProposals; // 0 - whitelist 1 - blacklist
 
     function initialize(address _admin) public initializer {
-        _setupRole(ADMIN_ROLE, _admin);
+        _grantRole(ADMIN_ROLE, _admin);
         _setRoleAdmin(MANAGER_ROLE, ADMIN_ROLE);
         _setRoleAdmin(GUARDIAN_NODE, ADMIN_ROLE);
 

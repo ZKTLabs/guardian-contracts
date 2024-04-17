@@ -1,13 +1,15 @@
 // SPDX-License-Identifier: UNLICENSED
 pragma solidity ^0.8.0;
 
+//import {AccessControlUpgradeable} from "@openzeppelin/contracts-upgradeable/access/AccessControlUpgradeable.sol";
+
 import {IComplianceRegistry} from "../interfaces/IComplianceRegistry.sol";
 import {INetworkSupportedRegistry} from "../interfaces/INetworkSupportedRegistry.sol";
 import {ProposalLabel} from "../libraries/ProposalLabel.sol";
 import {ProposalCommon} from "../libraries/ProposalCommon.sol";
-import {AccessControlUpgradeable} from "@openzeppelin/contracts-upgradeable/access/AccessControlUpgradeable.sol";
+import "@openzeppelin/contracts/access/AccessControl.sol";
 
-contract ComplianceRegistry is IComplianceRegistry, AccessControlUpgradeable {
+contract ComplianceRegistry is IComplianceRegistry, AccessControl {
     bytes32 public constant ADMIN_ROLE = keccak256("ADMIN_ROLE");
     bytes32 public constant COMPLIANCE_REGISTRY_STUB_ROLE =
         keccak256("COMPLIANCE_REGISTRY_STUB_ROLE");
@@ -16,18 +18,31 @@ contract ComplianceRegistry is IComplianceRegistry, AccessControlUpgradeable {
     mapping(bytes32 => Compliance) public complianceList;
     INetworkSupportedRegistry public networkRegistry;
 
-    function initialize(
-        address _admin,
-        bool _isWhitelistRegistry,
-        address _networkRegistry
-    ) public initializer {
-        __AccessControl_init();
+//    function initialize(
+//        address _admin,
+//        bool _isWhitelistRegistry,
+//        address _networkRegistry
+//    ) public initializer {
+//        __AccessControl_init();
+//
+//        _grantRole(ADMIN_ROLE, _admin);
+//        _setRoleAdmin(COMPLIANCE_REGISTRY_STUB_ROLE, ADMIN_ROLE);
+//        isWhitelistRegistry = _isWhitelistRegistry;
+//        networkRegistry = INetworkSupportedRegistry(_networkRegistry);
+//    }
 
-        _setupRole(ADMIN_ROLE, _admin);
+    constructor(
+        bool _isWhitelistRegistry,
+        address _admin,
+        address _networkRegistry
+    )  {
+
+        _grantRole(ADMIN_ROLE, _admin);
         _setRoleAdmin(COMPLIANCE_REGISTRY_STUB_ROLE, ADMIN_ROLE);
         isWhitelistRegistry = _isWhitelistRegistry;
         networkRegistry = INetworkSupportedRegistry(_networkRegistry);
     }
+
 
     function addProposalToList(
         ProposalCommon.Proposal memory proposal
