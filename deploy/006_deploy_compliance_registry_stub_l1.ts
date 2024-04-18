@@ -8,17 +8,15 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
   const { deployer } = await getNamedAccounts();
 
   const white = (await ethers.getContract(
-    "WhiteComplianceRegistry"
+    "WhitelistComplianceRegistry"
   )) as ComplianceRegistry;
   const black = (await ethers.getContract(
-    "BlackComplianceRegistry"
+    "BlacklistComplianceRegistry"
   )) as ComplianceRegistry;
   const deployedResult = await deploy("ComplianceRegistryStub_L1", {
     from: deployer,
-    contract: "ComplianceRegistryStub_L1",
     proxy: {
       owner: deployer,
-      proxyContract: "OpenZeppelinTransparentProxy",
       execute: {
         init: {
           methodName: "initialize",
@@ -26,6 +24,7 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
         },
       },
     },
+    log: true
   });
   const tx0 = await white.grantRole(
     await white.COMPLIANCE_REGISTRY_STUB_ROLE(),
@@ -47,5 +46,5 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
 
 func.id = "deploy_compliance_registry_stub_l1";
 func.tags = ["DeployComplianceRegistryStub_L1"];
-func.dependencies = ["DeployWhiteComplianceRegistry"];
+func.dependencies = ["DeployWhitelistComplianceRegistry"];
 export default func;

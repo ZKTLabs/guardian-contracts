@@ -15,10 +15,8 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
   )) as ComplianceRegistry;
   const deployedResult = await deploy("ComplianceRegistryStub", {
     from: deployer,
-    contract: "ComplianceRegistryStub",
     proxy: {
       owner: deployer,
-      proxyContract: "OpenZeppelinTransparentProxy",
       execute: {
         init: {
           methodName: "initialize",
@@ -26,6 +24,7 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
         },
       },
     },
+    log: true
   });
   const tx0 = await white.grantRole(
     await white.COMPLIANCE_REGISTRY_STUB_ROLE(),

@@ -1,26 +1,5 @@
 [
   {
-    "inputs": [
-      {
-        "internalType": "bool",
-        "name": "_isWhitelistRegistry",
-        "type": "bool"
-      },
-      {
-        "internalType": "address",
-        "name": "_admin",
-        "type": "address"
-      },
-      {
-        "internalType": "address",
-        "name": "_networkRegistry",
-        "type": "address"
-      }
-    ],
-    "stateMutability": "nonpayable",
-    "type": "constructor"
-  },
-  {
     "inputs": [],
     "name": "AccessControlBadConfirmation",
     "type": "error"
@@ -39,6 +18,16 @@
       }
     ],
     "name": "AccessControlUnauthorizedAccount",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "InvalidInitialization",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "NotInitializing",
     "type": "error"
   },
   {
@@ -64,6 +53,19 @@
       }
     ],
     "name": "AddProposalToAnotherNetworkList",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "uint64",
+        "name": "version",
+        "type": "uint64"
+      }
+    ],
+    "name": "Initialized",
     "type": "event"
   },
   {
@@ -298,11 +300,6 @@
         "internalType": "bool",
         "name": "isInList",
         "type": "bool"
-      },
-      {
-        "internalType": "bytes",
-        "name": "labels",
-        "type": "bytes"
       }
     ],
     "stateMutability": "view",
@@ -327,11 +324,6 @@
         "internalType": "bytes32",
         "name": "",
         "type": "bytes32"
-      },
-      {
-        "internalType": "bytes",
-        "name": "",
-        "type": "bytes"
       }
     ],
     "stateMutability": "view",
@@ -354,25 +346,6 @@
       }
     ],
     "stateMutability": "pure",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "account",
-        "type": "address"
-      }
-    ],
-    "name": "getComplianceLabels",
-    "outputs": [
-      {
-        "internalType": "string[]",
-        "name": "",
-        "type": "string[]"
-      }
-    ],
-    "stateMutability": "view",
     "type": "function"
   },
   {
@@ -434,6 +407,29 @@
       }
     ],
     "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "_admin",
+        "type": "address"
+      },
+      {
+        "internalType": "bool",
+        "name": "_isWhitelistRegistry",
+        "type": "bool"
+      },
+      {
+        "internalType": "address",
+        "name": "_networkRegistry",
+        "type": "address"
+      }
+    ],
+    "name": "initialize",
+    "outputs": [],
+    "stateMutability": "nonpayable",
     "type": "function"
   },
   {

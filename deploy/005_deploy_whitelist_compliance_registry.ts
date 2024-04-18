@@ -13,22 +13,20 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
     await deploy("WhitelistComplianceRegistry", {
         from: deployer,
         contract: "ComplianceRegistry",
-        args: [deployer, true, networkAddress],
-        // proxy: {
-        //     owner: deployer,
-        //     proxyContract: "OpenZeppelinTransparentProxy",
-        //     execute: {
-        //         init: {
-        //             methodName: "initialize",
-        //             args: [deployer, true, networkAddress],
-        //         },
-        //     },
-        // },
+        proxy: {
+            owner: deployer,
+            execute: {
+                init: {
+                    methodName: "initialize",
+                    args: [deployer, true, networkAddress],
+                },
+            },
+        },
         log: true
     });
 };
 
 func.id = "deploy_whitelist_compliance_registry";
-func.tags = ["DeployWhiteComplianceRegistry"];
-func.dependencies = ["DeployBlackComplianceRegistry"];
+func.tags = ["DeployWhitelistComplianceRegistry"];
+func.dependencies = ["DeployBlacklistComplianceRegistry"];
 export default func;

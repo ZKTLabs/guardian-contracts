@@ -1,15 +1,13 @@
 // SPDX-License-Identifier: UNLICENSED
 pragma solidity ^0.8.0;
 
-//import {AccessControlUpgradeable} from "@openzeppelin/contracts-upgradeable/access/AccessControlUpgradeable.sol";
-
+import {AccessControlUpgradeable} from "@openzeppelin/contracts-upgradeable/access/AccessControlUpgradeable.sol";
 import {IComplianceRegistry} from "../interfaces/IComplianceRegistry.sol";
 import {INetworkSupportedRegistry} from "../interfaces/INetworkSupportedRegistry.sol";
 import {ProposalLabel} from "../libraries/ProposalLabel.sol";
 import {ProposalCommon} from "../libraries/ProposalCommon.sol";
-import "@openzeppelin/contracts/access/AccessControl.sol";
 
-contract ComplianceRegistry is IComplianceRegistry, AccessControl {
+contract ComplianceRegistry is IComplianceRegistry, AccessControlUpgradeable {
     bytes32 public constant ADMIN_ROLE = keccak256("ADMIN_ROLE");
     bytes32 public constant COMPLIANCE_REGISTRY_STUB_ROLE =
         keccak256("COMPLIANCE_REGISTRY_STUB_ROLE");
@@ -18,31 +16,18 @@ contract ComplianceRegistry is IComplianceRegistry, AccessControl {
     mapping(bytes32 => Compliance) public complianceList;
     INetworkSupportedRegistry public networkRegistry;
 
-//    function initialize(
-//        address _admin,
-//        bool _isWhitelistRegistry,
-//        address _networkRegistry
-//    ) public initializer {
-//        __AccessControl_init();
-//
-//        _grantRole(ADMIN_ROLE, _admin);
-//        _setRoleAdmin(COMPLIANCE_REGISTRY_STUB_ROLE, ADMIN_ROLE);
-//        isWhitelistRegistry = _isWhitelistRegistry;
-//        networkRegistry = INetworkSupportedRegistry(_networkRegistry);
-//    }
-
-    constructor(
-        bool _isWhitelistRegistry,
+    function initialize(
         address _admin,
+        bool _isWhitelistRegistry,
         address _networkRegistry
-    )  {
+    ) public initializer {
+        __AccessControl_init();
 
         _grantRole(ADMIN_ROLE, _admin);
         _setRoleAdmin(COMPLIANCE_REGISTRY_STUB_ROLE, ADMIN_ROLE);
         isWhitelistRegistry = _isWhitelistRegistry;
         networkRegistry = INetworkSupportedRegistry(_networkRegistry);
     }
-
 
     function addProposalToList(
         ProposalCommon.Proposal memory proposal
@@ -51,8 +36,7 @@ contract ComplianceRegistry is IComplianceRegistry, AccessControl {
             bytes memory data = proposal.targets[idx];
             (
                 address target,
-                bytes32 networkHash,
-                bytes memory labels
+                bytes32 networkHash
             ) = decodeBytes(data);
             bytes32 addressKey = getAddressKey(target);
             if (complianceList[addressKey].isInList) continue;
@@ -68,25 +52,13 @@ contract ComplianceRegistry is IComplianceRegistry, AccessControl {
                 proposalId: proposal.id,
                 isInList: true,
                 target: target,
-                author: proposal.author,
-                labels: labels
+                author: proposal.author
             });
         }
     }
 
     function getAddressKey(address account) public pure returns (bytes32) {
         return keccak256(abi.encodePacked(account, "ZKT"));
-    }
-
-    function getComplianceLabels(
-        address account
-    ) public view returns (string[] memory) {
-        bytes32 key = getAddressKey(account);
-        if (!complianceList[key].isInList) return new string[](0);
-        string[] memory labels = ProposalLabel.unpack(
-            complianceList[key].labels
-        );
-        return labels;
     }
 
     function checkAddress(
@@ -97,17 +69,16 @@ contract ComplianceRegistry is IComplianceRegistry, AccessControl {
 
     function decodeBytes(
         bytes memory data
-    ) public view override returns (address, bytes32, bytes memory) {
+    ) public view override returns (address, bytes32) {
         (
             bytes memory addressBytes,
-            bytes32 networkHash,
-            bytes memory labels
-        ) = abi.decode(data, (bytes, bytes32, bytes));
+            bytes32 networkHash
+        ) = abi.decode(data, (bytes, bytes32));
         if (networkRegistry.isNetworkSupported(networkHash)) {
             address targetAddress = abi.decode(addressBytes, (address));
-            return (targetAddress, networkHash, labels);
+            return (targetAddress, networkHash);
         } else {
-            return (address(0), networkHash, new bytes(0));
+            return (address(0), networkHash);
         }
     }
 }

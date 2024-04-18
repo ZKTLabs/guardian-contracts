@@ -13,17 +13,15 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
     await deploy("BlacklistComplianceRegistry", {
         from: deployer,
         contract: "ComplianceRegistry",
-        args: [false, deployer, networkAddress],
-        // proxy: {
-        //     owner: deployer,
-        //     proxyContract: "OpenZeppelinTransparentProxy",
-        //     execute: {
-        //         init: {
-        //             methodName: "initialize",
-        //             args: [deployer, false, networkAddress],
-        //         },
-        //     }
-        // },
+        proxy: {
+            owner: deployer,
+            execute: {
+                init: {
+                    methodName: "initialize",
+                    args: [deployer, false, networkAddress],
+                },
+            }
+        },
         log: true,
     });
 };

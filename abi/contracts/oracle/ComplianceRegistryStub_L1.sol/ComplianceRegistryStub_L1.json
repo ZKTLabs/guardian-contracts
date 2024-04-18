@@ -22,6 +22,11 @@
   },
   {
     "inputs": [],
+    "name": "ComplianceRegistryStub_L1__BlacklistRegistryNotEnough",
+    "type": "error"
+  },
+  {
+    "inputs": [],
     "name": "ComplianceRegistryStub_L1__InvalidConfirmProposalStatus",
     "type": "error"
   },

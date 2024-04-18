@@ -49,18 +49,21 @@ contract ComplianceRegistryStub_L1 is
         IComplianceRegistry registry,
         bool useWhitelist
     ) external onlyRole(MANAGER_ROLE) {
-        IComplianceRegistry[] storage registries;
         if (useWhitelist) {
-            registries = whitelistRegistries;
-        } else {
-            registries = blacklistRegistries;
-        }
-        for (uint256 idx = 0; idx < registries.length; idx++) {
-            if (address(registries[idx]) == address(registry)) {
-                return;
+            for (uint256 idx = 0; idx < whitelistRegistries.length; idx++) {
+                if (address(whitelistRegistries[idx]) == address(registry)) {
+                    return;
+                }
             }
+            whitelistRegistries.push(registry);
+        } else {
+            for (uint256 idx = 0; idx < blacklistRegistries.length; idx++) {
+                if (address(blacklistRegistries[idx]) == address(registry)) {
+                    return;
+                }
+            }
+            blacklistRegistries.push(registry);
         }
-        registries.push(registry);
         emit AddRegistryToList(address(registry), useWhitelist);
     }
 
@@ -72,7 +75,7 @@ contract ComplianceRegistryStub_L1 is
         if (proposal.isWhitelist) {
             uint256 pivot = cumulativeProposals[0] /
                 maxProposalEachRegistries[0];
-            if (pivot > whitelistRegistries.length)
+            if (pivot >= whitelistRegistries.length)
                 revert ComplianceRegistryStub_L1__WhitelistRegistryNotEnough();
             IComplianceRegistry whitelistRegistry = whitelistRegistries[pivot];
             whitelistRegistry.addProposalToList(proposal);
@@ -82,10 +85,10 @@ contract ComplianceRegistryStub_L1 is
                 proposal.id
             );
         } else {
-            uint256 pivot = cumulativeProposals[0] /
-                maxProposalEachRegistries[0];
-            if (pivot > blacklistRegistries.length)
-                revert ComplianceRegistryStub_L1__WhitelistRegistryNotEnough();
+            uint256 pivot = cumulativeProposals[1] /
+                maxProposalEachRegistries[1];
+            if (pivot >= blacklistRegistries.length)
+                revert ComplianceRegistryStub_L1__BlacklistRegistryNotEnough();
             IComplianceRegistry blacklistRegistry = blacklistRegistries[pivot];
             blacklistRegistry.addProposalToList(proposal);
             emit AddProposalToRegistryList(
