@@ -24,7 +24,7 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
         },
       },
     },
-    log: true
+    log: true,
   });
   // const tx0 = await white.grantRole(
   //   await white.COMPLIANCE_REGISTRY_STUB_ROLE(),
@@ -40,10 +40,10 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
     "ComplianceRegistryStub_L1",
     deployedResult.address
   );
-  const tx2 = await stub.grantRole(await stub.GUARDIAN_NODE(), deployer);
-  await tx2.wait();
-  const tx3 = await stub.grantRole(await stub.MANAGER_ROLE(), deployer);
-  await tx3.wait();
+  // const tx2 = await stub.grantRole(await stub.GUARDIAN_NODE(), deployer);
+  // await tx2.wait();
+  // const tx3 = await stub.grantRole(await stub.MANAGER_ROLE(), deployer);
+  // await tx3.wait();
 };
 
 func.id = "deploy_compliance_registry_stub_l1";

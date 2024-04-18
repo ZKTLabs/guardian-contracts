@@ -144,10 +144,7 @@ contract GuardianVoterLicense is
      * @param _promoCode The promo code.
      */
     function mint(uint256 _amount, string calldata _promoCode) public payable {
-        require(
-            _tokenIds + _amount <= maxSupply,
-            "Exceeds maxSupply"
-        );
+        require(_tokenIds + _amount <= maxSupply, "Exceeds maxSupply");
         PromoCode memory promoCode = _promoCodes[_promoCode];
         require(
             (promoCode.recipient != address(0) && promoCode.active) ||
@@ -482,7 +479,7 @@ contract GuardianVoterLicense is
         address to,
         uint256 tokenId,
         address auth
-    ) internal override virtual returns (address) {
+    ) internal virtual override returns (address) {
         if (_ownerOf(tokenId) != address(0))
             revert("NodeLicense: transfer is not allowed");
         return super._update(to, tokenId, auth);

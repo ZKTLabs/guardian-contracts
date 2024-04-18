@@ -30,9 +30,7 @@ contract GuardianNode is IGuardianNode, AccessControl {
         return 0;
     }
 
-    function consecutiveOnlineSession(
-        address
-    ) external pure returns (uint256) {
+    function consecutiveOnlineSession(address) external pure returns (uint256) {
         return 0;
     }
 

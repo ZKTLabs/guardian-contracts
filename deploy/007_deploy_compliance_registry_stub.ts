@@ -24,7 +24,7 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
         },
       },
     },
-    log: true
+    log: true,
   });
   const tx0 = await white.grantRole(
     await white.COMPLIANCE_REGISTRY_STUB_ROLE(),

@@ -21,9 +21,10 @@ contract ComplianceRegistryStub_L1 is
     bytes32 public constant GUARDIAN_NODE =
         keccak256("compliance-registry-stub-l1.guardian.role");
 
-    IComplianceRegistry[] public whitelistRegistries;
-    IComplianceRegistry[] public blacklistRegistries;
+    mapping(uint256 => IComplianceRegistry) public whitelistRegistries;
+    mapping(uint256 => IComplianceRegistry) public blacklistRegistries;
 
+    uint256[2] public registriesCount; // 0 - whitelist 1 - blacklist
     uint256[2] public maxProposalEachRegistries; // 0 - whitelist 1 - blacklist
     uint256[2] public cumulativeProposals; // 0 - whitelist 1 - blacklist
 
@@ -36,6 +37,8 @@ contract ComplianceRegistryStub_L1 is
         maxProposalEachRegistries[1] = 10;
         cumulativeProposals[0] = 0;
         cumulativeProposals[1] = 0;
+        registriesCount[0] = 0;
+        registriesCount[1] = 0;
         require(hasRole(ADMIN_ROLE, _admin));
     }
 
@@ -51,21 +54,28 @@ contract ComplianceRegistryStub_L1 is
         bool useWhitelist
     ) external onlyRole(MANAGER_ROLE) {
         if (useWhitelist) {
-            for (uint256 idx = 0; idx < whitelistRegistries.length; idx++) {
-                if (address(whitelistRegistries[idx]) == address(registry)) {
-                    return;
-                }
-            }
-            whitelistRegistries.push(registry);
+            whitelistRegistries[registriesCount[0]] = registry;
+            registriesCount[0]++;
         } else {
-            for (uint256 idx = 0; idx < blacklistRegistries.length; idx++) {
-                if (address(blacklistRegistries[idx]) == address(registry)) {
-                    return;
-                }
-            }
-            blacklistRegistries.push(registry);
+            blacklistRegistries[registriesCount[1]] = registry;
+            registriesCount[1]++;
         }
         emit AddRegistryToList(address(registry), useWhitelist);
+    }
+
+    function replaceRegistry(
+        IComplianceRegistry registry,
+        bool useWhitelist,
+        uint256 index
+    ) external onlyRole(MANAGER_ROLE) {
+        if (useWhitelist) {
+            require(index < registriesCount[0]);
+            whitelistRegistries[index] = registry;
+        } else {
+            require(index < registriesCount[1]);
+            blacklistRegistries[index] = registry;
+        }
+        emit ReplaceRegistry(address(registry), useWhitelist, index);
     }
 
     function confirmProposal(
@@ -76,10 +86,11 @@ contract ComplianceRegistryStub_L1 is
         if (proposal.isWhitelist) {
             uint256 pivot = cumulativeProposals[0] /
                 maxProposalEachRegistries[0];
-            if (pivot >= whitelistRegistries.length)
+            if (pivot >= registriesCount[0])
                 revert ComplianceRegistryStub_L1__WhitelistRegistryNotEnough();
             IComplianceRegistry whitelistRegistry = whitelistRegistries[pivot];
             whitelistRegistry.addProposalToList(proposal);
+            cumulativeProposals[0]++;
             emit AddProposalToRegistryList(
                 address(whitelistRegistry),
                 true,
@@ -88,10 +99,11 @@ contract ComplianceRegistryStub_L1 is
         } else {
             uint256 pivot = cumulativeProposals[1] /
                 maxProposalEachRegistries[1];
-            if (pivot >= blacklistRegistries.length)
+            if (pivot >= registriesCount[1])
                 revert ComplianceRegistryStub_L1__BlacklistRegistryNotEnough();
             IComplianceRegistry blacklistRegistry = blacklistRegistries[pivot];
             blacklistRegistry.addProposalToList(proposal);
+            cumulativeProposals[1]++;
             emit AddProposalToRegistryList(
                 address(blacklistRegistry),
                 false,
@@ -103,7 +115,7 @@ contract ComplianceRegistryStub_L1 is
     function isWhitelist(
         address account
     ) external view override returns (bool) {
-        for (uint256 idx = 0; idx < whitelistRegistries.length; idx++) {
+        for (uint256 idx = 0; idx < registriesCount[0]; idx++) {
             if (whitelistRegistries[idx].checkAddress(account)) {
                 return true;
             }
@@ -114,7 +126,7 @@ contract ComplianceRegistryStub_L1 is
     function isBlacklist(
         address account
     ) external view override returns (bool) {
-        for (uint256 idx = 0; idx < blacklistRegistries.length; idx++) {
+        for (uint256 idx = 0; idx < registriesCount[1]; idx++) {
             if (blacklistRegistries[idx].checkAddress(account)) {
                 return true;
             }

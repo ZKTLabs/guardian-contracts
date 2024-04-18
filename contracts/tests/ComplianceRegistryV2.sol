@@ -1,28 +1,27 @@
 // SPDX-License-Identifier: UNLICENSED
 pragma solidity ^0.8.0;
 
-import {AccessControlUpgradeable} from "@openzeppelin/contracts-upgradeable/access/AccessControlUpgradeable.sol";
+import {AccessControl} from "@openzeppelin/contracts/access/AccessControl.sol";
 import {IComplianceRegistry} from "../interfaces/IComplianceRegistry.sol";
 import {INetworkSupportedRegistry} from "../interfaces/INetworkSupportedRegistry.sol";
 import {ProposalLabel} from "../libraries/ProposalLabel.sol";
 import {ProposalCommon} from "../libraries/ProposalCommon.sol";
 
-contract ComplianceRegistry is IComplianceRegistry, AccessControlUpgradeable {
-    bytes32 public constant ADMIN_ROLE = keccak256("ADMIN_ROLE");
+contract ComplianceRegistryV2 is IComplianceRegistry, AccessControl {
+    bytes32 public constant ADMIN_ROLE =
+        keccak256("compliance-registry.admin.role");
     bytes32 public constant COMPLIANCE_REGISTRY_STUB_ROLE =
-        keccak256("COMPLIANCE_REGISTRY_STUB_ROLE");
+        keccak256("compliance-registry.stub.role");
 
     bool public override isWhitelistRegistry;
     mapping(bytes32 => Compliance) public complianceList;
     INetworkSupportedRegistry public networkRegistry;
 
-    function initialize(
+    constructor(
         address _admin,
         bool _isWhitelistRegistry,
         address _networkRegistry
-    ) public initializer {
-        __AccessControl_init();
-
+    ) {
         _grantRole(ADMIN_ROLE, _admin);
         _setRoleAdmin(COMPLIANCE_REGISTRY_STUB_ROLE, ADMIN_ROLE);
         isWhitelistRegistry = _isWhitelistRegistry;

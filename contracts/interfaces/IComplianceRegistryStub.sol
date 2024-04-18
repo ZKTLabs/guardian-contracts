@@ -7,6 +7,8 @@ interface IComplianceRegistryStubEvent {
     event AddProposalToRegistryList(address, bool, bytes32);
 
     event AddRegistryToList(address, bool);
+
+    event ReplaceRegistry(address, bool, uint256);
 }
 
 interface IComplianceRegistryStub is IComplianceRegistryStubEvent {

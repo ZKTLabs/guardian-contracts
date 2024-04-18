@@ -16,7 +16,7 @@ contract ProposalManagement is IProposalManagement, AccessControlUpgradeable {
     bytes32 public constant ADMIN_ROLE =
         keccak256("proposal-management.admin.role");
     bytes32 public constant MANAGER_ROLE =
-    keccak256("proposal-management.manager.role");
+        keccak256("proposal-management.manager.role");
     bytes32 public constant SPEAKER_ROLE =
         keccak256("proposal-management.speaker.role");
     bytes32 public constant VOTER_ROLE =
@@ -31,10 +31,10 @@ contract ProposalManagement is IProposalManagement, AccessControlUpgradeable {
     IGuardianNode public sentry;
     mapping(bytes => IComplianceRegistryStub) public stubs;
 
-    function initialize(address _admin, IGuardianNode guardianNode)
-        public
-        initializer
-    {
+    function initialize(
+        address _admin,
+        IGuardianNode guardianNode
+    ) public initializer {
         _grantRole(ADMIN_ROLE, _admin);
         _setRoleAdmin(MANAGER_ROLE, ADMIN_ROLE);
         _setRoleAdmin(SPEAKER_ROLE, ADMIN_ROLE);
@@ -43,14 +43,18 @@ contract ProposalManagement is IProposalManagement, AccessControlUpgradeable {
         sentry = IGuardianNode(guardianNode);
     }
 
-    function updateRegionComplianceRegistryStub(string memory region, IComplianceRegistryStub stub)
-        external
-        onlyRole(MANAGER_ROLE)
-    {
+    function updateRegionComplianceRegistryStub(
+        string memory region,
+        IComplianceRegistryStub stub
+    ) external onlyRole(MANAGER_ROLE) {
         bytes memory regionBytes = bytes(region);
         stubs[regionBytes] = stub;
 
-        emit UpdateRegionComplianceRegistryStub(region, regionBytes, address(stub));
+        emit UpdateRegionComplianceRegistryStub(
+            region,
+            regionBytes,
+            address(stub)
+        );
     }
 
     function createProposal(
@@ -116,7 +120,9 @@ contract ProposalManagement is IProposalManagement, AccessControlUpgradeable {
                 proposals[proposalId].status ==
                 ProposalCommon.ProposalStatus.Approved
             ) {
-                IComplianceRegistryStub stub = stubs[bytes(proposals[proposalId].region)];
+                IComplianceRegistryStub stub = stubs[
+                    bytes(proposals[proposalId].region)
+                ];
                 stub.confirmProposal(proposals[proposalId]);
                 emit ConfirmProposal(proposalId);
             }
