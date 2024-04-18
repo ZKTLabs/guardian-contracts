@@ -32,10 +32,11 @@ contract ComplianceRegistryStub_L1 is
         _setRoleAdmin(MANAGER_ROLE, ADMIN_ROLE);
         _setRoleAdmin(GUARDIAN_NODE, ADMIN_ROLE);
 
-        maxProposalEachRegistries[0] = 100;
-        maxProposalEachRegistries[1] = 100;
+        maxProposalEachRegistries[0] = 10;
+        maxProposalEachRegistries[1] = 10;
         cumulativeProposals[0] = 0;
         cumulativeProposals[1] = 0;
+        require(hasRole(ADMIN_ROLE, _admin));
     }
 
     function updateMaxProposalEachRegistries(
