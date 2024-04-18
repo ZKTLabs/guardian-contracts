@@ -7,12 +7,12 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
   const { deploy } = deployments;
   const { deployer } = await getNamedAccounts();
 
-  const white = (await ethers.getContract(
-    "WhitelistComplianceRegistry"
-  )) as ComplianceRegistry;
-  const black = (await ethers.getContract(
-    "BlacklistComplianceRegistry"
-  )) as ComplianceRegistry;
+  // const white = (await ethers.getContract(
+  //   "WhitelistComplianceRegistry"
+  // )) as ComplianceRegistry;
+  // const black = (await ethers.getContract(
+  //   "BlacklistComplianceRegistry"
+  // )) as ComplianceRegistry;
   const deployedResult = await deploy("ComplianceRegistryStub_L1", {
     from: deployer,
     proxy: {
@@ -26,16 +26,16 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
     },
     log: true
   });
-  const tx0 = await white.grantRole(
-    await white.COMPLIANCE_REGISTRY_STUB_ROLE(),
-    deployedResult.address
-  );
-  await tx0.wait();
-  const tx1 = await black.grantRole(
-    await white.COMPLIANCE_REGISTRY_STUB_ROLE(),
-    deployedResult.address
-  );
-  await tx1.wait();
+  // const tx0 = await white.grantRole(
+  //   await white.COMPLIANCE_REGISTRY_STUB_ROLE(),
+  //   deployedResult.address
+  // );
+  // await tx0.wait();
+  // const tx1 = await black.grantRole(
+  //   await black.COMPLIANCE_REGISTRY_STUB_ROLE(),
+  //   deployedResult.address
+  // );
+  // await tx1.wait();
   const stub = await ethers.getContractAt(
     "ComplianceRegistryStub_L1",
     deployedResult.address
@@ -46,5 +46,5 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
 
 func.id = "deploy_compliance_registry_stub_l1";
 func.tags = ["DeployComplianceRegistryStub_L1"];
-func.dependencies = ["DeployWhitelistComplianceRegistry"];
+// func.dependencies = ["DeployBlacklistComplianceRegistry"];
 export default func;
