@@ -10,7 +10,7 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
         "NetworkSupportedRegistry"
     );
     const networkAddress = await networkSupportedRegistry.getAddress();
-    await deploy("BlacklistComplianceRegistry", {
+    await deploy("BlacklistComplianceRegistry-1", {
         from: deployer,
         contract: "ComplianceRegistry",
         proxy: {
