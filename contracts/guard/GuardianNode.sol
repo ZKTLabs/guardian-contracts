@@ -11,7 +11,7 @@ contract GuardianNode is IGuardianNode, AccessControl {
     Slot0 public slot0;
 
     constructor() {
-        _setupRole(ADMIN_ROLE, _msgSender());
+        _grantRole(ADMIN_ROLE, _msgSender());
         _setRoleAdmin(GUARDIAN_ROLE, ADMIN_ROLE);
         slot0 = Slot0({activeNodes: 0});
     }
@@ -26,17 +26,17 @@ contract GuardianNode is IGuardianNode, AccessControl {
         return slot0.activeNodes;
     }
 
-    function voteParticipated(address addr) external view returns (uint256) {
+    function voteParticipated(address) external pure returns (uint256) {
         return 0;
     }
 
     function consecutiveOnlineSession(
-        address addr
-    ) external view returns (uint256) {
+        address
+    ) external pure returns (uint256) {
         return 0;
     }
 
-    function zktEarned(address addr) external view returns (uint256) {
+    function zktEarned(address) external pure returns (uint256) {
         return 0;
     }
 }

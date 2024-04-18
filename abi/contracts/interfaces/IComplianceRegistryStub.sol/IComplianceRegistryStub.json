@@ -73,6 +73,11 @@
             "type": "string"
           },
           {
+            "internalType": "string",
+            "name": "region",
+            "type": "string"
+          },
+          {
             "internalType": "uint256",
             "name": "timestamp",
             "type": "uint256"

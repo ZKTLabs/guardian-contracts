@@ -15,6 +15,7 @@ library ProposalCommon {
         bytes[] targets;
         bool isWhitelist;
         string description;
+        string region;
         uint256 timestamp;
         ProposalStatus status;
         bytes signature;

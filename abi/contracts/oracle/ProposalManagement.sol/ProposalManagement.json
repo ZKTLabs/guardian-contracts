@@ -1,19 +1,61 @@
 [
   {
+    "inputs": [],
+    "name": "AccessControlBadConfirmation",
+    "type": "error"
+  },
+  {
     "inputs": [
       {
         "internalType": "address",
-        "name": "guardianNode",
+        "name": "account",
         "type": "address"
       },
       {
-        "internalType": "address",
-        "name": "complianceRegistryStub",
-        "type": "address"
+        "internalType": "bytes32",
+        "name": "neededRole",
+        "type": "bytes32"
       }
     ],
-    "stateMutability": "nonpayable",
-    "type": "constructor"
+    "name": "AccessControlUnauthorizedAccount",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "ECDSAInvalidSignature",
+    "type": "error"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "length",
+        "type": "uint256"
+      }
+    ],
+    "name": "ECDSAInvalidSignatureLength",
+    "type": "error"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "bytes32",
+        "name": "s",
+        "type": "bytes32"
+      }
+    ],
+    "name": "ECDSAInvalidSignatureS",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "InvalidInitialization",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "NotInitializing",
+    "type": "error"
   },
   {
     "inputs": [
@@ -47,6 +89,19 @@
       }
     ],
     "name": "ConfirmProposal",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "uint64",
+        "name": "version",
+        "type": "uint64"
+      }
+    ],
+    "name": "Initialized",
     "type": "event"
   },
   {
@@ -138,6 +193,31 @@
     "type": "event"
   },
   {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "string",
+        "name": "",
+        "type": "string"
+      },
+      {
+        "indexed": false,
+        "internalType": "bytes",
+        "name": "",
+        "type": "bytes"
+      },
+      {
+        "indexed": false,
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "name": "UpdateRegionComplianceRegistryStub",
+    "type": "event"
+  },
+  {
     "inputs": [],
     "name": "ADMIN_ROLE",
     "outputs": [
@@ -191,6 +271,19 @@
   },
   {
     "inputs": [],
+    "name": "MANAGER_ROLE",
+    "outputs": [
+      {
+        "internalType": "bytes32",
+        "name": "",
+        "type": "bytes32"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
     "name": "SPEAKER_ROLE",
     "outputs": [
       {
@@ -231,6 +324,11 @@
         "internalType": "bool",
         "name": "isWhitelist",
         "type": "bool"
+      },
+      {
+        "internalType": "string",
+        "name": "region",
+        "type": "string"
       },
       {
         "internalType": "string",
@@ -312,6 +410,24 @@
   {
     "inputs": [
       {
+        "internalType": "address",
+        "name": "_admin",
+        "type": "address"
+      },
+      {
+        "internalType": "contract IGuardianNode",
+        "name": "guardianNode",
+        "type": "address"
+      }
+    ],
+    "name": "initialize",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
         "internalType": "uint256",
         "name": "",
         "type": "uint256"
@@ -356,6 +472,11 @@
       {
         "internalType": "string",
         "name": "description",
+        "type": "string"
+      },
+      {
+        "internalType": "string",
+        "name": "region",
         "type": "string"
       },
       {
@@ -409,7 +530,7 @@
       },
       {
         "internalType": "address",
-        "name": "account",
+        "name": "callerConfirmation",
         "type": "address"
       }
     ],
@@ -450,8 +571,14 @@
     "type": "function"
   },
   {
-    "inputs": [],
-    "name": "stub",
+    "inputs": [
+      {
+        "internalType": "bytes",
+        "name": "",
+        "type": "bytes"
+      }
+    ],
+    "name": "stubs",
     "outputs": [
       {
         "internalType": "contract IComplianceRegistryStub",
@@ -479,6 +606,24 @@
       }
     ],
     "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "string",
+        "name": "region",
+        "type": "string"
+      },
+      {
+        "internalType": "contract IComplianceRegistryStub",
+        "name": "stub",
+        "type": "address"
+      }
+    ],
+    "name": "updateRegionComplianceRegistryStub",
+    "outputs": [],
+    "stateMutability": "nonpayable",
     "type": "function"
   },
   {

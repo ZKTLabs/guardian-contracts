@@ -26,6 +26,31 @@
     "type": "event"
   },
   {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "string",
+        "name": "",
+        "type": "string"
+      },
+      {
+        "indexed": false,
+        "internalType": "bytes",
+        "name": "",
+        "type": "bytes"
+      },
+      {
+        "indexed": false,
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "name": "UpdateRegionComplianceRegistryStub",
+    "type": "event"
+  },
+  {
     "inputs": [
       {
         "internalType": "bytes32",
@@ -34,13 +59,18 @@
       },
       {
         "internalType": "bytes[]",
-        "name": "targetAddresses",
+        "name": "targets",
         "type": "bytes[]"
       },
       {
         "internalType": "bool",
         "name": "isWhitelist",
         "type": "bool"
+      },
+      {
+        "internalType": "string",
+        "name": "region",
+        "type": "string"
       },
       {
         "internalType": "string",

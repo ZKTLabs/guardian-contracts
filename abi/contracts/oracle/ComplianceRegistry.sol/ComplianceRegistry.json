@@ -1,5 +1,36 @@
 [
   {
+    "inputs": [],
+    "name": "AccessControlBadConfirmation",
+    "type": "error"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "account",
+        "type": "address"
+      },
+      {
+        "internalType": "bytes32",
+        "name": "neededRole",
+        "type": "bytes32"
+      }
+    ],
+    "name": "AccessControlUnauthorizedAccount",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "InvalidInitialization",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "NotInitializing",
+    "type": "error"
+  },
+  {
     "anonymous": false,
     "inputs": [
       {
@@ -22,6 +53,19 @@
       }
     ],
     "name": "AddProposalToAnotherNetworkList",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "uint64",
+        "name": "version",
+        "type": "uint64"
+      }
+    ],
+    "name": "Initialized",
     "type": "event"
   },
   {
@@ -168,6 +212,11 @@
             "type": "string"
           },
           {
+            "internalType": "string",
+            "name": "region",
+            "type": "string"
+          },
+          {
             "internalType": "uint256",
             "name": "timestamp",
             "type": "uint256"
@@ -251,11 +300,6 @@
         "internalType": "bool",
         "name": "isInList",
         "type": "bool"
-      },
-      {
-        "internalType": "bytes",
-        "name": "labels",
-        "type": "bytes"
       }
     ],
     "stateMutability": "view",
@@ -280,11 +324,6 @@
         "internalType": "bytes32",
         "name": "",
         "type": "bytes32"
-      },
-      {
-        "internalType": "bytes",
-        "name": "",
-        "type": "bytes"
       }
     ],
     "stateMutability": "view",
@@ -307,25 +346,6 @@
       }
     ],
     "stateMutability": "pure",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "account",
-        "type": "address"
-      }
-    ],
-    "name": "getComplianceLabels",
-    "outputs": [
-      {
-        "internalType": "string[]",
-        "name": "",
-        "type": "string[]"
-      }
-    ],
-    "stateMutability": "view",
     "type": "function"
   },
   {
@@ -447,7 +467,7 @@
       },
       {
         "internalType": "address",
-        "name": "account",
+        "name": "callerConfirmation",
         "type": "address"
       }
     ],

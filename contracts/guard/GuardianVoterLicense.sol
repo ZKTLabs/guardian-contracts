@@ -2,18 +2,16 @@
 pragma solidity ^0.8.0;
 
 import "@openzeppelin/contracts-upgradeable/token/ERC721/extensions/ERC721EnumerableUpgradeable.sol";
-import "@openzeppelin/contracts-upgradeable/utils/CountersUpgradeable.sol";
-import "@openzeppelin/contracts-upgradeable/utils/StringsUpgradeable.sol";
-import "@openzeppelin/contracts-upgradeable/utils/Base64Upgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/access/AccessControlUpgradeable.sol";
+import "@openzeppelin/contracts/utils/Strings.sol";
+import "@openzeppelin/contracts/utils/Base64.sol";
 
 contract GuardianVoterLicense is
     ERC721EnumerableUpgradeable,
     AccessControlUpgradeable
 {
-    using StringsUpgradeable for uint256;
-    using CountersUpgradeable for CountersUpgradeable.Counter;
-    CountersUpgradeable.Counter private _tokenIds;
+    using Strings for uint256;
+    uint256 private _tokenIds;
 
     address payable public fundsReceiver;
 
@@ -147,7 +145,7 @@ contract GuardianVoterLicense is
      */
     function mint(uint256 _amount, string calldata _promoCode) public payable {
         require(
-            _tokenIds.current() + _amount <= maxSupply,
+            _tokenIds + _amount <= maxSupply,
             "Exceeds maxSupply"
         );
         PromoCode memory promoCode = _promoCodes[_promoCode];
@@ -167,15 +165,13 @@ contract GuardianVoterLicense is
         require(msg.value >= finalPrice, "Ether value sent is not correct");
 
         for (uint256 i = 0; i < _amount; i++) {
-            _tokenIds.increment();
-            uint256 newItemId = _tokenIds.current();
-            _mint(msg.sender, newItemId);
+            _mint(msg.sender, _tokenIds++);
 
             // Record the minting timestamp
-            _mintTimestamps[newItemId] = block.timestamp;
+            _mintTimestamps[_tokenIds] = block.timestamp;
 
             // Record the average cost
-            _averageCost[newItemId] = averageCost;
+            _averageCost[_tokenIds] = averageCost;
         }
 
         // Calculate the referral reward
@@ -385,12 +381,12 @@ contract GuardianVoterLicense is
                 "<svg xmlns='http://www.w3.org/2000/svg' width='100' height='100' style='background-color:black;'><text x='10' y='50' font-size='20' fill='white'>",
                 _tokenId.toString(),
                 "</text><text x='10' y='90' font-size='8' textLength='100' lengthAdjust='spacingAndGlyphs' fill='white'>",
-                StringsUpgradeable.toHexString(uint160(ownerAddress)),
+                Strings.toHexString(uint160(ownerAddress)),
                 "</text></svg>"
             )
         );
-        string memory image = Base64Upgradeable.encode(bytes(svg));
-        string memory json = Base64Upgradeable.encode(
+        string memory image = Base64.encode(bytes(svg));
+        string memory json = Base64.encode(
             bytes(
                 string(
                     abi.encodePacked(
@@ -399,7 +395,7 @@ contract GuardianVoterLicense is
                         '", "description": "A NodeLicense token", "image": "data:image/svg+xml;base64,',
                         image,
                         '", "owner": "',
-                        StringsUpgradeable.toHexString(uint160(ownerAddress)),
+                        Strings.toHexString(uint160(ownerAddress)),
                         '"}'
                     )
                 )
@@ -477,16 +473,22 @@ contract GuardianVoterLicense is
     }
 
     /**
-     * @notice Overrides the transfer function of the ERC721 contract to make the token non-transferable.
-     * @param from The current owner of the token.
-     * @param to The address to receive the token.
+     * @notice Overrides the update function of the ERC721 contract to make the token non-transferable.
+     * @param to The address receive the token.
      * @param tokenId The token id.
+     * @param auth The address is either the owner of the token, or approved to operate on the token (by the owner).
      */
-    function _transfer(
-        address from,
+    function _update(
         address to,
-        uint256 tokenId
-    ) internal override {
-        revert("NodeLicense: transfer is not allowed");
+        uint256 tokenId,
+        address auth
+    ) internal override virtual returns (address) {
+        if (_ownerOf(tokenId) != address(0))
+            revert("NodeLicense: transfer is not allowed");
+        return super._update(to, tokenId, auth);
+    }
+
+    function _exists(uint256 tokenId) internal view returns (bool) {
+        return _ownerOf(tokenId) != address(0);
     }
 }

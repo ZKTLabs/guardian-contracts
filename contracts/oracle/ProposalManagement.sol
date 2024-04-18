@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: UNLICENSED
 pragma solidity ^0.8.0;
 
-import {AccessControl} from "@openzeppelin/contracts/access/AccessControl.sol";
+import {AccessControlUpgradeable} from "@openzeppelin/contracts-upgradeable/access/AccessControlUpgradeable.sol";
 import {ECDSA} from "@openzeppelin/contracts/utils/cryptography/ECDSA.sol";
 import {IProposalManagement} from "../interfaces/IProposalManagement.sol";
 import {IComplianceRegistryStub} from "../interfaces/IComplianceRegistryStub.sol";
@@ -12,9 +12,11 @@ error ProposalManagement__AlreadyExistProposal(bytes32 proposalId);
 error ProposalManagement__InvalidSignature();
 error ProposalManagement__OnlyVoteForPendingProposal();
 
-contract ProposalManagement is IProposalManagement, AccessControl {
+contract ProposalManagement is IProposalManagement, AccessControlUpgradeable {
     bytes32 public constant ADMIN_ROLE =
         keccak256("proposal-management.admin.role");
+    bytes32 public constant MANAGER_ROLE =
+    keccak256("proposal-management.manager.role");
     bytes32 public constant SPEAKER_ROLE =
         keccak256("proposal-management.speaker.role");
     bytes32 public constant VOTER_ROLE =
@@ -24,25 +26,38 @@ contract ProposalManagement is IProposalManagement, AccessControl {
 
     uint256 public constant EXPIRY_DAYS = 7 days;
 
-    constructor(address guardianNode, address complianceRegistryStub) {
-        _setupRole(ADMIN_ROLE, _msgSender());
-        _setRoleAdmin(SPEAKER_ROLE, ADMIN_ROLE);
-        _setRoleAdmin(VOTER_ROLE, ADMIN_ROLE);
-        _setRoleAdmin(GUARDIAN_ROLE, ADMIN_ROLE);
-
-        sentry = IGuardianNode(guardianNode);
-        stub = IComplianceRegistryStub(complianceRegistryStub);
-    }
-
     bytes32[] public proposalIdList;
     mapping(bytes32 => ProposalCommon.Proposal) public proposals;
     IGuardianNode public sentry;
-    IComplianceRegistryStub public stub;
+    mapping(bytes => IComplianceRegistryStub) public stubs;
+
+    function initialize(address _admin, IGuardianNode guardianNode)
+        public
+        initializer
+    {
+        _grantRole(ADMIN_ROLE, _admin);
+        _setRoleAdmin(MANAGER_ROLE, ADMIN_ROLE);
+        _setRoleAdmin(SPEAKER_ROLE, ADMIN_ROLE);
+        _setRoleAdmin(VOTER_ROLE, ADMIN_ROLE);
+        _setRoleAdmin(GUARDIAN_ROLE, ADMIN_ROLE);
+        sentry = IGuardianNode(guardianNode);
+    }
+
+    function updateRegionComplianceRegistryStub(string memory region, IComplianceRegistryStub stub)
+        external
+        onlyRole(MANAGER_ROLE)
+    {
+        bytes memory regionBytes = bytes(region);
+        stubs[regionBytes] = stub;
+
+        emit UpdateRegionComplianceRegistryStub(region, regionBytes, address(stub));
+    }
 
     function createProposal(
         bytes32 proposalId,
         bytes[] calldata targets,
         bool isWhitelist,
+        string calldata region,
         string calldata description,
         bytes calldata signature
     ) external override onlyRole(SPEAKER_ROLE) {
@@ -70,6 +85,7 @@ contract ProposalManagement is IProposalManagement, AccessControl {
             targets: targets,
             isWhitelist: isWhitelist,
             description: description,
+            region: region,
             timestamp: block.timestamp,
             status: ProposalCommon.ProposalStatus.Pending,
             signature: signature,
@@ -100,6 +116,7 @@ contract ProposalManagement is IProposalManagement, AccessControl {
                 proposals[proposalId].status ==
                 ProposalCommon.ProposalStatus.Approved
             ) {
+                IComplianceRegistryStub stub = stubs[bytes(proposals[proposalId].region)];
                 stub.confirmProposal(proposals[proposalId]);
                 emit ConfirmProposal(proposalId);
             }
