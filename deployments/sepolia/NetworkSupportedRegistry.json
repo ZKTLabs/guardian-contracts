@@ -1,0 +1,413 @@
+{
+  "address": "0xD6D4C278ee26945A61c27B4E9D632E2d3feD9513",
+  "abi": [
+    {
+      "inputs": [],
+      "stateMutability": "nonpayable",
+      "type": "constructor"
+    },
+    {
+      "inputs": [],
+      "name": "NetworkSupportedRegistry__NetworkAlreadyExisted",
+      "type": "error"
+    },
+    {
+      "inputs": [],
+      "name": "NetworkSupportedRegistry__NetworkNotExisted",
+      "type": "error"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "owner",
+          "type": "address"
+        }
+      ],
+      "name": "OwnableInvalidOwner",
+      "type": "error"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "account",
+          "type": "address"
+        }
+      ],
+      "name": "OwnableUnauthorizedAccount",
+      "type": "error"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": false,
+          "internalType": "bytes32",
+          "name": "networkHash",
+          "type": "bytes32"
+        }
+      ],
+      "name": "AddNetworkHash",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": false,
+          "internalType": "string",
+          "name": "",
+          "type": "string"
+        },
+        {
+          "indexed": false,
+          "internalType": "bytes32",
+          "name": "",
+          "type": "bytes32"
+        }
+      ],
+      "name": "AddNetworkName",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "previousOwner",
+          "type": "address"
+        },
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "newOwner",
+          "type": "address"
+        }
+      ],
+      "name": "OwnershipTransferred",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": false,
+          "internalType": "bytes32",
+          "name": "networkHash",
+          "type": "bytes32"
+        }
+      ],
+      "name": "RevokeNetworkHash",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": false,
+          "internalType": "string",
+          "name": "",
+          "type": "string"
+        },
+        {
+          "indexed": false,
+          "internalType": "bytes32",
+          "name": "",
+          "type": "bytes32"
+        }
+      ],
+      "name": "RevokeNetworkName",
+      "type": "event"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "bytes32",
+          "name": "networkHash",
+          "type": "bytes32"
+        }
+      ],
+      "name": "addNetwork",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "string",
+          "name": "networkName",
+          "type": "string"
+        }
+      ],
+      "name": "addNetwork",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "bytes32[]",
+          "name": "networkHashes",
+          "type": "bytes32[]"
+        }
+      ],
+      "name": "batchAddNetworks",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "string[]",
+          "name": "networkNames",
+          "type": "string[]"
+        }
+      ],
+      "name": "batchAddNetworks",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "bytes32[]",
+          "name": "networkHashes",
+          "type": "bytes32[]"
+        }
+      ],
+      "name": "batchRevokeNetworks",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "string[]",
+          "name": "networkNames",
+          "type": "string[]"
+        }
+      ],
+      "name": "batchRevokeNetworks",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "string",
+          "name": "networkName",
+          "type": "string"
+        }
+      ],
+      "name": "isNetworkSupported",
+      "outputs": [
+        {
+          "internalType": "bool",
+          "name": "",
+          "type": "bool"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "bytes32",
+          "name": "networkHash",
+          "type": "bytes32"
+        }
+      ],
+      "name": "isNetworkSupported",
+      "outputs": [
+        {
+          "internalType": "bool",
+          "name": "",
+          "type": "bool"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "owner",
+      "outputs": [
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "renounceOwnership",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "string",
+          "name": "networkName",
+          "type": "string"
+        }
+      ],
+      "name": "revokeNetwork",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "bytes32",
+          "name": "networkHash",
+          "type": "bytes32"
+        }
+      ],
+      "name": "revokeNetwork",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "newOwner",
+          "type": "address"
+        }
+      ],
+      "name": "transferOwnership",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    }
+  ],
+  "transactionHash": "0x4eb7edec28f39e33389a0715b3c3bbd7121176466d6cedd263291bd4dc8ead13",
+  "receipt": {
+    "to": null,
+    "from": "0xdfcb98d66336084326Bf69a0e55Ed15c2Ae24008",
+    "contractAddress": "0xD6D4C278ee26945A61c27B4E9D632E2d3feD9513",
+    "transactionIndex": 49,
+    "gasUsed": "692443",
+    "logsBloom": "0x00000000000000000000001000000000000000000000000000800000000800000000000000000000000004000000000000000000000000000000000000000000000000000000000000000100000000000001000000000020000000000000000000000000020000000000000000000800000000000000000000000000000000400000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001000000000020000000000000000000000000000000000000000000000000000000000000000000",
+    "blockHash": "0x31fbf56a401da4583cedbe397629e37d5a3d93e459546d473b923987d274b98a",
+    "transactionHash": "0x4eb7edec28f39e33389a0715b3c3bbd7121176466d6cedd263291bd4dc8ead13",
+    "logs": [
+      {
+        "transactionIndex": 49,
+        "blockNumber": 5718437,
+        "transactionHash": "0x4eb7edec28f39e33389a0715b3c3bbd7121176466d6cedd263291bd4dc8ead13",
+        "address": "0xD6D4C278ee26945A61c27B4E9D632E2d3feD9513",
+        "topics": [
+          "0x8be0079c531659141344cd1fd0a4f28419497f9722a3daafe3b4186f6b6457e0",
+          "0x0000000000000000000000000000000000000000000000000000000000000000",
+          "0x000000000000000000000000dfcb98d66336084326bf69a0e55ed15c2ae24008"
+        ],
+        "data": "0x",
+        "logIndex": 59,
+        "blockHash": "0x31fbf56a401da4583cedbe397629e37d5a3d93e459546d473b923987d274b98a"
+      }
+    ],
+    "blockNumber": 5718437,
+    "cumulativeGasUsed": "6198744",
+    "status": 1,
+    "byzantium": true
+  },
+  "args": [],
+  "numDeployments": 2,
+  "solcInputHash": "527bb7a73aea624f39c884753bfdd29c",
+  "metadata": "{\"compiler\":{\"version\":\"0.8.20+commit.a1b79de6\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"inputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"constructor\"},{\"inputs\":[],\"name\":\"NetworkSupportedRegistry__NetworkAlreadyExisted\",\"type\":\"error\"},{\"inputs\":[],\"name\":\"NetworkSupportedRegistry__NetworkNotExisted\",\"type\":\"error\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"owner\",\"type\":\"address\"}],\"name\":\"OwnableInvalidOwner\",\"type\":\"error\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"account\",\"type\":\"address\"}],\"name\":\"OwnableUnauthorizedAccount\",\"type\":\"error\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"bytes32\",\"name\":\"networkHash\",\"type\":\"bytes32\"}],\"name\":\"AddNetworkHash\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"string\",\"name\":\"\",\"type\":\"string\"},{\"indexed\":false,\"internalType\":\"bytes32\",\"name\":\"\",\"type\":\"bytes32\"}],\"name\":\"AddNetworkName\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"previousOwner\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"newOwner\",\"type\":\"address\"}],\"name\":\"OwnershipTransferred\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"bytes32\",\"name\":\"networkHash\",\"type\":\"bytes32\"}],\"name\":\"RevokeNetworkHash\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"string\",\"name\":\"\",\"type\":\"string\"},{\"indexed\":false,\"internalType\":\"bytes32\",\"name\":\"\",\"type\":\"bytes32\"}],\"name\":\"RevokeNetworkName\",\"type\":\"event\"},{\"inputs\":[{\"internalType\":\"bytes32\",\"name\":\"networkHash\",\"type\":\"bytes32\"}],\"name\":\"addNetwork\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"string\",\"name\":\"networkName\",\"type\":\"string\"}],\"name\":\"addNetwork\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bytes32[]\",\"name\":\"networkHashes\",\"type\":\"bytes32[]\"}],\"name\":\"batchAddNetworks\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"string[]\",\"name\":\"networkNames\",\"type\":\"string[]\"}],\"name\":\"batchAddNetworks\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bytes32[]\",\"name\":\"networkHashes\",\"type\":\"bytes32[]\"}],\"name\":\"batchRevokeNetworks\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"string[]\",\"name\":\"networkNames\",\"type\":\"string[]\"}],\"name\":\"batchRevokeNetworks\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"string\",\"name\":\"networkName\",\"type\":\"string\"}],\"name\":\"isNetworkSupported\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bytes32\",\"name\":\"networkHash\",\"type\":\"bytes32\"}],\"name\":\"isNetworkSupported\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"owner\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"renounceOwnership\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"string\",\"name\":\"networkName\",\"type\":\"string\"}],\"name\":\"revokeNetwork\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bytes32\",\"name\":\"networkHash\",\"type\":\"bytes32\"}],\"name\":\"revokeNetwork\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"newOwner\",\"type\":\"address\"}],\"name\":\"transferOwnership\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"}],\"devdoc\":{\"errors\":{\"OwnableInvalidOwner(address)\":[{\"details\":\"The owner is not a valid owner account. (eg. `address(0)`)\"}],\"OwnableUnauthorizedAccount(address)\":[{\"details\":\"The caller account is not authorized to perform an operation.\"}]},\"kind\":\"dev\",\"methods\":{\"owner()\":{\"details\":\"Returns the address of the current owner.\"},\"renounceOwnership()\":{\"details\":\"Leaves the contract without owner. It will not be possible to call `onlyOwner` functions. Can only be called by the current owner. NOTE: Renouncing ownership will leave the contract without an owner, thereby disabling any functionality that is only available to the owner.\"},\"transferOwnership(address)\":{\"details\":\"Transfers ownership of the contract to a new account (`newOwner`). Can only be called by the current owner.\"}},\"version\":1},\"userdoc\":{\"kind\":\"user\",\"methods\":{},\"version\":1}},\"settings\":{\"compilationTarget\":{\"contracts/oracle/NetworkSupportedRegistry.sol\":\"NetworkSupportedRegistry\"},\"evmVersion\":\"paris\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"none\",\"useLiteralContent\":true},\"optimizer\":{\"details\":{\"constantOptimizer\":true,\"cse\":true,\"deduplicate\":true,\"inliner\":true,\"jumpdestRemover\":true,\"orderLiterals\":true,\"peephole\":true,\"yul\":false},\"runs\":200},\"remappings\":[]},\"sources\":{\"@openzeppelin/contracts/access/Ownable.sol\":{\"content\":\"// SPDX-License-Identifier: MIT\\n// OpenZeppelin Contracts (last updated v5.0.0) (access/Ownable.sol)\\n\\npragma solidity ^0.8.20;\\n\\nimport {Context} from \\\"../utils/Context.sol\\\";\\n\\n/**\\n * @dev Contract module which provides a basic access control mechanism, where\\n * there is an account (an owner) that can be granted exclusive access to\\n * specific functions.\\n *\\n * The initial owner is set to the address provided by the deployer. This can\\n * later be changed with {transferOwnership}.\\n *\\n * This module is used through inheritance. It will make available the modifier\\n * `onlyOwner`, which can be applied to your functions to restrict their use to\\n * the owner.\\n */\\nabstract contract Ownable is Context {\\n    address private _owner;\\n\\n    /**\\n     * @dev The caller account is not authorized to perform an operation.\\n     */\\n    error OwnableUnauthorizedAccount(address account);\\n\\n    /**\\n     * @dev The owner is not a valid owner account. (eg. `address(0)`)\\n     */\\n    error OwnableInvalidOwner(address owner);\\n\\n    event OwnershipTransferred(address indexed previousOwner, address indexed newOwner);\\n\\n    /**\\n     * @dev Initializes the contract setting the address provided by the deployer as the initial owner.\\n     */\\n    constructor(address initialOwner) {\\n        if (initialOwner == address(0)) {\\n            revert OwnableInvalidOwner(address(0));\\n        }\\n        _transferOwnership(initialOwner);\\n    }\\n\\n    /**\\n     * @dev Throws if called by any account other than the owner.\\n     */\\n    modifier onlyOwner() {\\n        _checkOwner();\\n        _;\\n    }\\n\\n    /**\\n     * @dev Returns the address of the current owner.\\n     */\\n    function owner() public view virtual returns (address) {\\n        return _owner;\\n    }\\n\\n    /**\\n     * @dev Throws if the sender is not the owner.\\n     */\\n    function _checkOwner() internal view virtual {\\n        if (owner() != _msgSender()) {\\n            revert OwnableUnauthorizedAccount(_msgSender());\\n        }\\n    }\\n\\n    /**\\n     * @dev Leaves the contract without owner. It will not be possible to call\\n     * `onlyOwner` functions. Can only be called by the current owner.\\n     *\\n     * NOTE: Renouncing ownership will leave the contract without an owner,\\n     * thereby disabling any functionality that is only available to the owner.\\n     */\\n    function renounceOwnership() public virtual onlyOwner {\\n        _transferOwnership(address(0));\\n    }\\n\\n    /**\\n     * @dev Transfers ownership of the contract to a new account (`newOwner`).\\n     * Can only be called by the current owner.\\n     */\\n    function transferOwnership(address newOwner) public virtual onlyOwner {\\n        if (newOwner == address(0)) {\\n            revert OwnableInvalidOwner(address(0));\\n        }\\n        _transferOwnership(newOwner);\\n    }\\n\\n    /**\\n     * @dev Transfers ownership of the contract to a new account (`newOwner`).\\n     * Internal function without access restriction.\\n     */\\n    function _transferOwnership(address newOwner) internal virtual {\\n        address oldOwner = _owner;\\n        _owner = newOwner;\\n        emit OwnershipTransferred(oldOwner, newOwner);\\n    }\\n}\\n\",\"keccak256\":\"0xff6d0bb2e285473e5311d9d3caacb525ae3538a80758c10649a4d61029b017bb\",\"license\":\"MIT\"},\"@openzeppelin/contracts/utils/Context.sol\":{\"content\":\"// SPDX-License-Identifier: MIT\\n// OpenZeppelin Contracts (last updated v5.0.1) (utils/Context.sol)\\n\\npragma solidity ^0.8.20;\\n\\n/**\\n * @dev Provides information about the current execution context, including the\\n * sender of the transaction and its data. While these are generally available\\n * via msg.sender and msg.data, they should not be accessed in such a direct\\n * manner, since when dealing with meta-transactions the account sending and\\n * paying for execution may not be the actual sender (as far as an application\\n * is concerned).\\n *\\n * This contract is only required for intermediate, library-like contracts.\\n */\\nabstract contract Context {\\n    function _msgSender() internal view virtual returns (address) {\\n        return msg.sender;\\n    }\\n\\n    function _msgData() internal view virtual returns (bytes calldata) {\\n        return msg.data;\\n    }\\n\\n    function _contextSuffixLength() internal view virtual returns (uint256) {\\n        return 0;\\n    }\\n}\\n\",\"keccak256\":\"0x493033a8d1b176a037b2cc6a04dad01a5c157722049bbecf632ca876224dd4b2\",\"license\":\"MIT\"},\"contracts/interfaces/INetworkSupportedRegistry.sol\":{\"content\":\"// SPDX-License-Identifier: UNLICENSED\\npragma solidity ^0.8.0;\\n\\ninterface INetworkSupportedRegistryEvent {\\n    event AddNetworkHash(bytes32 networkHash);\\n\\n    event AddNetworkName(string, bytes32);\\n\\n    event RevokeNetworkHash(bytes32 networkHash);\\n\\n    event RevokeNetworkName(string, bytes32);\\n}\\n\\ninterface INetworkSupportedRegistry is INetworkSupportedRegistryEvent {\\n    function isNetworkSupported(\\n        bytes32 networkHash\\n    ) external view returns (bool);\\n\\n    function isNetworkSupported(\\n        string memory networkName\\n    ) external view returns (bool);\\n}\\n\",\"keccak256\":\"0x1e05c025c27b50bc3f4ab3028cde8ad81966bfe5f0ff62eae3818b56e874c7fc\",\"license\":\"UNLICENSED\"},\"contracts/oracle/NetworkSupportedRegistry.sol\":{\"content\":\"// SPDX-License-Identifier: UNLICENSED\\npragma solidity ^0.8.0;\\n\\nimport {Ownable} from \\\"@openzeppelin/contracts/access/Ownable.sol\\\";\\nimport {INetworkSupportedRegistry} from \\\"../interfaces/INetworkSupportedRegistry.sol\\\";\\n\\nerror NetworkSupportedRegistry__NetworkAlreadyExisted();\\nerror NetworkSupportedRegistry__NetworkNotExisted();\\n\\ncontract NetworkSupportedRegistry is INetworkSupportedRegistry, Ownable {\\n    mapping(bytes32 => bool) private supportedNetworks;\\n\\n    constructor() Ownable(_msgSender()) {}\\n\\n    function isNetworkSupported(\\n        bytes32 networkHash\\n    ) external view returns (bool) {\\n        return supportedNetworks[networkHash];\\n    }\\n\\n    function isNetworkSupported(\\n        string memory networkName\\n    ) external view returns (bool) {\\n        return supportedNetworks[keccak256(abi.encode(networkName))];\\n    }\\n\\n    function batchAddNetworks(string[] memory networkNames) external {\\n        for (uint256 idx = 0; idx < networkNames.length; idx++) {\\n            addNetwork(networkNames[idx]);\\n        }\\n    }\\n\\n    function batchAddNetworks(bytes32[] memory networkHashes) external {\\n        for (uint256 idx = 0; idx < networkHashes.length; idx++) {\\n            addNetwork(networkHashes[idx]);\\n        }\\n    }\\n\\n    function batchRevokeNetworks(string[] memory networkNames) external {\\n        for (uint256 idx = 0; idx < networkNames.length; idx++) {\\n            revokeNetwork(networkNames[idx]);\\n        }\\n    }\\n\\n    function batchRevokeNetworks(bytes32[] memory networkHashes) external {\\n        for (uint256 idx = 0; idx < networkHashes.length; idx++) {\\n            revokeNetwork(networkHashes[idx]);\\n        }\\n    }\\n\\n    function addNetwork(string memory networkName) public onlyOwner {\\n        bytes32 networkHash = keccak256(abi.encode(networkName));\\n        if (supportedNetworks[networkHash])\\n            revert NetworkSupportedRegistry__NetworkAlreadyExisted();\\n        supportedNetworks[networkHash] = true;\\n        emit AddNetworkName(networkName, networkHash);\\n    }\\n\\n    function addNetwork(bytes32 networkHash) public onlyOwner {\\n        if (supportedNetworks[networkHash])\\n            revert NetworkSupportedRegistry__NetworkAlreadyExisted();\\n        supportedNetworks[networkHash] = true;\\n        emit AddNetworkHash(networkHash);\\n    }\\n\\n    function revokeNetwork(string memory networkName) public onlyOwner {\\n        bytes32 networkHash = keccak256(abi.encode(networkName));\\n        if (!supportedNetworks[networkHash])\\n            revert NetworkSupportedRegistry__NetworkNotExisted();\\n        supportedNetworks[networkHash] = false;\\n        emit RevokeNetworkName(networkName, networkHash);\\n    }\\n\\n    function revokeNetwork(bytes32 networkHash) public onlyOwner {\\n        if (!supportedNetworks[networkHash])\\n            revert NetworkSupportedRegistry__NetworkNotExisted();\\n        supportedNetworks[networkHash] = false;\\n        emit RevokeNetworkHash(networkHash);\\n    }\\n}\\n\",\"keccak256\":\"0xa8e817468bc2a2b6d2c8e95b5c970e0379d479df0d24398935f84c6757f0bdcb\",\"license\":\"UNLICENSED\"}},\"version\":1}",
+  "bytecode": "0x608060405234801561001057600080fd5b50338061003c576000604051631e4fbdf760e01b815260040161003391906100bd565b60405180910390fd5b6100458161004b565b506100cb565b600080546001600160a01b038381166001600160a01b0319831681178455604051919092169283917f8be0079c531659141344cd1fd0a4f28419497f9722a3daafe3b4186f6b6457e09190a35050565b60006001600160a01b0382165b92915050565b6100b78161009b565b82525050565b602081016100a882846100ae565b610b15806100da6000396000f3fe608060405234801561001057600080fd5b50600436106100cf5760003560e01c80638da5cb5b1161008c578063aca6ef0e11610066578063aca6ef0e146101a2578063c1886327146101b5578063c23b77f4146101c8578063f2fde38b146101db57600080fd5b80638da5cb5b1461015357806391ef73571461016c578063973cb0a11461017f57600080fd5b806317c6066f146100d45780633b2d3e37146100e9578063715018a6146100fc578063799d84a9146101045780637f24a93f146101175780638102511614610140575b600080fd5b6100e76100e23660046106a1565b6101ee565b005b6100e76100f73660046107d1565b61027c565b6100e76102c0565b6100e76101123660046108a3565b6102d4565b61012a6101253660046108a3565b61038b565b60405161013791906108e8565b60405180910390f35b6100e761014e3660046107d1565b6103d1565b6000546001600160a01b03166040516101379190610910565b6100e761017a3660046108a3565b610411565b61012a61018d3660046106a1565b60009081526001602052604090205460ff1690565b6100e76101b03660046109b0565b6104c2565b6100e76101c33660046106a1565b610502565b6100e76101d63660046109b0565b61057f565b6100e76101e93660046109ff565b6105bf565b6101f6610606565b60008181526001602052604090205460ff161561022657604051637a965a7960e11b815260040160405180910390fd5b600081815260016020819052604091829020805460ff19169091179055517fb54ae657e47b43b811d1530a82eda711975e4f2559cb63d33c091b35c079969290610271908390610a26565b60405180910390a150565b60005b81518110156102bc576102aa82828151811061029d5761029d610a34565b60200260200101516101ee565b806102b481610a60565b91505061027f565b5050565b6102c8610606565b6102d26000610633565b565b6102dc610606565b6000816040516020016102ef9190610ad0565b60408051601f1981840301815291815281516020928301206000818152600190935291205490915060ff166103375760405163c8ef12c760e01b815260040160405180910390fd5b60008181526001602052604090819020805460ff19169055517f20b511484bc9f89a9f8ef18096d0b62d2a2c00ba45bb59963d62245721dc3e349061037f9084908490610ae8565b60405180910390a15050565b600060016000836040516020016103a29190610ad0565b60408051601f198184030181529181528151602092830120835290820192909252016000205460ff1692915050565b60005b81518110156102bc576103ff8282815181106103f2576103f2610a34565b6020026020010151610502565b8061040981610a60565b9150506103d4565b610419610606565b60008160405160200161042c9190610ad0565b60408051601f1981840301815291815281516020928301206000818152600190935291205490915060ff161561047557604051637a965a7960e11b815260040160405180910390fd5b600081815260016020819052604091829020805460ff19169091179055517f643a185988d0d06cc85efb703c730f2c4494ddd8a60b3999e28513422fb398739061037f9084908490610ae8565b60005b81518110156102bc576104f08282815181106104e3576104e3610a34565b6020026020010151610411565b806104fa81610a60565b9150506104c5565b61050a610606565b60008181526001602052604090205460ff166105395760405163c8ef12c760e01b815260040160405180910390fd5b60008181526001602052604090819020805460ff19169055517f02defe9b4d25cbbb4fa9c0207bdf23ee2e1a588c309788817ea493e560198ed090610271908390610a26565b60005b81518110156102bc576105ad8282815181106105a0576105a0610a34565b60200260200101516102d4565b806105b781610a60565b915050610582565b6105c7610606565b6001600160a01b0381166105fa576000604051631e4fbdf760e01b81526004016105f19190610910565b60405180910390fd5b61060381610633565b50565b6000546001600160a01b031633146102d2573360405163118cdaa760e01b81526004016105f19190610910565b600080546001600160a01b038381166001600160a01b0319831681178455604051919092169283917f8be0079c531659141344cd1fd0a4f28419497f9722a3daafe3b4186f6b6457e09190a35050565b805b811461060357600080fd5b803561069b81610683565b92915050565b6000602082840312156106b6576106b6600080fd5b60006106c28484610690565b949350505050565b634e487b7160e01b600052604160045260246000fd5b601f19601f830116810181811067ffffffffffffffff82111715610706576107066106ca565b6040525050565b600061071860405190565b905061072482826106e0565b919050565b600067ffffffffffffffff821115610743576107436106ca565b5060209081020190565b600061076061075b84610729565b61070d565b8381529050602080820190840283018581111561077f5761077f600080fd5b835b818110156107a357806107948882610690565b84525060209283019201610781565b5050509392505050565b600082601f8301126107c1576107c1600080fd5b81356106c284826020860161074d565b6000602082840312156107e6576107e6600080fd5b813567ffffffffffffffff81111561080057610800600080fd5b6106c2848285016107ad565b600067ffffffffffffffff821115610826576108266106ca565b601f19601f83011660200192915050565b82818337506000910152565b600061085161075b8461080c565b90508281526020810184848401111561086c5761086c600080fd5b610877848285610837565b509392505050565b600082601f83011261089357610893600080fd5b81356106c2848260208601610843565b6000602082840312156108b8576108b8600080fd5b813567ffffffffffffffff8111156108d2576108d2600080fd5b6106c28482850161087f565b8015155b82525050565b6020810161069b82846108de565b60006001600160a01b03821661069b565b6108e2816108f6565b6020810161069b8284610907565b600061092c61075b84610729565b8381529050602080820190840283018581111561094b5761094b600080fd5b835b818110156107a357803567ffffffffffffffff81111561096f5761096f600080fd5b80860161097c898261087f565b855250506020928301920161094d565b600082601f8301126109a0576109a0600080fd5b81356106c284826020860161091e565b6000602082840312156109c5576109c5600080fd5b813567ffffffffffffffff8111156109df576109df600080fd5b6106c28482850161098c565b610685816108f6565b803561069b816109eb565b600060208284031215610a1457610a14600080fd5b60006106c284846109f4565b806108e2565b6020810161069b8284610a20565b634e487b7160e01b600052603260045260246000fd5b634e487b7160e01b600052601160045260246000fd5b60006000198203610a7357610a73610a4a565b5060010190565b60005b83811015610a95578181015183820152602001610a7d565b50506000910152565b6000610aa8825190565b808452602084019350610abf818560208601610a7a565b601f01601f19169290920192915050565b60208082528101610ae18184610a9e565b9392505050565b60408082528101610af98185610a9e565b9050610ae16020830184610a2056fea164736f6c6343000814000a",
+  "deployedBytecode": "0x608060405234801561001057600080fd5b50600436106100cf5760003560e01c80638da5cb5b1161008c578063aca6ef0e11610066578063aca6ef0e146101a2578063c1886327146101b5578063c23b77f4146101c8578063f2fde38b146101db57600080fd5b80638da5cb5b1461015357806391ef73571461016c578063973cb0a11461017f57600080fd5b806317c6066f146100d45780633b2d3e37146100e9578063715018a6146100fc578063799d84a9146101045780637f24a93f146101175780638102511614610140575b600080fd5b6100e76100e23660046106a1565b6101ee565b005b6100e76100f73660046107d1565b61027c565b6100e76102c0565b6100e76101123660046108a3565b6102d4565b61012a6101253660046108a3565b61038b565b60405161013791906108e8565b60405180910390f35b6100e761014e3660046107d1565b6103d1565b6000546001600160a01b03166040516101379190610910565b6100e761017a3660046108a3565b610411565b61012a61018d3660046106a1565b60009081526001602052604090205460ff1690565b6100e76101b03660046109b0565b6104c2565b6100e76101c33660046106a1565b610502565b6100e76101d63660046109b0565b61057f565b6100e76101e93660046109ff565b6105bf565b6101f6610606565b60008181526001602052604090205460ff161561022657604051637a965a7960e11b815260040160405180910390fd5b600081815260016020819052604091829020805460ff19169091179055517fb54ae657e47b43b811d1530a82eda711975e4f2559cb63d33c091b35c079969290610271908390610a26565b60405180910390a150565b60005b81518110156102bc576102aa82828151811061029d5761029d610a34565b60200260200101516101ee565b806102b481610a60565b91505061027f565b5050565b6102c8610606565b6102d26000610633565b565b6102dc610606565b6000816040516020016102ef9190610ad0565b60408051601f1981840301815291815281516020928301206000818152600190935291205490915060ff166103375760405163c8ef12c760e01b815260040160405180910390fd5b60008181526001602052604090819020805460ff19169055517f20b511484bc9f89a9f8ef18096d0b62d2a2c00ba45bb59963d62245721dc3e349061037f9084908490610ae8565b60405180910390a15050565b600060016000836040516020016103a29190610ad0565b60408051601f198184030181529181528151602092830120835290820192909252016000205460ff1692915050565b60005b81518110156102bc576103ff8282815181106103f2576103f2610a34565b6020026020010151610502565b8061040981610a60565b9150506103d4565b610419610606565b60008160405160200161042c9190610ad0565b60408051601f1981840301815291815281516020928301206000818152600190935291205490915060ff161561047557604051637a965a7960e11b815260040160405180910390fd5b600081815260016020819052604091829020805460ff19169091179055517f643a185988d0d06cc85efb703c730f2c4494ddd8a60b3999e28513422fb398739061037f9084908490610ae8565b60005b81518110156102bc576104f08282815181106104e3576104e3610a34565b6020026020010151610411565b806104fa81610a60565b9150506104c5565b61050a610606565b60008181526001602052604090205460ff166105395760405163c8ef12c760e01b815260040160405180910390fd5b60008181526001602052604090819020805460ff19169055517f02defe9b4d25cbbb4fa9c0207bdf23ee2e1a588c309788817ea493e560198ed090610271908390610a26565b60005b81518110156102bc576105ad8282815181106105a0576105a0610a34565b60200260200101516102d4565b806105b781610a60565b915050610582565b6105c7610606565b6001600160a01b0381166105fa576000604051631e4fbdf760e01b81526004016105f19190610910565b60405180910390fd5b61060381610633565b50565b6000546001600160a01b031633146102d2573360405163118cdaa760e01b81526004016105f19190610910565b600080546001600160a01b038381166001600160a01b0319831681178455604051919092169283917f8be0079c531659141344cd1fd0a4f28419497f9722a3daafe3b4186f6b6457e09190a35050565b805b811461060357600080fd5b803561069b81610683565b92915050565b6000602082840312156106b6576106b6600080fd5b60006106c28484610690565b949350505050565b634e487b7160e01b600052604160045260246000fd5b601f19601f830116810181811067ffffffffffffffff82111715610706576107066106ca565b6040525050565b600061071860405190565b905061072482826106e0565b919050565b600067ffffffffffffffff821115610743576107436106ca565b5060209081020190565b600061076061075b84610729565b61070d565b8381529050602080820190840283018581111561077f5761077f600080fd5b835b818110156107a357806107948882610690565b84525060209283019201610781565b5050509392505050565b600082601f8301126107c1576107c1600080fd5b81356106c284826020860161074d565b6000602082840312156107e6576107e6600080fd5b813567ffffffffffffffff81111561080057610800600080fd5b6106c2848285016107ad565b600067ffffffffffffffff821115610826576108266106ca565b601f19601f83011660200192915050565b82818337506000910152565b600061085161075b8461080c565b90508281526020810184848401111561086c5761086c600080fd5b610877848285610837565b509392505050565b600082601f83011261089357610893600080fd5b81356106c2848260208601610843565b6000602082840312156108b8576108b8600080fd5b813567ffffffffffffffff8111156108d2576108d2600080fd5b6106c28482850161087f565b8015155b82525050565b6020810161069b82846108de565b60006001600160a01b03821661069b565b6108e2816108f6565b6020810161069b8284610907565b600061092c61075b84610729565b8381529050602080820190840283018581111561094b5761094b600080fd5b835b818110156107a357803567ffffffffffffffff81111561096f5761096f600080fd5b80860161097c898261087f565b855250506020928301920161094d565b600082601f8301126109a0576109a0600080fd5b81356106c284826020860161091e565b6000602082840312156109c5576109c5600080fd5b813567ffffffffffffffff8111156109df576109df600080fd5b6106c28482850161098c565b610685816108f6565b803561069b816109eb565b600060208284031215610a1457610a14600080fd5b60006106c284846109f4565b806108e2565b6020810161069b8284610a20565b634e487b7160e01b600052603260045260246000fd5b634e487b7160e01b600052601160045260246000fd5b60006000198203610a7357610a73610a4a565b5060010190565b60005b83811015610a95578181015183820152602001610a7d565b50506000910152565b6000610aa8825190565b808452602084019350610abf818560208601610a7a565b601f01601f19169290920192915050565b60208082528101610ae18184610a9e565b9392505050565b60408082528101610af98185610a9e565b9050610ae16020830184610a2056fea164736f6c6343000814000a",
+  "devdoc": {
+    "errors": {
+      "OwnableInvalidOwner(address)": [
+        {
+          "details": "The owner is not a valid owner account. (eg. `address(0)`)"
+        }
+      ],
+      "OwnableUnauthorizedAccount(address)": [
+        {
+          "details": "The caller account is not authorized to perform an operation."
+        }
+      ]
+    },
+    "kind": "dev",
+    "methods": {
+      "owner()": {
+        "details": "Returns the address of the current owner."
+      },
+      "renounceOwnership()": {
+        "details": "Leaves the contract without owner. It will not be possible to call `onlyOwner` functions. Can only be called by the current owner. NOTE: Renouncing ownership will leave the contract without an owner, thereby disabling any functionality that is only available to the owner."
+      },
+      "transferOwnership(address)": {
+        "details": "Transfers ownership of the contract to a new account (`newOwner`). Can only be called by the current owner."
+      }
+    },
+    "version": 1
+  },
+  "userdoc": {
+    "kind": "user",
+    "methods": {},
+    "version": 1
+  },
+  "storageLayout": {
+    "storage": [
+      {
+        "astId": 3386,
+        "contract": "contracts/oracle/NetworkSupportedRegistry.sol:NetworkSupportedRegistry",
+        "label": "_owner",
+        "offset": 0,
+        "slot": "0",
+        "type": "t_address"
+      },
+      {
+        "astId": 9101,
+        "contract": "contracts/oracle/NetworkSupportedRegistry.sol:NetworkSupportedRegistry",
+        "label": "supportedNetworks",
+        "offset": 0,
+        "slot": "1",
+        "type": "t_mapping(t_bytes32,t_bool)"
+      }
+    ],
+    "types": {
+      "t_address": {
+        "encoding": "inplace",
+        "label": "address",
+        "numberOfBytes": "20"
+      },
+      "t_bool": {
+        "encoding": "inplace",
+        "label": "bool",
+        "numberOfBytes": "1"
+      },
+      "t_bytes32": {
+        "encoding": "inplace",
+        "label": "bytes32",
+        "numberOfBytes": "32"
+      },
+      "t_mapping(t_bytes32,t_bool)": {
+        "encoding": "mapping",
+        "key": "t_bytes32",
+        "label": "mapping(bytes32 => bool)",
+        "numberOfBytes": "32",
+        "value": "t_bool"
+      }
+    }
+  }
+}

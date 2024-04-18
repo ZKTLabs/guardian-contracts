@@ -13,8 +13,8 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
     const stub = (await ethers.getContract("ComplianceRegistryStub_L1")) as ComplianceRegistryStub_L1;
     const stubAddress = await stub.getAddress();
     const networkAddress = await networkSupportedRegistry.getAddress();
-    for (let i = 0; i < 100; i++) {
-        const deployedResult = await deploy(`BlacklistComplianceRegistry-${i}`, {
+    for (let i = 1; i < 100; i++) {
+        const deployedResult = await deploy(`BlacklistComplianceRegistry_${i}`, {
             from: deployer,
             contract: "ComplianceRegistry",
             proxy: {
@@ -28,8 +28,8 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
             },
             log: true,
         });
-        console.log(`BlacklistComplianceRegistry-${i} deployed at ${deployedResult.address}`)
-        const deployedContract = await ethers.getContractAt(`BlacklistComplianceRegistry-${i}`, deployedResult.address)
+        console.log(`BlacklistComplianceRegistry_${i} deployed at ${deployedResult.address}`)
+        const deployedContract = await ethers.getContractAt(`ComplianceRegistry`, deployedResult.address)
         const tx0 = await deployedContract.grantRole(await deployedContract.COMPLIANCE_REGISTRY_STUB_ROLE(), stubAddress)
         await tx0.wait()
         console.log(`Granted role to stub txHash: ${tx0.hash}`)
