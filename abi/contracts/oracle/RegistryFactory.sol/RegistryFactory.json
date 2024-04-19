@@ -152,6 +152,22 @@
   },
   {
     "inputs": [],
+<<<<<<< HEAD
+=======
+    "name": "COMPLIANCE_REGISTRY_STUB_ROLE",
+    "outputs": [
+      {
+        "internalType": "bytes32",
+        "name": "",
+        "type": "bytes32"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+>>>>>>> 7bf47aa (add Callback)
     "name": "DEFAULT_ADMIN_ROLE",
     "outputs": [
       {
@@ -172,7 +188,7 @@
       },
       {
         "internalType": "address",
-        "name": "index",
+        "name": "stub",
         "type": "address"
       },
       {

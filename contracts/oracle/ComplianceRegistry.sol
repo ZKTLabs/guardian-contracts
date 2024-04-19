@@ -9,6 +9,7 @@ import "hardhat/console.sol";
 abstract contract ComplianceRegistry is AccessControl, Initializable {
     bytes32 public constant COMPLIANCE_REGISTRY_STUB_ROLE =
         keccak256("compliance-registry.index.role");
+
     bytes32 public constant ZKT_KEY = keccak256("ZKT");
 
     mapping(bytes32 => bool) public accounts;

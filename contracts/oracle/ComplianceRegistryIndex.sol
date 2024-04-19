@@ -36,6 +36,15 @@ interface IRegistryFactory {
     ) external view returns (address, bool);
 }
 
+interface ICallback {
+    function callback(
+        uint256 pivot,
+        address index,
+        bool useWhitelist,
+        address account
+    ) external;
+}
+
 contract ComplianceRegistryIndex is AccessControl, Initializable {
     bytes32 public constant COMPLIANCE_REGISTRY_STUB_ROLE =
         keccak256("compliance-registry-index.stub.role");

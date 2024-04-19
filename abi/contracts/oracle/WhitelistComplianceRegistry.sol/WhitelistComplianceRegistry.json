@@ -260,7 +260,7 @@
     "inputs": [
       {
         "internalType": "address",
-        "name": "_index",
+        "name": "_stub",
         "type": "address"
       }
     ],
