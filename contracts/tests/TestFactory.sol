@@ -45,10 +45,7 @@ contract TestFactory {
         }
         if (codeSize == 0) {
             Create2.deploy(0, salt, bytecode);
-            TestComplianceRegistry(registry).initialize(
-                _admin,
-                _stub
-            );
+            TestComplianceRegistry(registry).initialize(_admin, _stub);
             return (registry, true);
         }
         return (registry, false);

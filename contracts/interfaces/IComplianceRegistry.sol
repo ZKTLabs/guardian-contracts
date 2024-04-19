@@ -29,7 +29,5 @@ interface IComplianceRegistry is IComplianceEntry, IComplianceEvent {
 
     function isExceed() external view returns (bool);
 
-    function decodeBytes(
-        bytes memory data
-    ) external view returns (address);
+    function decodeBytes(bytes memory data) external view returns (address);
 }

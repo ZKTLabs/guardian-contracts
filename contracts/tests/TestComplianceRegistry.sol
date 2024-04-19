@@ -65,11 +65,8 @@ abstract contract TestComplianceRegistry is
 
     function decodeBytes(
         bytes memory data
-    ) public view override returns (address) {
-        (bytes memory addressBytes) = abi.decode(
-            data,
-            (bytes)
-        );
+    ) public pure override returns (address) {
+        bytes memory addressBytes = abi.decode(data, (bytes));
         return abi.decode(addressBytes, (address));
     }
 }

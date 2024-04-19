@@ -6,11 +6,15 @@ import {Initializable} from "@openzeppelin/contracts/proxy/utils/Initializable.s
 import {IComplianceRegistry} from "../interfaces/IComplianceRegistry.sol";
 import {ProposalCommon} from "../libraries/ProposalCommon.sol";
 
-abstract contract ComplianceRegistry is IComplianceRegistry, AccessControl, Initializable {
+abstract contract ComplianceRegistry is
+    IComplianceRegistry,
+    AccessControl,
+    Initializable
+{
     bytes32 public constant ADMIN_ROLE =
-    keccak256("compliance-registry.admin.role");
+        keccak256("compliance-registry.admin.role");
     bytes32 public constant COMPLIANCE_REGISTRY_STUB_ROLE =
-    keccak256("compliance-registry.stub.role");
+        keccak256("compliance-registry.stub.role");
 
     struct Slot {
         uint256 maxComplianceCount;
@@ -30,7 +34,7 @@ abstract contract ComplianceRegistry is IComplianceRegistry, AccessControl, Init
     ) external override onlyRole(COMPLIANCE_REGISTRY_STUB_ROLE) {
         for (uint256 idx = 0; idx < proposal.targets.length; idx++) {
             bytes memory data = proposal.targets[idx];
-            (address target) = decodeBytes(data);
+            address target = decodeBytes(data);
             bytes32 addressKey = getAddressKey(target);
             if (target == address(0) || compliance[addressKey]) continue;
             compliance[addressKey] = true;
@@ -54,10 +58,7 @@ abstract contract ComplianceRegistry is IComplianceRegistry, AccessControl, Init
     function decodeBytes(
         bytes memory data
     ) public pure override returns (address) {
-        (bytes memory addressBytes) = abi.decode(
-            data,
-            (bytes)
-        );
+        bytes memory addressBytes = abi.decode(data, (bytes));
         return abi.decode(addressBytes, (address));
     }
 }

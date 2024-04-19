@@ -1,18 +1,15 @@
 import { DeployFunction } from "hardhat-deploy/types";
 import { HardhatRuntimeEnvironment } from "hardhat/types";
-import { ComplianceRegistry } from "../typechain-types";
+import { RegistryFactory } from "../typechain-types";
 
 const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
   const { getNamedAccounts, deployments, ethers } = hre;
   const { deploy } = deployments;
   const { deployer } = await getNamedAccounts();
 
-  // const white = (await ethers.getContract(
-  //   "WhitelistComplianceRegistry"
-  // )) as ComplianceRegistry;
-  // const black = (await ethers.getContract(
-  //   "BlacklistComplianceRegistry"
-  // )) as ComplianceRegistry;
+  const factory = (await ethers.getContract(
+    "RegistryFactory"
+  )) as RegistryFactory;
   const deployedResult = await deploy("ComplianceRegistryStub_L1", {
     from: deployer,
     proxy: {
@@ -20,32 +17,20 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
       execute: {
         init: {
           methodName: "initialize",
-          args: [deployer],
+          args: [deployer, await factory.getAddress()],
         },
       },
     },
     log: true,
   });
-  // const tx0 = await white.grantRole(
-  //   await white.COMPLIANCE_REGISTRY_STUB_ROLE(),
-  //   deployedResult.address
-  // );
-  // await tx0.wait();
-  // const tx1 = await black.grantRole(
-  //   await black.COMPLIANCE_REGISTRY_STUB_ROLE(),
-  //   deployedResult.address
-  // );
-  // await tx1.wait();
-  const stub = await ethers.getContractAt(
-    "ComplianceRegistryStub_L1",
+  const tx = await factory.grantRole(
+    await factory.COMPLIANCE_REGISTRY_STUB_ROLE(),
     deployedResult.address
   );
-  // const tx2 = await stub.grantRole(await stub.GUARDIAN_NODE(), deployer);
-  // await tx2.wait();
-  // const tx3 = await stub.grantRole(await stub.MANAGER_ROLE(), deployer);
-  // await tx3.wait();
+  await tx.wait();
 };
 
 func.id = "deploy_compliance_registry_stub_l1";
 func.tags = ["DeployComplianceRegistryStub_L1"];
+func.dependencies = ["DeployRegistryFactory"]
 export default func;
