@@ -32,5 +32,5 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
 
 func.id = "deploy_compliance_registry_stub_l1";
 func.tags = ["DeployComplianceRegistryStub_L1"];
-func.dependencies = ["DeployRegistryFactory"]
+func.dependencies = ["DeployRegistryFactory"];
 export default func;
