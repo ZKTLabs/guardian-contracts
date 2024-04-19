@@ -48,15 +48,13 @@ contract TestComplianceRegistryStub is IComplianceRegistryStub, AccessControl {
             revert ComplianceRegistryStub_L1__InvalidConfirmProposalStatus();
         if (proposal.isWhitelist) {
             uint256 pivot = whitelist.cumulative / whitelist.maxProposals;
-            (address registry, bool isCreated) = _deployer.upsert(
+            (address registry, ) = _deployer.upsert(
                 pivot,
                 address(this),
                 true
             );
             IComplianceRegistry(registry).addProposalToList(proposal);
-            if (isCreated) {
-                whitelist.cumulative++;
-            }
+            whitelist.cumulative++;
             emit AddProposalToRegistryList(
                 address(registry),
                 true,
@@ -64,15 +62,13 @@ contract TestComplianceRegistryStub is IComplianceRegistryStub, AccessControl {
             );
         } else {
             uint256 pivot = blacklist.cumulative / blacklist.maxProposals;
-            (address registry, bool isCreated) = _deployer.upsert(
+            (address registry, ) = _deployer.upsert(
                 pivot,
                 address(this),
                 false
             );
             IComplianceRegistry(registry).addProposalToList(proposal);
-            if (isCreated) {
-                blacklist.cumulative++;
-            }
+            blacklist.cumulative++;
             emit AddProposalToRegistryList(
                 address(registry),
                 true,

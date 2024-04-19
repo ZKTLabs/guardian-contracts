@@ -33,6 +33,7 @@ contract ComplianceRegistryStub_L1 is
 
     function initialize(address _admin, address _factory) public initializer {
         _grantRole(ADMIN_ROLE, _admin);
+        _grantRole(GUARDIAN_NODE, _admin);
         _setRoleAdmin(MANAGER_ROLE, ADMIN_ROLE);
         _setRoleAdmin(GUARDIAN_NODE, ADMIN_ROLE);
 
@@ -49,15 +50,9 @@ contract ComplianceRegistryStub_L1 is
             revert ComplianceRegistryStub_L1__InvalidConfirmProposalStatus();
         if (proposal.isWhitelist) {
             uint256 pivot = whitelist.cumulative / whitelist.maxProposals;
-            (address registry, bool isCreated) = factory.deploy(
-                pivot,
-                address(this),
-                true
-            );
+            address registry = factory.deploy(pivot, address(this), true);
             IComplianceRegistry(registry).addProposalToList(proposal);
-            if (isCreated) {
-                whitelist.cumulative++;
-            }
+            whitelist.cumulative++;
             emit AddProposalToRegistryList(
                 address(registry),
                 true,
@@ -65,15 +60,9 @@ contract ComplianceRegistryStub_L1 is
             );
         } else {
             uint256 pivot = blacklist.cumulative / blacklist.maxProposals;
-            (address registry, bool isCreated) = factory.deploy(
-                pivot,
-                address(this),
-                false
-            );
+            address registry = factory.deploy(pivot, address(this), false);
             IComplianceRegistry(registry).addProposalToList(proposal);
-            if (isCreated) {
-                blacklist.cumulative++;
-            }
+            blacklist.cumulative++;
             emit AddProposalToRegistryList(
                 address(registry),
                 true,

@@ -7,6 +7,8 @@ import {WhitelistComplianceRegistry} from "./WhitelistComplianceRegistry.sol";
 import {BlacklistComplianceRegistry} from "./BlacklistComplianceRegistry.sol";
 import {ComplianceRegistry} from "./ComplianceRegistry.sol";
 
+error RegistryFactory__Create2FailedDeployment();
+
 contract RegistryFactory is AccessControl {
     bytes32 public constant ADMIN_ROLE =
         keccak256("registry-factory.admin.role");
@@ -51,8 +53,10 @@ contract RegistryFactory is AccessControl {
         uint256 index,
         address _stub,
         bool _isWhitelist
-    ) external onlyRole(COMPLIANCE_REGISTRY_STUB_ROLE) returns (address, bool) {
-        bytes32 salt = bytes32(index + slot.base);
+    ) external onlyRole(COMPLIANCE_REGISTRY_STUB_ROLE) returns (address) {
+        bytes32 salt = keccak256(
+            abi.encodePacked(bytes32(index), bytes32(slot.base))
+        );
         bytes memory bytecode = getByteCode(_isWhitelist);
         address registry = Create2.computeAddress(salt, keccak256(bytecode));
         uint256 codeSize;
@@ -62,16 +66,18 @@ contract RegistryFactory is AccessControl {
         if (codeSize == 0) {
             Create2.deploy(0, salt, bytecode);
             ComplianceRegistry(registry).initialize(slot.admin, _stub);
-            return (registry, true);
+            return registry;
         }
-        return (registry, false);
+        return registry;
     }
 
     function get(
         uint256 index,
         bool _isWhitelist
     ) public view returns (address, bool) {
-        bytes32 salt = bytes32(index + slot.base);
+        bytes32 salt = keccak256(
+            abi.encodePacked(bytes32(index), bytes32(slot.base))
+        );
         bytes32 bytecodeHash = getByteCodeHash(_isWhitelist);
         address registry = Create2.computeAddress(salt, bytecodeHash);
         uint256 codeSize;
