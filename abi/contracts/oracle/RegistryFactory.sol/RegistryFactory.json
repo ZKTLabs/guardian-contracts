@@ -152,7 +152,7 @@
   },
   {
     "inputs": [],
-    "name": "COMPLIANCE_REGISTRY_STUB_ROLE",
+    "name": "COMPLIANCE_REGISTRY_INDEX",
     "outputs": [
       {
         "internalType": "bytes32",
@@ -180,17 +180,17 @@
     "inputs": [
       {
         "internalType": "uint256",
-        "name": "index",
+        "name": "pivot",
         "type": "uint256"
       },
       {
         "internalType": "address",
-        "name": "_stub",
+        "name": "index",
         "type": "address"
       },
       {
         "internalType": "bool",
-        "name": "_isWhitelist",
+        "name": "useWhitelist",
         "type": "bool"
       }
     ],
@@ -209,12 +209,12 @@
     "inputs": [
       {
         "internalType": "uint256",
-        "name": "index",
+        "name": "pivot",
         "type": "uint256"
       },
       {
         "internalType": "bool",
-        "name": "_isWhitelist",
+        "name": "useWhitelist",
         "type": "bool"
       }
     ],

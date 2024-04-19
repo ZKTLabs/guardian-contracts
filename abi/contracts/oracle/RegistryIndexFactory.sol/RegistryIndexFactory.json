@@ -1,5 +1,26 @@
 [
   {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "base",
+        "type": "uint256"
+      },
+      {
+        "internalType": "address",
+        "name": "admin",
+        "type": "address"
+      },
+      {
+        "internalType": "address",
+        "name": "registryFactory",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "nonpayable",
+    "type": "constructor"
+  },
+  {
     "inputs": [],
     "name": "AccessControlBadConfirmation",
     "type": "error"
@@ -22,31 +43,29 @@
   },
   {
     "inputs": [],
-    "name": "ComplianceRegistryStub_L1__InvalidConfirmProposalStatus",
+    "name": "Create2EmptyBytecode",
     "type": "error"
   },
   {
     "inputs": [],
-    "name": "InvalidInitialization",
+    "name": "Create2FailedDeployment",
     "type": "error"
   },
   {
-    "inputs": [],
-    "name": "NotInitializing",
-    "type": "error"
-  },
-  {
-    "anonymous": false,
     "inputs": [
       {
-        "indexed": false,
-        "internalType": "uint64",
-        "name": "version",
-        "type": "uint64"
+        "internalType": "uint256",
+        "name": "balance",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "needed",
+        "type": "uint256"
       }
     ],
-    "name": "Initialized",
-    "type": "event"
+    "name": "Create2InsufficientBalance",
+    "type": "error"
   },
   {
     "anonymous": false,
@@ -138,12 +157,25 @@
   },
   {
     "inputs": [],
-    "name": "BASE_MODE",
+    "name": "COMPLIANCE_REGISTRY_INDEX",
     "outputs": [
       {
-        "internalType": "uint256",
+        "internalType": "bytes32",
         "name": "",
-        "type": "uint256"
+        "type": "bytes32"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "COMPLIANCE_REGISTRY_STUB_ROLE",
+    "outputs": [
+      {
+        "internalType": "bytes32",
+        "name": "",
+        "type": "bytes32"
       }
     ],
     "stateMutability": "view",
@@ -163,105 +195,19 @@
     "type": "function"
   },
   {
-    "inputs": [],
-    "name": "GUARDIAN_NODE",
-    "outputs": [
-      {
-        "internalType": "bytes32",
-        "name": "",
-        "type": "bytes32"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "MANAGER_ROLE",
-    "outputs": [
-      {
-        "internalType": "bytes32",
-        "name": "",
-        "type": "bytes32"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
     "inputs": [
       {
-        "components": [
-          {
-            "internalType": "bytes32",
-            "name": "id",
-            "type": "bytes32"
-          },
-          {
-            "internalType": "address",
-            "name": "author",
-            "type": "address"
-          },
-          {
-            "internalType": "bytes[]",
-            "name": "targets",
-            "type": "bytes[]"
-          },
-          {
-            "internalType": "bool",
-            "name": "isWhitelist",
-            "type": "bool"
-          },
-          {
-            "internalType": "string",
-            "name": "region",
-            "type": "string"
-          },
-          {
-            "internalType": "uint256",
-            "name": "timestamp",
-            "type": "uint256"
-          },
-          {
-            "internalType": "enum ProposalCommon.ProposalStatus",
-            "name": "status",
-            "type": "uint8"
-          },
-          {
-            "internalType": "bytes",
-            "name": "signature",
-            "type": "bytes"
-          },
-          {
-            "internalType": "uint256",
-            "name": "voters",
-            "type": "uint256"
-          },
-          {
-            "internalType": "uint256",
-            "name": "activeNodes",
-            "type": "uint256"
-          }
-        ],
-        "internalType": "struct ProposalCommon.Proposal",
-        "name": "proposal",
-        "type": "tuple"
-      }
-    ],
-    "name": "confirmProposal",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
+        "internalType": "uint256",
+        "name": "pivot",
+        "type": "uint256"
+      },
       {
-        "internalType": "bytes",
-        "name": "data",
-        "type": "bytes"
+        "internalType": "address",
+        "name": "stub",
+        "type": "address"
       }
     ],
-    "name": "decodeAddressBytes",
+    "name": "deploy",
     "outputs": [
       {
         "internalType": "address",
@@ -269,17 +215,28 @@
         "type": "address"
       }
     ],
-    "stateMutability": "pure",
+    "stateMutability": "nonpayable",
     "type": "function"
   },
   {
-    "inputs": [],
-    "name": "factory",
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "pivot",
+        "type": "uint256"
+      }
+    ],
+    "name": "get",
     "outputs": [
       {
-        "internalType": "contract RegistryIndexFactory",
+        "internalType": "address",
         "name": "",
         "type": "address"
+      },
+      {
+        "internalType": "bool",
+        "name": "",
+        "type": "bool"
       }
     ],
     "stateMutability": "view",
@@ -336,62 +293,6 @@
       }
     ],
     "name": "hasRole",
-    "outputs": [
-      {
-        "internalType": "bool",
-        "name": "",
-        "type": "bool"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "_admin",
-        "type": "address"
-      },
-      {
-        "internalType": "address",
-        "name": "_factory",
-        "type": "address"
-      }
-    ],
-    "name": "initialize",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "account",
-        "type": "address"
-      }
-    ],
-    "name": "isBlacklist",
-    "outputs": [
-      {
-        "internalType": "bool",
-        "name": "",
-        "type": "bool"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "account",
-        "type": "address"
-      }
-    ],
-    "name": "isWhitelist",
     "outputs": [
       {
         "internalType": "bool",

@@ -22,11 +22,6 @@
   },
   {
     "inputs": [],
-    "name": "ComplianceRegistryStub_L1__InvalidConfirmProposalStatus",
-    "type": "error"
-  },
-  {
-    "inputs": [],
     "name": "InvalidInitialization",
     "type": "error"
   },
@@ -125,25 +120,12 @@
   },
   {
     "inputs": [],
-    "name": "ADMIN_ROLE",
+    "name": "COMPLIANCE_REGISTRY_STUB_ROLE",
     "outputs": [
       {
         "internalType": "bytes32",
         "name": "",
         "type": "bytes32"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "BASE_MODE",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
       }
     ],
     "stateMutability": "view",
@@ -164,112 +146,20 @@
   },
   {
     "inputs": [],
-    "name": "GUARDIAN_NODE",
+    "name": "blacklist",
     "outputs": [
       {
-        "internalType": "bytes32",
-        "name": "",
-        "type": "bytes32"
+        "internalType": "uint256",
+        "name": "stepCumulative",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "cumulative",
+        "type": "uint256"
       }
     ],
     "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "MANAGER_ROLE",
-    "outputs": [
-      {
-        "internalType": "bytes32",
-        "name": "",
-        "type": "bytes32"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "components": [
-          {
-            "internalType": "bytes32",
-            "name": "id",
-            "type": "bytes32"
-          },
-          {
-            "internalType": "address",
-            "name": "author",
-            "type": "address"
-          },
-          {
-            "internalType": "bytes[]",
-            "name": "targets",
-            "type": "bytes[]"
-          },
-          {
-            "internalType": "bool",
-            "name": "isWhitelist",
-            "type": "bool"
-          },
-          {
-            "internalType": "string",
-            "name": "region",
-            "type": "string"
-          },
-          {
-            "internalType": "uint256",
-            "name": "timestamp",
-            "type": "uint256"
-          },
-          {
-            "internalType": "enum ProposalCommon.ProposalStatus",
-            "name": "status",
-            "type": "uint8"
-          },
-          {
-            "internalType": "bytes",
-            "name": "signature",
-            "type": "bytes"
-          },
-          {
-            "internalType": "uint256",
-            "name": "voters",
-            "type": "uint256"
-          },
-          {
-            "internalType": "uint256",
-            "name": "activeNodes",
-            "type": "uint256"
-          }
-        ],
-        "internalType": "struct ProposalCommon.Proposal",
-        "name": "proposal",
-        "type": "tuple"
-      }
-    ],
-    "name": "confirmProposal",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "bytes",
-        "name": "data",
-        "type": "bytes"
-      }
-    ],
-    "name": "decodeAddressBytes",
-    "outputs": [
-      {
-        "internalType": "address",
-        "name": "",
-        "type": "address"
-      }
-    ],
-    "stateMutability": "pure",
     "type": "function"
   },
   {
@@ -277,9 +167,33 @@
     "name": "factory",
     "outputs": [
       {
-        "internalType": "contract RegistryIndexFactory",
+        "internalType": "contract RegistryFactory",
         "name": "",
         "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "account",
+        "type": "address"
+      },
+      {
+        "internalType": "bool",
+        "name": "useWhitelist",
+        "type": "bool"
+      }
+    ],
+    "name": "get",
+    "outputs": [
+      {
+        "internalType": "bool",
+        "name": "",
+        "type": "bool"
       }
     ],
     "stateMutability": "view",
@@ -350,7 +264,7 @@
     "inputs": [
       {
         "internalType": "address",
-        "name": "_admin",
+        "name": "_stub",
         "type": "address"
       },
       {
@@ -362,44 +276,6 @@
     "name": "initialize",
     "outputs": [],
     "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "account",
-        "type": "address"
-      }
-    ],
-    "name": "isBlacklist",
-    "outputs": [
-      {
-        "internalType": "bool",
-        "name": "",
-        "type": "bool"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "account",
-        "type": "address"
-      }
-    ],
-    "name": "isWhitelist",
-    "outputs": [
-      {
-        "internalType": "bool",
-        "name": "",
-        "type": "bool"
-      }
-    ],
-    "stateMutability": "view",
     "type": "function"
   },
   {
@@ -441,6 +317,24 @@
   {
     "inputs": [
       {
+        "internalType": "address",
+        "name": "account",
+        "type": "address"
+      },
+      {
+        "internalType": "bool",
+        "name": "useWhitelist",
+        "type": "bool"
+      }
+    ],
+    "name": "store",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
         "internalType": "bytes4",
         "name": "interfaceId",
         "type": "bytes4"
@@ -452,6 +346,24 @@
         "internalType": "bool",
         "name": "",
         "type": "bool"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "whitelist",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "stepCumulative",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "cumulative",
+        "type": "uint256"
       }
     ],
     "stateMutability": "view",

@@ -6,59 +6,28 @@ import {Initializable} from "@openzeppelin/contracts/proxy/utils/Initializable.s
 import {IComplianceRegistry} from "../interfaces/IComplianceRegistry.sol";
 import {ProposalCommon} from "../libraries/ProposalCommon.sol";
 
-abstract contract ComplianceRegistry is
-    IComplianceRegistry,
-    AccessControl,
-    Initializable
-{
-    bytes32 public constant ADMIN_ROLE =
-        keccak256("compliance-registry.admin.role");
-    bytes32 public constant COMPLIANCE_REGISTRY_STUB_ROLE =
-        keccak256("compliance-registry.stub.role");
+abstract contract ComplianceRegistry is AccessControl, Initializable {
+    bytes32 public constant COMPLIANCE_REGISTRY_INDEX_ROLE =
+        keccak256("compliance-registry.index.role");
+    bytes32 public constant ZKT_KEY = keccak256("ZKT");
 
-    struct Slot {
-        uint256 maxComplianceCount;
-        uint256 complianceCount;
-    }
-    Slot public slot;
-    mapping(bytes32 => bool) public compliance;
+    mapping(bytes32 => bool) public accounts;
 
-    function initialize(address _admin, address _stub) public initializer {
-        _grantRole(ADMIN_ROLE, _admin);
-        _grantRole(COMPLIANCE_REGISTRY_STUB_ROLE, _stub);
-        _setRoleAdmin(COMPLIANCE_REGISTRY_STUB_ROLE, ADMIN_ROLE);
+    function initialize(address _index) public initializer {
+        _grantRole(COMPLIANCE_REGISTRY_INDEX_ROLE, _index);
     }
 
-    function addProposalToList(
-        ProposalCommon.Proposal memory proposal
-    ) external override onlyRole(COMPLIANCE_REGISTRY_STUB_ROLE) {
-        for (uint256 idx = 0; idx < proposal.targets.length; idx++) {
-            bytes memory data = proposal.targets[idx];
-            address target = decodeBytes(data);
-            bytes32 addressKey = getAddressKey(target);
-            if (target == address(0) || compliance[addressKey]) continue;
-            compliance[addressKey] = true;
-        }
-    }
-
-    function getAddressKey(address account) public pure returns (bytes32) {
-        return keccak256(abi.encodePacked(account, "ZKT"));
-    }
-
-    function isExceed() external view override returns (bool) {
-        return slot.complianceCount >= slot.maxComplianceCount;
-    }
-
-    function checkCompliance(
+    function store(
         address account
-    ) external view override returns (bool) {
-        return compliance[getAddressKey(account)];
+    ) external onlyRole(COMPLIANCE_REGISTRY_INDEX_ROLE) {
+        accounts[key(account)] = true;
     }
 
-    function decodeBytes(
-        bytes memory data
-    ) public pure override returns (address) {
-        bytes memory addressBytes = abi.decode(data, (bytes));
-        return abi.decode(addressBytes, (address));
+    function key(address account) public pure returns (bytes32) {
+        return keccak256(abi.encodePacked(account, ZKT_KEY));
+    }
+
+    function check(address account) external view returns (bool) {
+        return accounts[key(account)];
     }
 }

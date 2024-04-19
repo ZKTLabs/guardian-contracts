@@ -35,31 +35,6 @@
     "inputs": [
       {
         "indexed": false,
-        "internalType": "bool",
-        "name": "isWhitelistRegistry",
-        "type": "bool"
-      },
-      {
-        "indexed": false,
-        "internalType": "bytes",
-        "name": "data",
-        "type": "bytes"
-      },
-      {
-        "indexed": false,
-        "internalType": "bytes32",
-        "name": "networkHash",
-        "type": "bytes32"
-      }
-    ],
-    "name": "AddProposalToAnotherNetworkList",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": false,
         "internalType": "uint64",
         "name": "version",
         "type": "uint64"
@@ -145,20 +120,7 @@
   },
   {
     "inputs": [],
-    "name": "ADMIN_ROLE",
-    "outputs": [
-      {
-        "internalType": "bytes32",
-        "name": "",
-        "type": "bytes32"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "COMPLIANCE_REGISTRY_STUB_ROLE",
+    "name": "COMPLIANCE_REGISTRY_INDEX_ROLE",
     "outputs": [
       {
         "internalType": "bytes32",
@@ -183,84 +145,13 @@
     "type": "function"
   },
   {
-    "inputs": [
-      {
-        "components": [
-          {
-            "internalType": "bytes32",
-            "name": "id",
-            "type": "bytes32"
-          },
-          {
-            "internalType": "address",
-            "name": "author",
-            "type": "address"
-          },
-          {
-            "internalType": "bytes[]",
-            "name": "targets",
-            "type": "bytes[]"
-          },
-          {
-            "internalType": "bool",
-            "name": "isWhitelist",
-            "type": "bool"
-          },
-          {
-            "internalType": "string",
-            "name": "region",
-            "type": "string"
-          },
-          {
-            "internalType": "uint256",
-            "name": "timestamp",
-            "type": "uint256"
-          },
-          {
-            "internalType": "enum ProposalCommon.ProposalStatus",
-            "name": "status",
-            "type": "uint8"
-          },
-          {
-            "internalType": "bytes",
-            "name": "signature",
-            "type": "bytes"
-          },
-          {
-            "internalType": "uint256",
-            "name": "voters",
-            "type": "uint256"
-          },
-          {
-            "internalType": "uint256",
-            "name": "activeNodes",
-            "type": "uint256"
-          }
-        ],
-        "internalType": "struct ProposalCommon.Proposal",
-        "name": "proposal",
-        "type": "tuple"
-      }
-    ],
-    "name": "addProposalToList",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "account",
-        "type": "address"
-      }
-    ],
-    "name": "checkCompliance",
+    "inputs": [],
+    "name": "ZKT_KEY",
     "outputs": [
       {
-        "internalType": "bool",
+        "internalType": "bytes32",
         "name": "",
-        "type": "bool"
+        "type": "bytes32"
       }
     ],
     "stateMutability": "view",
@@ -274,7 +165,7 @@
         "type": "bytes32"
       }
     ],
-    "name": "compliance",
+    "name": "accounts",
     "outputs": [
       {
         "internalType": "bool",
@@ -288,39 +179,20 @@
   {
     "inputs": [
       {
-        "internalType": "bytes",
-        "name": "data",
-        "type": "bytes"
-      }
-    ],
-    "name": "decodeBytes",
-    "outputs": [
-      {
-        "internalType": "address",
-        "name": "",
-        "type": "address"
-      }
-    ],
-    "stateMutability": "pure",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
         "internalType": "address",
         "name": "account",
         "type": "address"
       }
     ],
-    "name": "getAddressKey",
+    "name": "check",
     "outputs": [
       {
-        "internalType": "bytes32",
+        "internalType": "bool",
         "name": "",
-        "type": "bytes32"
+        "type": "bool"
       }
     ],
-    "stateMutability": "pure",
+    "stateMutability": "view",
     "type": "function"
   },
   {
@@ -388,12 +260,7 @@
     "inputs": [
       {
         "internalType": "address",
-        "name": "_admin",
-        "type": "address"
-      },
-      {
-        "internalType": "address",
-        "name": "_stub",
+        "name": "_index",
         "type": "address"
       }
     ],
@@ -403,16 +270,22 @@
     "type": "function"
   },
   {
-    "inputs": [],
-    "name": "isExceed",
-    "outputs": [
+    "inputs": [
       {
-        "internalType": "bool",
-        "name": "",
-        "type": "bool"
+        "internalType": "address",
+        "name": "account",
+        "type": "address"
       }
     ],
-    "stateMutability": "view",
+    "name": "key",
+    "outputs": [
+      {
+        "internalType": "bytes32",
+        "name": "",
+        "type": "bytes32"
+      }
+    ],
+    "stateMutability": "pure",
     "type": "function"
   },
   {
@@ -452,21 +325,16 @@
     "type": "function"
   },
   {
-    "inputs": [],
-    "name": "slot",
-    "outputs": [
+    "inputs": [
       {
-        "internalType": "uint256",
-        "name": "maxComplianceCount",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "complianceCount",
-        "type": "uint256"
+        "internalType": "address",
+        "name": "account",
+        "type": "address"
       }
     ],
-    "stateMutability": "view",
+    "name": "store",
+    "outputs": [],
+    "stateMutability": "nonpayable",
     "type": "function"
   },
   {

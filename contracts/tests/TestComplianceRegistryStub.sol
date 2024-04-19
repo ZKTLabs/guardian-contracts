@@ -48,11 +48,7 @@ contract TestComplianceRegistryStub is IComplianceRegistryStub, AccessControl {
             revert ComplianceRegistryStub_L1__InvalidConfirmProposalStatus();
         if (proposal.isWhitelist) {
             uint256 pivot = whitelist.cumulative / whitelist.maxProposals;
-            (address registry, ) = _deployer.upsert(
-                pivot,
-                address(this),
-                true
-            );
+            (address registry, ) = _deployer.upsert(pivot, address(this), true);
             IComplianceRegistry(registry).addProposalToList(proposal);
             whitelist.cumulative++;
             emit AddProposalToRegistryList(
