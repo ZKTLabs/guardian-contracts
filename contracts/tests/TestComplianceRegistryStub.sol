@@ -1,24 +1,24 @@
 // SPDX-License-Identifier: UNLICENSED
 pragma solidity ^0.8.0;
 
-import {AccessControlUpgradeable} from "@openzeppelin/contracts-upgradeable/access/AccessControlUpgradeable.sol";
+import {AccessControl} from "@openzeppelin/contracts/access/AccessControl.sol";
 import {IComplianceRegistryStub} from "../interfaces/IComplianceRegistryStub.sol";
 import {IComplianceRegistry} from "../interfaces/IComplianceRegistry.sol";
 import {ProposalCommon} from "../libraries/ProposalCommon.sol";
-import {RegistryFactory} from "./RegistryFactory.sol";
+import "./TestFactory.sol";
+import "hardhat/console.sol";
 
-error ComplianceRegistryStub__InvalidConfirmProposalStatus();
-error ComplianceRegistryStub__WhitelistRegistryNotEnough();
-error ComplianceRegistryStub__BlacklistRegistryNotEnough();
+error ComplianceRegistryStub_L1__InvalidConfirmProposalStatus();
+error ComplianceRegistryStub_L1__WhitelistRegistryNotEnough();
+error ComplianceRegistryStub_L1__BlacklistRegistryNotEnough();
 
-contract ComplianceRegistryStub is
-    IComplianceRegistryStub,
-    AccessControlUpgradeable
-{
+contract TestComplianceRegistryStub is IComplianceRegistryStub, AccessControl {
     bytes32 public constant ADMIN_ROLE =
         keccak256("compliance-registry-stub.admin.role");
-    bytes32 public constant PROPOSAL_MANAGEMENT_ROLE =
-        keccak256("compliance-registry-stub.proposal_management.role");
+    bytes32 public constant MANAGER_ROLE =
+        keccak256("compliance-registry-stub.manager.role");
+    bytes32 public constant GUARDIAN_NODE =
+        keccak256("compliance-registry-stub.guardian.role");
 
     struct RegistrySlot {
         uint256 maxProposals;
@@ -27,17 +27,15 @@ contract ComplianceRegistryStub is
 
     RegistrySlot public blacklist;
     RegistrySlot public whitelist;
-    RegistryFactory public factory;
+    TestFactory _deployer;
 
-    function initialize(
-        address _admin,
-        address _factory,
-        address _proposal_management
-    ) public initializer {
+    constructor(address _admin, address deployer) {
         _grantRole(ADMIN_ROLE, _admin);
-        _grantRole(PROPOSAL_MANAGEMENT_ROLE, _proposal_management);
+        _setRoleAdmin(MANAGER_ROLE, ADMIN_ROLE);
+        _setRoleAdmin(GUARDIAN_NODE, ADMIN_ROLE);
 
-        factory = RegistryFactory(_factory);
+        _deployer = TestFactory(deployer);
+
         blacklist = RegistrySlot({maxProposals: 10, cumulative: 0});
         whitelist = RegistrySlot({maxProposals: 10, cumulative: 0});
         require(hasRole(ADMIN_ROLE, _admin));
@@ -45,12 +43,12 @@ contract ComplianceRegistryStub is
 
     function confirmProposal(
         ProposalCommon.Proposal memory proposal
-    ) external override onlyRole(PROPOSAL_MANAGEMENT_ROLE) {
+    ) external override onlyRole(GUARDIAN_NODE) {
         if (proposal.status != ProposalCommon.ProposalStatus.Approved)
-            revert ComplianceRegistryStub__InvalidConfirmProposalStatus();
+            revert ComplianceRegistryStub_L1__InvalidConfirmProposalStatus();
         if (proposal.isWhitelist) {
             uint256 pivot = whitelist.cumulative / whitelist.maxProposals;
-            (address registry, bool isCreated) = factory.deploy(
+            (address registry, bool isCreated) = _deployer.upsert(
                 pivot,
                 address(this),
                 true
@@ -66,7 +64,7 @@ contract ComplianceRegistryStub is
             );
         } else {
             uint256 pivot = blacklist.cumulative / blacklist.maxProposals;
-            (address registry, bool isCreated) = factory.deploy(
+            (address registry, bool isCreated) = _deployer.upsert(
                 pivot,
                 address(this),
                 false
@@ -91,7 +89,7 @@ contract ComplianceRegistryStub is
             idx < whitelist.cumulative / whitelist.maxProposals;
             idx++
         ) {
-            (address registry, bool isZero) = factory.get(idx, true);
+            (address registry, bool isZero) = _deployer.get(idx, true);
             if (!isZero) continue;
             if (IComplianceRegistry(registry).checkCompliance(account)) {
                 return true;
@@ -108,7 +106,7 @@ contract ComplianceRegistryStub is
             idx < blacklist.cumulative / blacklist.maxProposals;
             idx++
         ) {
-            (address registry, bool isZero) = factory.get(idx, false);
+            (address registry, bool isZero) = _deployer.get(idx, false);
             if (!isZero) continue;
             if (IComplianceRegistry(registry).checkCompliance(account)) {
                 return true;

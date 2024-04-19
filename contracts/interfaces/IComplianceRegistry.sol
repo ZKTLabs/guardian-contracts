@@ -25,11 +25,11 @@ interface IComplianceRegistry is IComplianceEntry, IComplianceEvent {
         ProposalCommon.Proposal memory proposal
     ) external;
 
-    function checkAddress(address account) external view returns (bool);
+    function checkCompliance(address account) external view returns (bool);
 
-    function isWhitelistRegistry() external view returns (bool);
+    function isExceed() external view returns (bool);
 
     function decodeBytes(
         bytes memory data
-    ) external view returns (address, bytes32);
+    ) external view returns (address);
 }

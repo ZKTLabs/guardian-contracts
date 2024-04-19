@@ -13,7 +13,6 @@ interface IProposalManagement is IProposalManagementEvent {
         bytes[] calldata targets,
         bool isWhitelist,
         string calldata region,
-        string calldata description,
         bytes calldata signature
     ) external;
 

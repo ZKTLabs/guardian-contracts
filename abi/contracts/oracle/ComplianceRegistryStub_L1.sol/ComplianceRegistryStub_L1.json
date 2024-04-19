@@ -22,17 +22,7 @@
   },
   {
     "inputs": [],
-    "name": "ComplianceRegistryStub_L1__BlacklistRegistryNotEnough",
-    "type": "error"
-  },
-  {
-    "inputs": [],
     "name": "ComplianceRegistryStub_L1__InvalidConfirmProposalStatus",
-    "type": "error"
-  },
-  {
-    "inputs": [],
-    "name": "ComplianceRegistryStub_L1__WhitelistRegistryNotEnough",
     "type": "error"
   },
   {
@@ -255,37 +245,18 @@
     "type": "function"
   },
   {
-    "inputs": [
-      {
-        "internalType": "contract IComplianceRegistry",
-        "name": "registry",
-        "type": "address"
-      },
-      {
-        "internalType": "bool",
-        "name": "useWhitelist",
-        "type": "bool"
-      }
-    ],
-    "name": "addRegistry",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "name": "blacklistRegistries",
+    "inputs": [],
+    "name": "blacklist",
     "outputs": [
       {
-        "internalType": "contract IComplianceRegistry",
-        "name": "",
-        "type": "address"
+        "internalType": "uint256",
+        "name": "maxProposals",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "cumulative",
+        "type": "uint256"
       }
     ],
     "stateMutability": "view",
@@ -314,11 +285,6 @@
             "internalType": "bool",
             "name": "isWhitelist",
             "type": "bool"
-          },
-          {
-            "internalType": "string",
-            "name": "description",
-            "type": "string"
           },
           {
             "internalType": "string",
@@ -362,19 +328,13 @@
     "type": "function"
   },
   {
-    "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "name": "cumulativeProposals",
+    "inputs": [],
+    "name": "factory",
     "outputs": [
       {
-        "internalType": "uint256",
+        "internalType": "contract RegistryFactory",
         "name": "",
-        "type": "uint256"
+        "type": "address"
       }
     ],
     "stateMutability": "view",
@@ -447,6 +407,11 @@
         "internalType": "address",
         "name": "_admin",
         "type": "address"
+      },
+      {
+        "internalType": "address",
+        "name": "_factory",
+        "type": "address"
       }
     ],
     "name": "initialize",
@@ -495,44 +460,6 @@
   {
     "inputs": [
       {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "name": "maxProposalEachRegistries",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "name": "registriesCount",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
         "internalType": "bytes32",
         "name": "role",
         "type": "bytes32"
@@ -544,29 +471,6 @@
       }
     ],
     "name": "renounceRole",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "contract IComplianceRegistry",
-        "name": "registry",
-        "type": "address"
-      },
-      {
-        "internalType": "bool",
-        "name": "useWhitelist",
-        "type": "bool"
-      },
-      {
-        "internalType": "uint256",
-        "name": "index",
-        "type": "uint256"
-      }
-    ],
-    "name": "replaceRegistry",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
@@ -609,32 +513,18 @@
     "type": "function"
   },
   {
-    "inputs": [
-      {
-        "internalType": "uint256[]",
-        "name": "_maxProposalEachRegistries",
-        "type": "uint256[]"
-      }
-    ],
-    "name": "updateMaxProposalEachRegistries",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "name": "whitelistRegistries",
+    "inputs": [],
+    "name": "whitelist",
     "outputs": [
       {
-        "internalType": "contract IComplianceRegistry",
-        "name": "",
-        "type": "address"
+        "internalType": "uint256",
+        "name": "maxProposals",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "cumulative",
+        "type": "uint256"
       }
     ],
     "stateMutability": "view",

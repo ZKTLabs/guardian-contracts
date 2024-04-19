@@ -41,6 +41,13 @@ const config: HardhatUserConfig = {
     }
   },
   networks: {
+    hardhat: {
+      // forking: {
+      //   // url: `https://mainnet.infura.io/v3/${INFURA_API_KEY}`,
+      //   url: "https://zkt-network.rpc.caldera.xyz/http",  // RPC URL Here
+      // },
+      gasPrice: 1052989477
+    },
     zkt_test: {
       url: "https://zkt-network.rpc.caldera.xyz/http",  // RPC URL Here
       chainId: 48238,
@@ -58,6 +65,9 @@ const config: HardhatUserConfig = {
   abiExporter: {
     runOnCompile: true,
   },
+  mocha: {
+    timeout: 60000
+  }
 };
 
 export default config;

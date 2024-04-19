@@ -50,11 +50,6 @@
           },
           {
             "internalType": "string",
-            "name": "description",
-            "type": "string"
-          },
-          {
-            "internalType": "string",
             "name": "region",
             "type": "string"
           },
@@ -102,7 +97,7 @@
         "type": "address"
       }
     ],
-    "name": "checkAddress",
+    "name": "checkCompliance",
     "outputs": [
       {
         "internalType": "bool",
@@ -127,11 +122,6 @@
         "internalType": "address",
         "name": "",
         "type": "address"
-      },
-      {
-        "internalType": "bytes32",
-        "name": "",
-        "type": "bytes32"
       }
     ],
     "stateMutability": "view",
@@ -139,7 +129,7 @@
   },
   {
     "inputs": [],
-    "name": "isWhitelistRegistry",
+    "name": "isExceed",
     "outputs": [
       {
         "internalType": "bool",

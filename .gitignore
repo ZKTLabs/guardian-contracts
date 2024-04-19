@@ -16,3 +16,5 @@ node_modules
 .idea
 .openzeppelin
 scripts
+test/*.json
+test/*.s.ts

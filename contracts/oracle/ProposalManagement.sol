@@ -62,7 +62,6 @@ contract ProposalManagement is IProposalManagement, AccessControlUpgradeable {
         bytes[] calldata targets,
         bool isWhitelist,
         string calldata region,
-        string calldata description,
         bytes calldata signature
     ) external override onlyRole(SPEAKER_ROLE) {
         if (
@@ -88,7 +87,6 @@ contract ProposalManagement is IProposalManagement, AccessControlUpgradeable {
             author: _msgSender(),
             targets: targets,
             isWhitelist: isWhitelist,
-            description: description,
             region: region,
             timestamp: block.timestamp,
             status: ProposalCommon.ProposalStatus.Pending,

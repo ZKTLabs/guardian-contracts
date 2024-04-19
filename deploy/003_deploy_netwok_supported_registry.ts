@@ -22,15 +22,15 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
     from: deployer,
     log: true,
   });
-  // const networkSupportedRegistry = await ethers.getContractAt(
-  //   "NetworkSupportedRegistry",
-  //   deployResulted.address
-  // );
-  // const tx = await networkSupportedRegistry["batchAddNetworks(string[])"](
-  //   supportedNetworkNames
-  // );
-  // await tx.wait();
-  // console.log(`batchAddNetworks finish: ${tx.hash}`);
+  const networkSupportedRegistry = await ethers.getContractAt(
+    "NetworkSupportedRegistry",
+    deployResulted.address
+  );
+  const tx = await networkSupportedRegistry["batchAddNetworks(string[])"](
+    supportedNetworkNames
+  );
+  await tx.wait();
+  console.log(`batchAddNetworks finish: ${tx.hash}`);
 };
 
 func.id = "deploy_network_supported_registry";

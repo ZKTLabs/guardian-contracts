@@ -331,11 +331,6 @@
         "type": "string"
       },
       {
-        "internalType": "string",
-        "name": "description",
-        "type": "string"
-      },
-      {
         "internalType": "bytes",
         "name": "signature",
         "type": "bytes"
@@ -468,11 +463,6 @@
         "internalType": "bool",
         "name": "isWhitelist",
         "type": "bool"
-      },
-      {
-        "internalType": "string",
-        "name": "description",
-        "type": "string"
       },
       {
         "internalType": "string",

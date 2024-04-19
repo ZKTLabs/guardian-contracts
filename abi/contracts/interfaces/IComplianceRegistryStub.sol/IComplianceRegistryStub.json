@@ -94,11 +94,6 @@
           },
           {
             "internalType": "string",
-            "name": "description",
-            "type": "string"
-          },
-          {
-            "internalType": "string",
             "name": "region",
             "type": "string"
           },

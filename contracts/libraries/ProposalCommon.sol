@@ -14,7 +14,6 @@ library ProposalCommon {
         address author;
         bytes[] targets;
         bool isWhitelist;
-        string description;
         string region;
         uint256 timestamp;
         ProposalStatus status;
