@@ -56,7 +56,7 @@ contract RegistryIndexFactory is AccessControl {
     function deploy(
         uint256 pivot,
         address stub
-    ) external onlyRole(COMPLIANCE_REGISTRY_STUB_ROLE) returns (address) {
+    ) external returns (address) {
         bytes32 salt = getSalt(pivot);
         bytes memory bytecode = getByteCode();
         address registryIndex = Create2.computeAddress(

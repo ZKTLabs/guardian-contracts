@@ -74,11 +74,11 @@ contract RegistryFactory is AccessControl {
         assembly {
             codeSize := extcodesize(registry)
         }
-        if (codeSize == 0) {
-            Create2.deploy(0, salt, bytecode);
-            ComplianceRegistry(registry).initialize(index);
-            return registry;
-        }
+//        if (codeSize == 0) {
+//            Create2.deploy(0, salt, bytecode);
+//            ComplianceRegistry(registry).initialize(index);
+//            return registry;
+//        }
         return registry;
     }
 
