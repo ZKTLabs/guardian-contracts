@@ -3,7 +3,6 @@ pragma solidity ^0.8.0;
 
 import {AccessControl} from "@openzeppelin/contracts/access/AccessControl.sol";
 import {Initializable} from "@openzeppelin/contracts/proxy/utils/Initializable.sol";
-import {IComplianceRegistry} from "../interfaces/IComplianceRegistry.sol";
 import {ProposalCommon} from "../libraries/ProposalCommon.sol";
 
 abstract contract ComplianceRegistry is AccessControl, Initializable {

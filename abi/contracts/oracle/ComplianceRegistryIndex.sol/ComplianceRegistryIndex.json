@@ -163,19 +163,6 @@
     "type": "function"
   },
   {
-    "inputs": [],
-    "name": "factory",
-    "outputs": [
-      {
-        "internalType": "contract RegistryFactory",
-        "name": "",
-        "type": "address"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
     "inputs": [
       {
         "internalType": "address",
@@ -269,13 +256,26 @@
       },
       {
         "internalType": "address",
-        "name": "_factory",
+        "name": "_registryFactory",
         "type": "address"
       }
     ],
     "name": "initialize",
     "outputs": [],
     "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "registryFactory",
+    "outputs": [
+      {
+        "internalType": "contract IRegistryFactory",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
     "type": "function"
   },
   {

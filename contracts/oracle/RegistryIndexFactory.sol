@@ -4,7 +4,6 @@ pragma solidity ^0.8.4;
 import {AccessControl} from "@openzeppelin/contracts/access/AccessControl.sol";
 import {Create2} from "@openzeppelin/contracts/utils/Create2.sol";
 import {ComplianceRegistryIndex} from "./ComplianceRegistryIndex.sol";
-import {RegistryFactory} from "./RegistryFactory.sol";
 
 contract RegistryIndexFactory is AccessControl {
     bytes32 public constant ADMIN_ROLE =
@@ -73,10 +72,6 @@ contract RegistryIndexFactory is AccessControl {
             ComplianceRegistryIndex(registryIndex).initialize(
                 stub,
                 slot.registryFactory
-            );
-            RegistryFactory(slot.registryFactory).grantRole(
-                COMPLIANCE_REGISTRY_INDEX,
-                registryIndex
             );
             return registryIndex;
         }

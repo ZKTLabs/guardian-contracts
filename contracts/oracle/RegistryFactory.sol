@@ -23,8 +23,6 @@ contract RegistryFactory is AccessControl {
     constructor(address admin, uint256 base) {
         _grantRole(ADMIN_ROLE, admin);
 
-        // grant admin_role to registryIndexFactory
-        _setRoleAdmin(ADMIN_ROLE, ADMIN_ROLE);
         _setRoleAdmin(COMPLIANCE_REGISTRY_INDEX, ADMIN_ROLE);
         slot = Slot({admin: admin, base: base});
         require(hasRole(ADMIN_ROLE, admin));

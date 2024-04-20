@@ -27,6 +27,11 @@
   },
   {
     "inputs": [],
+    "name": "ComplianceRegistryStub_L1__OnlyAllowScripting",
+    "type": "error"
+  },
+  {
+    "inputs": [],
     "name": "InvalidInitialization",
     "type": "error"
   },
@@ -191,6 +196,34 @@
   {
     "inputs": [
       {
+        "internalType": "uint256",
+        "name": "pivot",
+        "type": "uint256"
+      },
+      {
+        "internalType": "address",
+        "name": "index",
+        "type": "address"
+      },
+      {
+        "internalType": "bool",
+        "name": "useWhitelist",
+        "type": "bool"
+      },
+      {
+        "internalType": "address",
+        "name": "account",
+        "type": "address"
+      }
+    ],
+    "name": "callback",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
         "components": [
           {
             "internalType": "bytes32",
@@ -273,19 +306,6 @@
     "type": "function"
   },
   {
-    "inputs": [],
-    "name": "factory",
-    "outputs": [
-      {
-        "internalType": "contract RegistryIndexFactory",
-        "name": "",
-        "type": "address"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
     "inputs": [
       {
         "internalType": "bytes32",
@@ -355,7 +375,12 @@
       },
       {
         "internalType": "address",
-        "name": "_factory",
+        "name": "_registryIndexFactory",
+        "type": "address"
+      },
+      {
+        "internalType": "address",
+        "name": "_registryFactory",
         "type": "address"
       }
     ],
@@ -397,6 +422,32 @@
         "internalType": "bool",
         "name": "",
         "type": "bool"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "registryFactory",
+    "outputs": [
+      {
+        "internalType": "contract IRegistryFactory",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "registryIndexFactory",
+    "outputs": [
+      {
+        "internalType": "contract IRegistryIndexFactory",
+        "name": "",
+        "type": "address"
       }
     ],
     "stateMutability": "view",
