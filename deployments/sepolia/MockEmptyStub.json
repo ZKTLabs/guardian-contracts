@@ -1,0 +1,79 @@
+{
+  "address": "0x348c14705AD4B0588266ED4A6a5c0Dd9Df1EE405",
+  "abi": [
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "name": "isBlacklist",
+      "outputs": [
+        {
+          "internalType": "bool",
+          "name": "",
+          "type": "bool"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "name": "isWhitelist",
+      "outputs": [
+        {
+          "internalType": "bool",
+          "name": "",
+          "type": "bool"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    }
+  ],
+  "transactionHash": "0x0ae51b4e6f82d4292f9fafbd2eb2ebf85ff4cdafd63fad086e48ea32abdac381",
+  "receipt": {
+    "to": null,
+    "from": "0xdfcb98d66336084326Bf69a0e55Ed15c2Ae24008",
+    "contractAddress": "0x348c14705AD4B0588266ED4A6a5c0Dd9Df1EE405",
+    "transactionIndex": 153,
+    "gasUsed": "100933",
+    "logsBloom": "0x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+    "blockHash": "0x39fef9c15c2911d7556bd2f3d866739ffbe33335b3e0f74954ec1e8899213dfc",
+    "transactionHash": "0x0ae51b4e6f82d4292f9fafbd2eb2ebf85ff4cdafd63fad086e48ea32abdac381",
+    "logs": [],
+    "blockNumber": 5744719,
+    "cumulativeGasUsed": "17865018",
+    "status": 1,
+    "byzantium": true
+  },
+  "args": [],
+  "numDeployments": 1,
+  "solcInputHash": "c04ff3a5d6023b31023297fad06af492",
+  "metadata": "{\"compiler\":{\"version\":\"0.8.20+commit.a1b79de6\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"inputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"name\":\"isBlacklist\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"name\":\"isWhitelist\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\"}],\"stateMutability\":\"view\",\"type\":\"function\"}],\"devdoc\":{\"kind\":\"dev\",\"methods\":{},\"version\":1},\"userdoc\":{\"kind\":\"user\",\"methods\":{},\"version\":1}},\"settings\":{\"compilationTarget\":{\"contracts/tests/MockEmptyStub.sol\":\"MockEmptyStub\"},\"evmVersion\":\"paris\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"none\",\"useLiteralContent\":true},\"optimizer\":{\"details\":{\"constantOptimizer\":true,\"cse\":true,\"deduplicate\":true,\"inliner\":true,\"jumpdestRemover\":true,\"orderLiterals\":true,\"peephole\":true,\"yul\":false},\"runs\":200},\"remappings\":[]},\"sources\":{\"contracts/tests/MockEmptyStub.sol\":{\"content\":\"// SPDX-License-Identifier: MIT\\npragma solidity ^0.8.4;\\n\\ncontract MockEmptyStub {\\n    function isBlacklist(address) external view returns (bool) {\\n        return false;\\n    }\\n\\n    function isWhitelist(address) external view returns (bool) {\\n        return true;\\n    }\\n}\\n\",\"keccak256\":\"0xa8f4b5d7e42a04e878e57da9b58b86a0a78938cc4778a327fc64d6ce29850e61\",\"license\":\"MIT\"}},\"version\":1}",
+  "bytecode": "0x608060405234801561001057600080fd5b5060dc8061001f6000396000f3fe6080604052348015600f57600080fd5b506004361060325760003560e01c8063333e99db146037578063c683630d14605c575b600080fd5b60486042366004609d565b50600090565b6040516053919060c2565b60405180910390f35b60486067366004609d565b50600190565b60006001600160a01b0382165b92915050565b608781606d565b8114609157600080fd5b50565b8035607a816080565b60006020828403121560b05760b0600080fd5b600060ba84846094565b949350505050565b811515815260208101607a56fea164736f6c6343000814000a",
+  "deployedBytecode": "0x6080604052348015600f57600080fd5b506004361060325760003560e01c8063333e99db146037578063c683630d14605c575b600080fd5b60486042366004609d565b50600090565b6040516053919060c2565b60405180910390f35b60486067366004609d565b50600190565b60006001600160a01b0382165b92915050565b608781606d565b8114609157600080fd5b50565b8035607a816080565b60006020828403121560b05760b0600080fd5b600060ba84846094565b949350505050565b811515815260208101607a56fea164736f6c6343000814000a",
+  "devdoc": {
+    "kind": "dev",
+    "methods": {},
+    "version": 1
+  },
+  "userdoc": {
+    "kind": "user",
+    "methods": {},
+    "version": 1
+  },
+  "storageLayout": {
+    "storage": [],
+    "types": null
+  }
+}
