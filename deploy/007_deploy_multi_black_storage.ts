@@ -39,7 +39,7 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
     // const jsonData = JSON.stringify(blacklistArray, null, 2)
     // fs.writeFileSync("blacklistArray.json", jsonData)
 
-    for (let i = 43; i < registryIndexArray.length; i++) {
+    for (let i = 0; i < registryIndexArray.length; i++) {
         for (let j = 0; j < 1; j++) {
             const address = await registryFactory.deploy.staticCall(
                 j,

@@ -16,23 +16,24 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
     const stub = (await ethers.getContract("ComplianceRegistryStub_L1")) as ComplianceRegistryStub_L1;
     const BASE_MODE = toNumber(await stub.BASE_MODE());
     const stubAddress = await stub.getAddress();
-    let jsonObj = fs.readFileSync("registryIndexArray.json");
-    let registryIndexArray = JSON.parse(jsonObj.toString());
-    if (registryIndexArray.length == 0) {
-        throw new Error("registryIndexArray is empty");
-    }
-    // let registryIndexArray = [];
-    // /// index
-    // for (let i = 0; i < BASE_MODE; i++) {
-    //     const address = await registryIndexFactory.deploy.staticCall(
-    //         i,
-    //         stubAddress
-    //     );
-    //     registryIndexArray.push(address)
+    // let jsonObj = fs.readFileSync("registryIndexArray.json");
+    // let registryIndexArray = JSON.parse(jsonObj.toString());
+    // if (registryIndexArray.length == 0) {
+    //     throw new Error("registryIndexArray is empty");
     // }
-    // let jsonData = JSON.stringify(registryIndexArray, null, 2);
-    // fs.writeFileSync("registryIndexArray.json", jsonData)
-    for (let i = 73; i < BASE_MODE; i++) {
+    let registryIndexArray = [];
+    /// index
+    for (let i = 0; i < BASE_MODE; i++) {
+        const address = await registryIndexFactory.deploy.staticCall(
+            i,
+            stubAddress
+        );
+        registryIndexArray.push(address)
+    }
+    let jsonData = JSON.stringify(registryIndexArray, null, 2);
+    fs.writeFileSync("registryIndexArray.json", jsonData)
+
+    for (let i = 0; i < BASE_MODE; i++) {
         const tx = await registryIndexFactory.deploy(i, stubAddress, {gasPrice: 15544294392});
         await tx.wait()
         console.log(`finish index: ${i}, contractAddr: ${registryIndexArray[i]}`)

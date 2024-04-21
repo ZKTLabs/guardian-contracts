@@ -22,8 +22,12 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
             execute: {
                 init: {
                     methodName: "initialize",
-                    args: [deployer, await registryFactory.getAddress(), await registryIndexFactory.getAddress()],
+                    args: [deployer, await registryIndexFactory.getAddress(), await registryFactory.getAddress()],
                 },
+                // onUpgrade:{
+                //     methodName: "switchRegistry",
+                //     args: [],
+                // }
             },
         },
         log: true,
@@ -32,5 +36,5 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
 
 func.id = "deploy_compliance_registry_stub_l1";
 func.tags = ["DeployComplianceRegistryStub_L1"];
-func.dependencies = ["DeployRegistryIndexFactory"];
+// func.dependencies = ["DeployRegistryIndexFactory"];
 export default func;
