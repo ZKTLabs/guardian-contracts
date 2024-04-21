@@ -8,6 +8,11 @@
       },
       {
         "internalType": "address",
+        "name": "index",
+        "type": "address"
+      },
+      {
+        "internalType": "address",
         "name": "stub",
         "type": "address"
       },
@@ -34,6 +39,11 @@
         "internalType": "uint256",
         "name": "pivot",
         "type": "uint256"
+      },
+      {
+        "internalType": "address",
+        "name": "index",
+        "type": "address"
       },
       {
         "internalType": "bool",

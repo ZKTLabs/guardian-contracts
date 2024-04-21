@@ -120,7 +120,7 @@
   },
   {
     "inputs": [],
-    "name": "COMPLIANCE_REGISTRY_INDEX_ROLE",
+    "name": "COMPLIANCE_REGISTRY_STUB_ROLE",
     "outputs": [
       {
         "internalType": "bytes32",

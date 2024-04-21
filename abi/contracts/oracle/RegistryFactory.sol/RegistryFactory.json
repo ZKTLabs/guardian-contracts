@@ -37,6 +37,32 @@
     "type": "error"
   },
   {
+    "inputs": [],
+    "name": "Create2EmptyBytecode",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "Create2FailedDeployment",
+    "type": "error"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "balance",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "needed",
+        "type": "uint256"
+      }
+    ],
+    "name": "Create2InsufficientBalance",
+    "type": "error"
+  },
+  {
     "anonymous": false,
     "inputs": [
       {
@@ -126,19 +152,6 @@
   },
   {
     "inputs": [],
-    "name": "COMPLIANCE_REGISTRY_INDEX",
-    "outputs": [
-      {
-        "internalType": "bytes32",
-        "name": "",
-        "type": "bytes32"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [],
     "name": "DEFAULT_ADMIN_ROLE",
     "outputs": [
       {
@@ -158,8 +171,13 @@
         "type": "uint256"
       },
       {
-        "internalType": "address",
+        "internalType": "uint256",
         "name": "index",
+        "type": "uint256"
+      },
+      {
+        "internalType": "address",
+        "name": "stub",
         "type": "address"
       },
       {
@@ -184,6 +202,11 @@
       {
         "internalType": "uint256",
         "name": "pivot",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "index",
         "type": "uint256"
       },
       {

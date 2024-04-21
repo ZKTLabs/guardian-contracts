@@ -6,19 +6,19 @@ import {Initializable} from "@openzeppelin/contracts/proxy/utils/Initializable.s
 import {ProposalCommon} from "../libraries/ProposalCommon.sol";
 
 abstract contract ComplianceRegistry is AccessControl, Initializable {
-    bytes32 public constant COMPLIANCE_REGISTRY_INDEX_ROLE =
+    bytes32 public constant COMPLIANCE_REGISTRY_STUB_ROLE =
         keccak256("compliance-registry.index.role");
     bytes32 public constant ZKT_KEY = keccak256("ZKT");
 
     mapping(bytes32 => bool) public accounts;
 
     function initialize(address _index) public initializer {
-        _grantRole(COMPLIANCE_REGISTRY_INDEX_ROLE, _index);
+        _grantRole(COMPLIANCE_REGISTRY_STUB_ROLE, _index);
     }
 
     function store(
         address account
-    ) external onlyRole(COMPLIANCE_REGISTRY_INDEX_ROLE) {
+    ) external onlyRole(COMPLIANCE_REGISTRY_STUB_ROLE) {
         accounts[key(account)] = true;
     }
 

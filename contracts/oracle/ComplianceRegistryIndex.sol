@@ -3,6 +3,7 @@ pragma solidity ^0.8.4;
 
 import {AccessControl} from "@openzeppelin/contracts/access/AccessControl.sol";
 import {Initializable} from "@openzeppelin/contracts/proxy/utils/Initializable.sol";
+import "hardhat/console.sol";
 
 interface ICallback {
     function callback(
@@ -14,34 +15,50 @@ interface ICallback {
 }
 
 interface IComplianceRegistry {
+    function store(address account) external;
+
     function check(address account) external view returns (bool);
+
+    function verify() external view returns (bool);
 }
 
 interface IRegistryFactory {
-    function deploy(uint256 pivot, address stub, bool useWhitelist) external returns (address);
+    function deploy(
+        uint256 pivot,
+        address index,
+        address stub,
+        bool useWhitelist
+    ) external returns (address);
 
-    function get(uint256 pivot, bool useWhitelist) external view returns (address, bool);
+    function get(
+        uint256 pivot,
+        address index,
+        bool useWhitelist
+    ) external view returns (address, bool);
 }
 
 contract ComplianceRegistryIndex is AccessControl, Initializable {
     bytes32 public constant COMPLIANCE_REGISTRY_STUB_ROLE =
-    keccak256("compliance-registry-index.stub.role");
+        keccak256("compliance-registry-index.stub.role");
 
     struct RegistrySlot {
         uint256 stepCumulative;
         uint256 cumulative;
     }
 
+    uint256 public index;
     RegistrySlot public blacklist;
     RegistrySlot public whitelist;
     IRegistryFactory public registryFactory;
 
     function initialize(
+        uint256 _index,
         address _stub,
         address _registryFactory
     ) public initializer {
         _grantRole(COMPLIANCE_REGISTRY_STUB_ROLE, _stub);
 
+        index = _index;
         blacklist = RegistrySlot({stepCumulative: 1000, cumulative: 0});
         whitelist = RegistrySlot({stepCumulative: 1000, cumulative: 0});
         registryFactory = IRegistryFactory(_registryFactory);
@@ -79,6 +96,7 @@ contract ComplianceRegistryIndex is AccessControl, Initializable {
         for (uint256 idx = 0; idx < cumulative / stepCumulative; idx++) {
             (address registry, bool isZero) = registryFactory.get(
                 idx,
+                address(this),
                 useWhitelist
             );
             if (!isZero) continue;

@@ -6,21 +6,47 @@ import {ProposalCommon} from "../libraries/ProposalCommon.sol";
 
 error ComplianceRegistryStub_L1__InvalidConfirmProposalStatus();
 error ComplianceRegistryStub_L1__OnlyAllowScripting();
+error ComplianceRegistryStub_L1__RegistryIndexNotCreated(
+    address,
+    uint256,
+    address
+);
+error ComplianceRegistryStub_L1__RegistryNotCreated(
+    address,
+    uint256,
+    uint256,
+    bool,
+    address
+);
 
 interface IComplianceRegistry {
     function store(address account) external;
 }
 
 interface IComplianceRegistryIndex {
+    function index() external view returns (uint256);
+
     function store(address account, bool useWhitelist) external;
 
-    function get(address account, bool useWhitelist) external view returns (bool);
+    function get(
+        address account,
+        bool useWhitelist
+    ) external view returns (bool);
 }
 
 interface IRegistryFactory {
-    function deploy(uint256 pivot, address stub, bool useWhitelist) external returns (address);
+    function deploy(
+        uint256 pivot,
+        uint256 index,
+        address stub,
+        bool useWhitelist
+    ) external returns (address);
 
-    function get(uint256 pivot, bool useWhitelist) external view returns (address, bool);
+    function get(
+        uint256 pivot,
+        uint256 index,
+        bool useWhitelist
+    ) external view returns (address, bool);
 }
 
 interface IRegistryIndexFactory {
@@ -36,7 +62,7 @@ contract ComplianceRegistryStub_L1 is AccessControlUpgradeable {
         keccak256("compliance-registry-stub-1.manager.role");
     bytes32 public constant GUARDIAN_NODE =
         keccak256("compliance-registry-stub-l1.guardian.role");
-    uint256 public constant BASE_MODE = 1000;
+    uint256 public constant BASE_MODE = 100;
 
     IRegistryFactory public registryFactory;
     IRegistryIndexFactory public registryIndexFactory;
@@ -71,10 +97,15 @@ contract ComplianceRegistryStub_L1 is AccessControlUpgradeable {
         for (uint256 idx = 0; idx < proposal.targets.length; idx++) {
             address target = decodeAddressBytes(proposal.targets[idx]);
             uint256 pivot = uint160(target) % BASE_MODE;
-            address registryIndex = registryIndexFactory.deploy(
-                pivot,
-                address(this)
+            (address registryIndex, bool notCreated) = registryIndexFactory.get(
+                pivot
             );
+            if (notCreated)
+                revert ComplianceRegistryStub_L1__RegistryIndexNotCreated(
+                    address(registryIndexFactory),
+                    pivot,
+                    registryIndex
+                );
             scripting = registryIndex;
             IComplianceRegistryIndex(registryIndex).store(
                 target,
@@ -85,25 +116,39 @@ contract ComplianceRegistryStub_L1 is AccessControlUpgradeable {
 
     function callback(
         uint256 pivot,
-        address index,
+        address caller,
         bool useWhitelist,
         address account
     ) external {
-        if (scripting != index)
+        if (scripting != caller)
             revert ComplianceRegistryStub_L1__OnlyAllowScripting();
-        address registry = registryFactory.deploy(
+        (address registry, bool notCreated) = registryFactory.get(
             pivot,
-            address(this),
+            IComplianceRegistryIndex(caller).index(),
             useWhitelist
         );
+        if (notCreated)
+            revert ComplianceRegistryStub_L1__RegistryNotCreated(
+                address(registryFactory),
+                pivot,
+                IComplianceRegistryIndex(caller).index(),
+                useWhitelist,
+                registry
+            );
         IComplianceRegistry(registry).store(account);
     }
 
     function isWhitelist(address account) external view returns (bool) {
         uint256 pivot = uint160(account) % BASE_MODE;
-        (address registryIndex, bool notCreated) = registryIndexFactory.get(pivot);
+        (address registryIndex, bool notCreated) = registryIndexFactory.get(
+            pivot
+        );
         if (!notCreated) {
-            return IComplianceRegistryIndex(registryIndex).get(account, true);
+            return
+                IComplianceRegistryIndex(registryIndex).get(
+                    account,
+                    true
+                );
         } else {
             return false;
         }
@@ -111,9 +156,15 @@ contract ComplianceRegistryStub_L1 is AccessControlUpgradeable {
 
     function isBlacklist(address account) external view returns (bool) {
         uint256 pivot = uint160(account) % BASE_MODE;
-        (address registryIndex, bool notCreated) = registryIndexFactory.get(pivot);
+        (address registryIndex, bool notCreated) = registryIndexFactory.get(
+            pivot
+        );
         if (!notCreated) {
-            return IComplianceRegistryIndex(registryIndex).get(account, false);
+            return
+                IComplianceRegistryIndex(registryIndex).get(
+                    account,
+                    false
+                );
         } else {
             return false;
         }
