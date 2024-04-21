@@ -30,13 +30,13 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
     }
     let jsonData = JSON.stringify(registryIndexArray, null, 2);
     fs.writeFileSync("registryIndexArray.json", jsonData)
-    for (let i = 0; i < BASE_MODE; i++) {
+    for (let i = 40; i < BASE_MODE; i++) {
         const tx = await registryIndexFactory.deploy(i, stubAddress);
         await tx.wait()
     }
 };
 
-func.id = "deploy_multi_index_storage";
-func.tags = ["DeployMultiIndexStorage"];
+func.id = "deploy_multi_index";
+func.tags = ["DeployMultiIndex"];
 func.dependencies = ["DeployComplianceRegistryStub_L1"];
 export default func;

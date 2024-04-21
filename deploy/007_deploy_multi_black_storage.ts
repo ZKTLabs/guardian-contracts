@@ -20,8 +20,26 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
     const stubAddress = await stub.getAddress();
     let jsonObj = fs.readFileSync("registryIndexArray.json");
     let registryIndexArray = JSON.parse(jsonObj.toString());
+    if (registryIndexArray.length == 0) {
+        throw new Error("registryIndexArray is empty");
+    }
 
     /// blacklist
+    let blacklistArray = []
+    for (let i = 0; i < registryIndexArray.length; i++) {
+        for (let j = 0; j < 4; j++) {
+            const address = await registryFactory.deploy.staticCall(
+                j,
+                registryIndexArray[i],
+                stubAddress,
+                false
+            );
+            blacklistArray.push(address);
+        }
+    }
+    const jsonData = JSON.stringify(blacklistArray, null, 2)
+    fs.writeFileSync("blacklistArray.json", jsonData)
+
     for (let i = 0; i < registryIndexArray.length; i++) {
         for (let j = 0; j < 4; j++) {
             const tx = await registryFactory.deploy(
@@ -35,7 +53,7 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
     }
 };
 
-func.id = "deploy_multi_index_storage";
-func.tags = ["DeployMultiIndexStorage"];
+func.id = "deploy_multi_black_storage";
+func.tags = ["DeployMultiBlackStorage"];
 func.dependencies = ["DeployComplianceRegistryStub_L1"];
 export default func;

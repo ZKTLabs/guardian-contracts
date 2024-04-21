@@ -18,3 +18,5 @@ node_modules
 scripts
 test/*.json
 test/*.s.ts
+registryIndexArray.json
+blacklistArray.json

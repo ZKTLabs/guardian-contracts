@@ -9,7 +9,7 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
     const registryFactory = await ethers.getContract("RegistryFactory")
     await deploy("RegistryIndexFactory", {
         from: deployer,
-        args: [deployer, BigInt(ethers.hexlify(ethers.randomBytes(32))), await registryFactory.getAddress()],
+        args: [BigInt(ethers.hexlify(ethers.randomBytes(32))), deployer, await registryFactory.getAddress()],
         log: true,
     });
 };
