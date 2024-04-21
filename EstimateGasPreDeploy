@@ -1,0 +1,23 @@
+# EstimateGas PreDeploy
+
+1. 981 json file, 981 * 200 = 196200 addresses
+
+2. origin swap gas cost without aggregator: 0.000508392966678471
+
+## BASE_MODE = 100
+
+1. total gas cost: 34.809551254446889545
+
+2. swap gas cost:0.000692332529678244
+
+## BASE_MODE = 200
+
+1. total gas cost: 36.357592160881869345
+
+2. swap gas cost: 0.00062934325078878
+
+## BASE_MODE = 1000
+
+1. total gas cost: 38.382444408774409461
+
+2. swap gas cost:0.00024658996005729

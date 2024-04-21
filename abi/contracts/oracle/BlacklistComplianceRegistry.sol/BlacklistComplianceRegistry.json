@@ -120,7 +120,7 @@
   },
   {
     "inputs": [],
-    "name": "COMPLIANCE_REGISTRY_INDEX_ROLE",
+    "name": "COMPLIANCE_REGISTRY_STUB_ROLE",
     "outputs": [
       {
         "internalType": "bytes32",
@@ -346,6 +346,19 @@
       }
     ],
     "name": "supportsInterface",
+    "outputs": [
+      {
+        "internalType": "bool",
+        "name": "",
+        "type": "bool"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "verify",
     "outputs": [
       {
         "internalType": "bool",

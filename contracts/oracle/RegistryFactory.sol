@@ -10,8 +10,6 @@ import {ComplianceRegistry} from "./ComplianceRegistry.sol";
 contract RegistryFactory is AccessControl {
     bytes32 public constant ADMIN_ROLE =
         keccak256("registry-factory.admin.role");
-    bytes32 public constant COMPLIANCE_REGISTRY_INDEX =
-        keccak256("registry-factory.index.role");
 
     struct Slot {
         address admin;
@@ -23,9 +21,6 @@ contract RegistryFactory is AccessControl {
     constructor(address admin, uint256 base) {
         _grantRole(ADMIN_ROLE, admin);
 
-        // grant admin_role to registryIndexFactory
-        _setRoleAdmin(ADMIN_ROLE, ADMIN_ROLE);
-        _setRoleAdmin(COMPLIANCE_REGISTRY_INDEX, ADMIN_ROLE);
         slot = Slot({admin: admin, base: base});
         require(hasRole(ADMIN_ROLE, admin));
     }
@@ -51,6 +46,7 @@ contract RegistryFactory is AccessControl {
 
     function getSalt(
         uint256 pivot,
+        address index,
         bool useWhitelist
     ) internal view returns (bytes32) {
         return
@@ -58,6 +54,7 @@ contract RegistryFactory is AccessControl {
                 abi.encodePacked(
                     bytes32(pivot),
                     slot.admin,
+                    index,
                     useWhitelist,
                     bytes32(slot.base)
                 )
@@ -67,9 +64,10 @@ contract RegistryFactory is AccessControl {
     function deploy(
         uint256 pivot,
         address index,
+        address stub,
         bool useWhitelist
-    ) external onlyRole(COMPLIANCE_REGISTRY_INDEX) returns (address) {
-        bytes32 salt = getSalt(pivot, useWhitelist);
+    ) external onlyRole(ADMIN_ROLE) returns (address) {
+        bytes32 salt = getSalt(pivot, index, useWhitelist);
         bytes memory bytecode = getByteCode(useWhitelist);
         address registry = Create2.computeAddress(salt, keccak256(bytecode));
         uint256 codeSize;
@@ -78,7 +76,7 @@ contract RegistryFactory is AccessControl {
         }
         if (codeSize == 0) {
             Create2.deploy(0, salt, bytecode);
-            ComplianceRegistry(registry).initialize(index);
+            ComplianceRegistry(registry).initialize(stub);
             return registry;
         }
         return registry;
@@ -86,9 +84,10 @@ contract RegistryFactory is AccessControl {
 
     function get(
         uint256 pivot,
+        address index,
         bool useWhitelist
     ) public view returns (address, bool) {
-        bytes32 salt = getSalt(pivot, useWhitelist);
+        bytes32 salt = getSalt(pivot, index, useWhitelist);
         bytes32 bytecodeHash = getByteCodeHash(useWhitelist);
         address registry = Create2.computeAddress(salt, bytecodeHash);
         uint256 codeSize;

@@ -4,15 +4,10 @@ pragma solidity ^0.8.4;
 import {AccessControl} from "@openzeppelin/contracts/access/AccessControl.sol";
 import {Create2} from "@openzeppelin/contracts/utils/Create2.sol";
 import {ComplianceRegistryIndex} from "./ComplianceRegistryIndex.sol";
-import {RegistryFactory} from "./RegistryFactory.sol";
 
 contract RegistryIndexFactory is AccessControl {
     bytes32 public constant ADMIN_ROLE =
         keccak256("registry-index-factory.admin.role");
-    bytes32 public constant COMPLIANCE_REGISTRY_STUB_ROLE =
-        keccak256("registry-index-factory.stub.role");
-    bytes32 public constant COMPLIANCE_REGISTRY_INDEX =
-        keccak256("registry-factory.index.role");
 
     struct Slot {
         address admin;
@@ -25,7 +20,6 @@ contract RegistryIndexFactory is AccessControl {
     constructor(uint256 base, address admin, address registryFactory) {
         _grantRole(ADMIN_ROLE, admin);
 
-        _setRoleAdmin(COMPLIANCE_REGISTRY_STUB_ROLE, ADMIN_ROLE);
         slot = Slot({
             registryFactory: registryFactory,
             admin: admin,
@@ -57,7 +51,7 @@ contract RegistryIndexFactory is AccessControl {
     function deploy(
         uint256 pivot,
         address stub
-    ) external onlyRole(COMPLIANCE_REGISTRY_STUB_ROLE) returns (address) {
+    ) external onlyRole(ADMIN_ROLE) returns (address) {
         bytes32 salt = getSalt(pivot);
         bytes memory bytecode = getByteCode();
         address registryIndex = Create2.computeAddress(
@@ -73,10 +67,6 @@ contract RegistryIndexFactory is AccessControl {
             ComplianceRegistryIndex(registryIndex).initialize(
                 stub,
                 slot.registryFactory
-            );
-            RegistryFactory(slot.registryFactory).grantRole(
-                COMPLIANCE_REGISTRY_INDEX,
-                registryIndex
             );
             return registryIndex;
         }

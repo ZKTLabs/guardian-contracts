@@ -46,7 +46,7 @@ const config: HardhatUserConfig = {
       //   // url: `https://mainnet.infura.io/v3/${INFURA_API_KEY}`,
       //   url: "https://zkt-network.rpc.caldera.xyz/http",  // RPC URL Here
       // },
-      gasPrice: 1052989477
+      gasPrice: 3052989477
     },
     zkt_test: {
       url: "https://zkt-network.rpc.caldera.xyz/http",  // RPC URL Here

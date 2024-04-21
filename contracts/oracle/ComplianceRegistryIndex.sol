@@ -3,8 +3,38 @@ pragma solidity ^0.8.4;
 
 import {AccessControl} from "@openzeppelin/contracts/access/AccessControl.sol";
 import {Initializable} from "@openzeppelin/contracts/proxy/utils/Initializable.sol";
-import {RegistryFactory} from "./RegistryFactory.sol";
-import {ComplianceRegistry} from "./ComplianceRegistry.sol";
+
+interface ICallback {
+    function callback(
+        uint256 pivot,
+        address index,
+        bool useWhitelist,
+        address account
+    ) external;
+}
+
+interface IComplianceRegistry {
+    function store(address account) external;
+
+    function check(address account) external view returns (bool);
+
+    function verify() external view returns (bool);
+}
+
+interface IRegistryFactory {
+    function deploy(
+        uint256 pivot,
+        address index,
+        address stub,
+        bool useWhitelist
+    ) external returns (address);
+
+    function get(
+        uint256 pivot,
+        address index,
+        bool useWhitelist
+    ) external view returns (address, bool);
+}
 
 contract ComplianceRegistryIndex is AccessControl, Initializable {
     bytes32 public constant COMPLIANCE_REGISTRY_STUB_ROLE =
@@ -17,14 +47,17 @@ contract ComplianceRegistryIndex is AccessControl, Initializable {
 
     RegistrySlot public blacklist;
     RegistrySlot public whitelist;
-    RegistryFactory public factory;
+    IRegistryFactory public registryFactory;
 
-    function initialize(address _stub, address _factory) public initializer {
+    function initialize(
+        address _stub,
+        address _registryFactory
+    ) public initializer {
         _grantRole(COMPLIANCE_REGISTRY_STUB_ROLE, _stub);
 
         blacklist = RegistrySlot({stepCumulative: 1000, cumulative: 0});
         whitelist = RegistrySlot({stepCumulative: 1000, cumulative: 0});
-        factory = RegistryFactory(_factory);
+        registryFactory = IRegistryFactory(_registryFactory);
     }
 
     function store(
@@ -38,8 +71,12 @@ contract ComplianceRegistryIndex is AccessControl, Initializable {
         } else {
             blacklist.cumulative++;
         }
-        address registry = factory.deploy(pivot, address(this), useWhitelist);
-        ComplianceRegistry(registry).store(account);
+        ICallback(_msgSender()).callback(
+            pivot,
+            address(this),
+            useWhitelist,
+            account
+        );
     }
 
     function get(
@@ -52,10 +89,14 @@ contract ComplianceRegistryIndex is AccessControl, Initializable {
             cumulative = whitelist.cumulative;
             stepCumulative = whitelist.stepCumulative;
         }
-        for (uint256 idx = 0; idx < cumulative / stepCumulative; idx++) {
-            (address registry, bool isZero) = factory.get(idx, useWhitelist);
-            if (!isZero) continue;
-            if (ComplianceRegistry(registry).check(account)) {
+        for (uint256 idx = 0; idx <= cumulative / stepCumulative; idx++) {
+            (address registry, bool notCreated) = registryFactory.get(
+                idx,
+                address(this),
+                useWhitelist
+            );
+            if (notCreated) continue;
+            if (IComplianceRegistry(registry).check(account)) {
                 return true;
             }
         }

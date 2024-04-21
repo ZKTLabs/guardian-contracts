@@ -1,0 +1,35 @@
+# EstimateGas
+
+origin swap without blacklist check gasCost: 0.000122342447311821
+
+## BASE_MODE = 10
+
+### TestCase 0
+
+1 file (200 addresses) insert and swap gasCost: 0.00024658996005729
+
+### TestCase 1
+
+100 files (20000 addresses) insert and swap gasCost: 0.000346618107281718
+
+### TestCase 2
+
+200 files (40000 addresses) insert and swap gasCost: 0.000420695843951646
+
+deploy gasCost: 6.641012575517846976
+
+### TestCase 3
+
+All files (196000 addresses) insert and swap gasCost: 0.000976288027944537
+
+deploy gasCost: 32.608393611656236164
+
+## BASE_MODE = 15
+
+## TestCase 0
+
+1 file (200 addresses) insert and swap gasCost: 0.00024658996005729
+
+
+## TestCase 1
+

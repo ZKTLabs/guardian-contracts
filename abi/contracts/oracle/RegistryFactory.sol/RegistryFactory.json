@@ -152,19 +152,6 @@
   },
   {
     "inputs": [],
-    "name": "COMPLIANCE_REGISTRY_INDEX",
-    "outputs": [
-      {
-        "internalType": "bytes32",
-        "name": "",
-        "type": "bytes32"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [],
     "name": "DEFAULT_ADMIN_ROLE",
     "outputs": [
       {
@@ -186,6 +173,11 @@
       {
         "internalType": "address",
         "name": "index",
+        "type": "address"
+      },
+      {
+        "internalType": "address",
+        "name": "stub",
         "type": "address"
       },
       {
@@ -211,6 +203,11 @@
         "internalType": "uint256",
         "name": "pivot",
         "type": "uint256"
+      },
+      {
+        "internalType": "address",
+        "name": "index",
+        "type": "address"
       },
       {
         "internalType": "bool",
