@@ -270,11 +270,7 @@
     "name": "registryFactory",
     "outputs": [
       {
-<<<<<<< HEAD
         "internalType": "contract IRegistryFactory",
-=======
-        "internalType": "contract RegistryFactory",
->>>>>>> 7bf47aa (add Callback)
         "name": "",
         "type": "address"
       }

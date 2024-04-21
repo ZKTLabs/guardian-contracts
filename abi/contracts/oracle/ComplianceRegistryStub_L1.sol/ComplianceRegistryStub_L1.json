@@ -31,7 +31,6 @@
     "type": "error"
   },
   {
-<<<<<<< HEAD
     "inputs": [
       {
         "internalType": "address",
@@ -84,8 +83,6 @@
     "type": "error"
   },
   {
-=======
->>>>>>> 7bf47aa (add Callback)
     "inputs": [],
     "name": "InvalidInitialization",
     "type": "error"
@@ -257,11 +254,7 @@
       },
       {
         "internalType": "address",
-<<<<<<< HEAD
         "name": "caller",
-=======
-        "name": "index",
->>>>>>> 7bf47aa (add Callback)
         "type": "address"
       },
       {
@@ -491,11 +484,7 @@
     "name": "registryFactory",
     "outputs": [
       {
-<<<<<<< HEAD
         "internalType": "contract IRegistryFactory",
-=======
-        "internalType": "contract RegistryFactory",
->>>>>>> 7bf47aa (add Callback)
         "name": "",
         "type": "address"
       }
@@ -508,11 +497,7 @@
     "name": "registryIndexFactory",
     "outputs": [
       {
-<<<<<<< HEAD
         "internalType": "contract IRegistryIndexFactory",
-=======
-        "internalType": "contract RegistryIndexFactory",
->>>>>>> 7bf47aa (add Callback)
         "name": "",
         "type": "address"
       }

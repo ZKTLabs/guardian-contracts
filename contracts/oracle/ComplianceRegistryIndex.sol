@@ -4,15 +4,6 @@ pragma solidity ^0.8.4;
 import {AccessControl} from "@openzeppelin/contracts/access/AccessControl.sol";
 import {Initializable} from "@openzeppelin/contracts/proxy/utils/Initializable.sol";
 
-interface ICallback {
-    function callback(
-        uint256 pivot,
-        address index,
-        bool useWhitelist,
-        address account
-    ) external;
-}
-
 interface IComplianceRegistry {
     function store(address account) external;
 
@@ -64,8 +55,8 @@ contract ComplianceRegistryIndex is AccessControl, Initializable {
     ) public initializer {
         _grantRole(COMPLIANCE_REGISTRY_STUB_ROLE, _stub);
 
-        blacklist = RegistrySlot({stepCumulative: 1000, cumulative: 0});
-        whitelist = RegistrySlot({stepCumulative: 1000, cumulative: 0});
+        blacklist = RegistrySlot({stepCumulative: 2000, cumulative: 0});
+        whitelist = RegistrySlot({stepCumulative: 2000, cumulative: 0});
         registryFactory = IRegistryFactory(_registryFactory);
     }
 
