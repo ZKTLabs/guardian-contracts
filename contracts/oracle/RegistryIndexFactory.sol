@@ -65,7 +65,6 @@ contract RegistryIndexFactory is AccessControl {
         if (codeSize == 0) {
             Create2.deploy(0, salt, bytecode);
             ComplianceRegistryIndex(registryIndex).initialize(
-                pivot,
                 stub,
                 slot.registryFactory
             );

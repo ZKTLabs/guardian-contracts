@@ -46,7 +46,7 @@ contract RegistryFactory is AccessControl {
 
     function getSalt(
         uint256 pivot,
-        uint256 index,
+        address index,
         bool useWhitelist
     ) internal view returns (bytes32) {
         return
@@ -63,7 +63,7 @@ contract RegistryFactory is AccessControl {
 
     function deploy(
         uint256 pivot,
-        uint256 index,
+        address index,
         address stub,
         bool useWhitelist
     ) external onlyRole(ADMIN_ROLE) returns (address) {
@@ -84,7 +84,7 @@ contract RegistryFactory is AccessControl {
 
     function get(
         uint256 pivot,
-        uint256 index,
+        address index,
         bool useWhitelist
     ) public view returns (address, bool) {
         bytes32 salt = getSalt(pivot, index, useWhitelist);

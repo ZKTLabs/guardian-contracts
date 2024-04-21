@@ -14,7 +14,7 @@ error ComplianceRegistryStub_L1__RegistryIndexNotCreated(
 error ComplianceRegistryStub_L1__RegistryNotCreated(
     address,
     uint256,
-    uint256,
+    address,
     bool,
     address
 );
@@ -24,7 +24,6 @@ interface IComplianceRegistry {
 }
 
 interface IComplianceRegistryIndex {
-    function index() external view returns (uint256);
 
     function store(address account, bool useWhitelist) external;
 
@@ -37,14 +36,14 @@ interface IComplianceRegistryIndex {
 interface IRegistryFactory {
     function deploy(
         uint256 pivot,
-        uint256 index,
+        address index,
         address stub,
         bool useWhitelist
     ) external returns (address);
 
     function get(
         uint256 pivot,
-        uint256 index,
+        address index,
         bool useWhitelist
     ) external view returns (address, bool);
 }
@@ -124,14 +123,14 @@ contract ComplianceRegistryStub_L1 is AccessControlUpgradeable {
             revert ComplianceRegistryStub_L1__OnlyAllowScripting();
         (address registry, bool notCreated) = registryFactory.get(
             pivot,
-            IComplianceRegistryIndex(caller).index(),
+            caller,
             useWhitelist
         );
         if (notCreated)
             revert ComplianceRegistryStub_L1__RegistryNotCreated(
                 address(registryFactory),
                 pivot,
-                IComplianceRegistryIndex(caller).index(),
+                caller,
                 useWhitelist,
                 registry
             );
