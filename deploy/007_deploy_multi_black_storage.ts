@@ -52,7 +52,6 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
                 registryIndexArray[i],
                 stubAddress,
                 false,
-                {gasPrice: 15544294392}
             );
             await tx.wait();
             console.log(`finish blacklist index: ${i}, pivot: ${j}, contractAddr:  ${address}, using index: ${registryIndexArray[i]}`)

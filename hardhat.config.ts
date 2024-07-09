@@ -57,6 +57,10 @@ const config: HardhatUserConfig = {
       url: `https://sepolia.infura.io/v3/${INFURA_API_KEY}`,
       accounts: [SEPOLIA_DEPLOYER as string]
     },
+    opbnbTest: {
+      url: "https://opbnb-testnet.nodereal.io/v1/64a9df0874fb4a93b9d0a3849de012d3",
+      accounts: [SEPOLIA_DEPLOYER as string]
+    }
   },
   gasReporter: {
     enabled: process.env.REPORT_GAS !== undefined,
