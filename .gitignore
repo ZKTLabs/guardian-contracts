@@ -20,3 +20,4 @@ test/*.json
 test/*.s.ts
 registryIndexArray.json
 blacklistArray.json
+merkleTreeData.json

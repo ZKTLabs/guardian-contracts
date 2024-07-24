@@ -24,7 +24,6 @@ interface IComplianceRegistry {
 }
 
 interface IComplianceRegistryIndex {
-
     function store(address account, bool useWhitelist) external;
 
     function get(
@@ -143,11 +142,7 @@ contract ComplianceRegistryStub_L1 is AccessControlUpgradeable {
             pivot
         );
         if (!notCreated) {
-            return
-                IComplianceRegistryIndex(registryIndex).get(
-                    account,
-                    true
-                );
+            return IComplianceRegistryIndex(registryIndex).get(account, true);
         } else {
             return false;
         }
@@ -159,11 +154,7 @@ contract ComplianceRegistryStub_L1 is AccessControlUpgradeable {
             pivot
         );
         if (!notCreated) {
-            return
-                IComplianceRegistryIndex(registryIndex).get(
-                    account,
-                    false
-                );
+            return IComplianceRegistryIndex(registryIndex).get(account, false);
         } else {
             return false;
         }

@@ -42,11 +42,11 @@ const config: HardhatUserConfig = {
   },
   networks: {
     hardhat: {
-      // forking: {
-      //   // url: `https://mainnet.infura.io/v3/${INFURA_API_KEY}`,
-      //   url: "https://zkt-network.rpc.caldera.xyz/http",  // RPC URL Here
-      // },
-      gasPrice: 3052989477
+       //forking: {
+         //// url: `https://mainnet.infura.io/v3/${INFURA_API_KEY}`,
+         //url: "https://arbitrum.blockpi.network/v1/rpc/public",  // RPC URL Here
+       //},
+      gasPrice: 1000000000
     },
     zkt_test: {
       url: "https://zkt-network.rpc.caldera.xyz/http",  // RPC URL Here
