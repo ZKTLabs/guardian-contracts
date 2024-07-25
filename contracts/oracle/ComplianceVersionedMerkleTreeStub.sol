@@ -1,7 +1,6 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.4;
 
-import "hardhat/console.sol";
 import {Ownable} from "@openzeppelin/contracts/access/Ownable.sol";
 import {MerkleProof} from "@openzeppelin/contracts/utils/cryptography/MerkleProof.sol";
 import {Pausable} from "@openzeppelin/contracts/utils/Pausable.sol";
@@ -101,42 +100,74 @@ contract ComplianceVersionedMerkleTreeStub is
     }
 
     function getScore(
-        bytes memory encodedData
-    ) public pure override returns (uint256) {
-        (, , uint256 _score, ) = abi.decode(
-            encodedData,
-            (address, uint256, uint256, uint256)
-        );
-        return _score;
+        bytes memory encodedData,
+        bool withRoot
+    ) public pure override returns (uint256 score) {
+        if (withRoot) {
+            (, bytes memory _subData) = getRoot(encodedData);
+            (, , score, ) = abi.decode(
+                _subData,
+                (address, uint256, uint256, uint256)
+            );
+        } else {
+            (, , score, ) = abi.decode(
+                encodedData,
+                (address, uint256, uint256, uint256)
+            );
+        }
     }
 
     function getVersion(
-        bytes memory encodedData
-    ) public pure override returns (uint256) {
-        (, , , uint256 _version) = abi.decode(
-            encodedData,
-            (address, uint256, uint256, uint256)
-        );
-        return _version;
+        bytes memory encodedData,
+        bool withRoot
+    ) public pure override returns (uint256 version) {
+        if (withRoot) {
+            (, bytes memory _subData) = getRoot(encodedData);
+            (, , , version) = abi.decode(
+                _subData,
+                (address, uint256, uint256, uint256)
+            );
+        } else {
+            (, , , version) = abi.decode(
+                encodedData,
+                (address, uint256, uint256, uint256)
+            );
+        }
     }
 
     function getLabel(
-        bytes memory encodedData
-    ) public pure override returns (uint256) {
-        (, uint256 _label, , ) = abi.decode(
-            encodedData,
-            (address, uint256, uint256, uint256)
-        );
-        return _label;
+        bytes memory encodedData,
+        bool withRoot
+    ) public pure override returns (uint256 label) {
+        if (withRoot) {
+            (, bytes memory _subData) = getRoot(encodedData);
+            (, label, , ) = abi.decode(
+                _subData,
+                (address, uint256, uint256, uint256)
+            );
+        } else {
+            (, label, , ) = abi.decode(
+                encodedData,
+                (address, uint256, uint256, uint256)
+            );
+        }
     }
 
     function getAccount(
-        bytes memory encodedData
-    ) public pure override returns (address) {
-        (address _account, , , ) = abi.decode(
-            encodedData,
-            (address, uint256, uint256, uint256)
-        );
-        return _account;
+        bytes memory encodedData,
+        bool withRoot
+    ) public pure override returns (address account) {
+        if (withRoot) {
+            (, bytes memory _subData) = getRoot(encodedData);
+            (account, , , ) = abi.decode(
+                _subData,
+                (address, uint256, uint256, uint256)
+            );
+        } else {
+            (account, , , ) = abi.decode(
+                encodedData,
+                (address, uint256, uint256, uint256)
+            );
+        }
     }
 }

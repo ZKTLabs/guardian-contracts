@@ -5,6 +5,11 @@
         "internalType": "bytes",
         "name": "encodedData",
         "type": "bytes"
+      },
+      {
+        "internalType": "bool",
+        "name": "withRoot",
+        "type": "bool"
       }
     ],
     "name": "getAccount",
@@ -63,6 +68,11 @@
         "internalType": "bytes",
         "name": "encodedData",
         "type": "bytes"
+      },
+      {
+        "internalType": "bool",
+        "name": "withRoot",
+        "type": "bool"
       }
     ],
     "name": "getLabel",
@@ -106,6 +116,11 @@
         "internalType": "bytes",
         "name": "encodedData",
         "type": "bytes"
+      },
+      {
+        "internalType": "bool",
+        "name": "withRoot",
+        "type": "bool"
       }
     ],
     "name": "getScore",
@@ -125,6 +140,11 @@
         "internalType": "bytes",
         "name": "encodedData",
         "type": "bytes"
+      },
+      {
+        "internalType": "bool",
+        "name": "withRoot",
+        "type": "bool"
       }
     ],
     "name": "getVersion",

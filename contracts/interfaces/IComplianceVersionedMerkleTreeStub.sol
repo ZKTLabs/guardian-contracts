@@ -24,15 +24,23 @@ interface IComplianceVersionedMerkleTreeStub {
             uint256 version
         );
 
-    function getScore(bytes memory encodedData) external pure returns (uint256);
-
-    function getVersion(
-        bytes memory encodedData
+    function getScore(
+        bytes memory encodedData,
+        bool withRoot
     ) external pure returns (uint256);
 
-    function getLabel(bytes memory encodedData) external pure returns (uint256);
+    function getVersion(
+        bytes memory encodedData,
+        bool withRoot
+    ) external pure returns (uint256);
+
+    function getLabel(
+        bytes memory encodedData,
+        bool withRoot
+    ) external pure returns (uint256);
 
     function getAccount(
-        bytes memory encodedData
+        bytes memory encodedData,
+        bool withRoot
     ) external pure returns (address);
 }

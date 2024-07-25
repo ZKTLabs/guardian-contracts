@@ -108,13 +108,18 @@
         "internalType": "bytes",
         "name": "encodedData",
         "type": "bytes"
+      },
+      {
+        "internalType": "bool",
+        "name": "withRoot",
+        "type": "bool"
       }
     ],
     "name": "getAccount",
     "outputs": [
       {
         "internalType": "address",
-        "name": "",
+        "name": "account",
         "type": "address"
       }
     ],
@@ -166,13 +171,18 @@
         "internalType": "bytes",
         "name": "encodedData",
         "type": "bytes"
+      },
+      {
+        "internalType": "bool",
+        "name": "withRoot",
+        "type": "bool"
       }
     ],
     "name": "getLabel",
     "outputs": [
       {
         "internalType": "uint256",
-        "name": "",
+        "name": "label",
         "type": "uint256"
       }
     ],
@@ -209,13 +219,18 @@
         "internalType": "bytes",
         "name": "encodedData",
         "type": "bytes"
+      },
+      {
+        "internalType": "bool",
+        "name": "withRoot",
+        "type": "bool"
       }
     ],
     "name": "getScore",
     "outputs": [
       {
         "internalType": "uint256",
-        "name": "",
+        "name": "score",
         "type": "uint256"
       }
     ],
@@ -228,13 +243,18 @@
         "internalType": "bytes",
         "name": "encodedData",
         "type": "bytes"
+      },
+      {
+        "internalType": "bool",
+        "name": "withRoot",
+        "type": "bool"
       }
     ],
     "name": "getVersion",
     "outputs": [
       {
         "internalType": "uint256",
-        "name": "",
+        "name": "version",
         "type": "uint256"
       }
     ],
