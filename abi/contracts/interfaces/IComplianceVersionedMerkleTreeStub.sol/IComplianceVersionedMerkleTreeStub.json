@@ -5,6 +5,25 @@
         "internalType": "bytes",
         "name": "encodedData",
         "type": "bytes"
+      }
+    ],
+    "name": "getAccount",
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "pure",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "bytes",
+        "name": "encodedData",
+        "type": "bytes"
       },
       {
         "internalType": "bool",
@@ -46,6 +65,25 @@
         "type": "bytes"
       }
     ],
+    "name": "getLabel",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "pure",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "bytes",
+        "name": "encodedData",
+        "type": "bytes"
+      }
+    ],
     "name": "getRoot",
     "outputs": [
       {
@@ -57,6 +95,44 @@
         "internalType": "bytes",
         "name": "",
         "type": "bytes"
+      }
+    ],
+    "stateMutability": "pure",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "bytes",
+        "name": "encodedData",
+        "type": "bytes"
+      }
+    ],
+    "name": "getScore",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "pure",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "bytes",
+        "name": "encodedData",
+        "type": "bytes"
+      }
+    ],
+    "name": "getVersion",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
       }
     ],
     "stateMutability": "pure",
